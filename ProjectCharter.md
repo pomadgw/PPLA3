@@ -85,6 +85,8 @@ Keluaran yang kami harapkan dari pengembangan proyek aplikasi ini:
 * Beberapa di antara kami belum begitu menguasai pemrograman di Android, sehingga perlu meng-*invest* waktu di awal untuk mempelajarinya.
 
 ### Business Risk
+* Produk yang kami hasilkan bersifat baru di mata pengguna sehingga butuh usaha lebih untuk membangun preferensi pengguna terhadap produk kami.
+* Aktivitas kompetisi terhadap produk lain yang sejenis yang mungkin hadir selama aplikasi ini berkembang.
 
 
 
