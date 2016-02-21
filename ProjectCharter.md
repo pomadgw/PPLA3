@@ -20,8 +20,11 @@ Untuk permasalahan tersebut produk aplikasi ini dibuat. Dengan aplikasi ini diha
 
 Proyek i-Survey bertujuan untuk:
 1. Membantu memudahkan pencarian surveyor untuk kepentingan para stakeholder.
+
 2. Menjembatani para user untuk dapat melakukan survey dengan mudah bahkan lintas daerah.
+
 3. Menyelesaikan proyek pada mata kuliah Proyek Perangkat Lunak dengan sebaik mungkin.
+
 4. Menjadi produk IT yang bermanfaat sehingga dapat dipergunakan di masyarakat luas. 
 
 ### Target Pengguna
