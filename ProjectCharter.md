@@ -25,7 +25,8 @@ Untuk permasalahan tersebut produk aplikasi ini dibuat. Dengan aplikasi ini diha
 ### Keluaran Yang Diharapkan
 Keluaran yang kami harapkan dari pengembangan proyek aplikasi ini:
 * Aplikasi *mobile* yang dapat membantu orang mencari responden yang sesuai yang bisa mengisi survey.
-* Bertambahnya *skill* kami.
+* Bertambahnya *skill* dan ilmu kami.
+* Pengalaman mempraktikkan metodologi pengembangan scrum.
 
 ## Daftar Resiko Yang Teridentifikasi
 
@@ -34,7 +35,7 @@ Keluaran yang kami harapkan dari pengembangan proyek aplikasi ini:
 
 ### Technical Risk
 * Jika kami ingin membuat form sendiri, maka harus dipertimbangkan desain untuk basis datanya.
-* Jika kami akan menggunakan tekologi Google Form, maka kami mencari mekanisme 
+* Jika kami akan menggunakan teknologi Google Form, maka kami mencari mekanisme 
   konfirmasi bahwa seseorang telah mengisi survey secara lengkap, sedangkan
   kami belum menemukan API khusus untuk Google Form.
 
