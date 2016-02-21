@@ -31,10 +31,10 @@ Untuk permasalahan tersebut produk aplikasi ini dibuat. Dengan aplikasi ini diha
 
 
 ### Technical Risk
-* Jika kami inging membuat form sendiri, maka harus dipertimbangkan wujud basis datanya.
-* Jika kami akan menggukana tekologi Google Form, maka kami mencari mekanisme konfirmasi bahwa
-  seseorang telah mengisi survey secara lengkap, sedangkan kami belum menemukan API khusus
-  untuk Google Form.
+* Jika kami ingin membuat form sendiri, maka harus dipertimbangkan wujud basis datanya.
+* Jika kami akan menggunakan tekologi Google Form, maka kami mencari mekanisme 
+  konfirmasi bahwa seseorang telah mengisi survey secara lengkap, sedangkan
+  kami belum menemukan API khusus untuk Google Form.
 
 ### Business Risk
 
