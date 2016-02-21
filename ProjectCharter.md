@@ -32,7 +32,12 @@ Proyek i-Survei bertujuan untuk:
 Target pengguna aplikasi ini yaitu pengguna smartphone (khususnya android) yang membutuhkan wadah pengumpulan data penelitian dengan survey, serta pengguna dengan beraneka ragam latar belakang dan bersedia untuk mengisi survey-survey yang sesuai dengan target yang diinginkan.
 
 ### Keluaran Yang Diharapkan
-
+Keluaran yang kami harapkan dari pengembangan proyek aplikasi ini:
+* Aplikasi *mobile* yang dapat membantu orang mencari responden yang sesuai yang bisa mengisi survey.
+* Sistem *backend* untuk aplikasi kami ini.
+* Suatu website yang bisa menjadi halaman untuk aplikasi kami.
+* Bertambahnya *skill* dan ilmu kami.
+* Pengalaman mempraktikkan metodologi pengembangan scrum.
 
 ## Daftar Resiko Yang Teridentifikasi
 
@@ -41,10 +46,10 @@ Target pengguna aplikasi ini yaitu pengguna smartphone (khususnya android) yang 
 * Beberapa dari kelompok kami memiliki pengalaman yang kurang dalam mengembangkan suatu aplikasi seperti proyek yang akan kami kerjakan, sehingga dibutuhkan pembelajaran dan pemahaman yang lebih dalam serta usaha yang lebih tinggi untuk dapat menyelesaikan proyek ini.
 
 ### Technical Risk
-* Jika kami ingin membuat form sendiri, maka harus dipertimbangkan wujud basis datanya.
-* Jika kami akan menggunakan tekologi Google Form, maka kami mencari mekanisme konfirmasi bahwa
-  seseorang telah mengisi survey secara lengkap, sedangkan kami belum menemukan API khusus
-  untuk Google Form.
+* Jika kami ingin membuat form sendiri, maka harus dipertimbangkan desain untuk basis datanya.
+* Jika kami akan menggunakan teknologi Google Form, maka kami mencari mekanisme 
+  konfirmasi bahwa seseorang telah mengisi survey secara lengkap, sedangkan
+  kami belum menemukan API khusus untuk Google Form.
 
 ### Business Risk
 
