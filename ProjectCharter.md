@@ -23,7 +23,9 @@ Untuk permasalahan tersebut produk aplikasi ini dibuat. Dengan aplikasi ini diha
 
 
 ### Keluaran Yang Diharapkan
-
+Keluaran yang kami harapkan dari pengembangan proyek aplikasi ini:
+* Aplikasi *mobile* yang dapat membantu orang mencari responden yang sesuai yang bisa mengisi survey.
+* Bertambahnya *skill* kami.
 
 ## Daftar Resiko Yang Teridentifikasi
 
@@ -31,7 +33,7 @@ Untuk permasalahan tersebut produk aplikasi ini dibuat. Dengan aplikasi ini diha
 
 
 ### Technical Risk
-* Jika kami ingin membuat form sendiri, maka harus dipertimbangkan wujud basis datanya.
+* Jika kami ingin membuat form sendiri, maka harus dipertimbangkan desain untuk basis datanya.
 * Jika kami akan menggunakan tekologi Google Form, maka kami mencari mekanisme 
   konfirmasi bahwa seseorang telah mengisi survey secara lengkap, sedangkan
   kami belum menemukan API khusus untuk Google Form.
