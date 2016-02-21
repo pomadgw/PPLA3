@@ -56,7 +56,8 @@ perbulan.
 * Minimum target: Jabodetabek, Indonesia
 * Big Target: Asia 
 	
-##### Demografi: 15++ tahun
+##### Demografi: 
+* 15++ tahun
 
 ##### Kultur target pasar:
 * Membutuhkan hasil cepat dan instan
