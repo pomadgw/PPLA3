@@ -53,8 +53,11 @@ Proyek i-Survey bertujuan untuk:
 
 
 ## Project Vision
-
+Mengembangkasn sebuah survei online yang membantu penyurvei untuk mencari responden dengan mudah serta efektif, dan menguntungkan responden yang telah mengisi survei.  
 
 ## SCRUM Core Team
+Product Owner: Diego Perdana
+Scrum Master: Bapak Hadaiq Rolis A., S.Kom, M.Kom
+Scrum Team: Azhar Fauzan, Bardan Putra P., Bambang Prakoso, Rahadian Yusuf.
 
 
