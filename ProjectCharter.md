@@ -57,7 +57,9 @@ Mengembangkasn sebuah survei online yang membantu penyurvei untuk mencari respon
 
 ## SCRUM Core Team
 Product Owner: Diego Perdana
+
 Scrum Master: Bapak Hadaiq Rolis A., S.Kom, M.Kom
+
 Scrum Team: Azhar Fauzan, Bardan Putra P., Bambang Prakoso, Rahadian Yusuf.
 
 
