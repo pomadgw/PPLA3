@@ -19,6 +19,7 @@ Untuk permasalahan tersebut produk aplikasi ini dibuat. Dengan aplikasi ini diha
 ### Tujuan Umum
 
 Proyek i-Survey bertujuan untuk:
+
 1. Membantu memudahkan pencarian surveyor untuk kepentingan para stakeholder.
 
 2. Menjembatani para user untuk dapat melakukan survey dengan mudah bahkan lintas daerah.
