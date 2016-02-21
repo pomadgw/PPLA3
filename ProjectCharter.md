@@ -40,7 +40,7 @@ Proyek i-Survey bertujuan untuk:
 
 
 ### Technical Risk
-* Jika kami inging membuat form sendiri, maka harus dipertimbangkan wujud basis datanya.
+* Jika kami ingin membuat form sendiri, maka harus dipertimbangkan wujud basis datanya.
 * Jika kami akan menggukana tekologi Google Form, maka kami mencari mekanisme konfirmasi bahwa
   seseorang telah mengisi survey secara lengkap, sedangkan kami belum menemukan API khusus
   untuk Google Form.
@@ -53,7 +53,7 @@ Proyek i-Survey bertujuan untuk:
 
 
 ## Project Vision
-Mengembangkasn sebuah survei online yang membantu penyurvei untuk mencari responden dengan mudah serta efektif, dan menguntungkan responden yang telah mengisi survei.  
+Mengembangkan sebuah survei online yang membantu penyurvei untuk mencari responden dengan mudah serta efektif, dan menguntungkan responden yang telah mengisi survei.  
 
 ## SCRUM Core Team
 Product Owner: Diego Perdana
