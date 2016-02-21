@@ -40,10 +40,10 @@ Kami membagi target pasar kedalam beberapa segmentasi pasar:
 
 ##### Profesi: 
 
-* Minimum target: Akademisi yang terdiri dari pelajar, dosen, dan peneliti dari badan akademis yang membutuhkan target
+* **Minimum target**: Akademisi yang terdiri dari pelajar, dosen, dan peneliti dari badan akademis yang membutuhkan target
 pasar dengan pendapatan minimum Rp 100.000,- perbulan.
 
-* Big target: Target besar lainnya adalah para pelaku bisnis dan pekerja kantoran yang membutuhkan data mengenai produk
+* **Big target**: Target besar lainnya adalah para pelaku bisnis dan pekerja kantoran yang membutuhkan data mengenai produk
 mereka untuk dijadikan benchmark atau prediksi pasar kedepannya dengan pendapatan minimum Rp 100.000,- 
 perbulan.
 
@@ -53,8 +53,8 @@ perbulan.
 * Terbiasa dengan engine seperti Google Form 
 
 ##### Geografi:
-* Minimum target: Jabodetabek, Indonesia
-* Big Target: Asia 
+* **Minimum target**: Jabodetabek, Indonesia
+* **Big Target**: Asia 
 	
 ##### Demografi: 
 * 15++ tahun
