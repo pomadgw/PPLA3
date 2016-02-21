@@ -29,34 +29,30 @@ Proyek i-Survei bertujuan untuk:
 4. Menjadi produk IT yang bermanfaat sehingga dapat dipergunakan di masyarakat luas. 
 
 ### Target Pengguna
-Target pengguna:
+#### Target pengguna
 Pengguna smartphone Android dengan beraneka ragam latar belakang sebagai kriteria target survey
 
-Target pasar:
+#### Target pasar
 Kami membagi target pasar kedalam beberapa segmentasi pasar:
-	Profesi: 
-		Minimum target:
-		* Akademisi yang terdiri dari pelajar, dosen, dan peneliti dari badan akademis yang membutuhkan target pasar dengan 
-		pendapatan minimum Rp 100.000,- perbulan.
-		Big target:
-		* Target besar lainnya adalah para pelaku bisnis dan pekerja kantoran yang membutuhkan data mengenai produk mereka untuk dijadikan
-		benchmark atau prediksi pasar kedepannya dengan pendapatan minimum Rp 100.000,- perbulan.
-	Lifestyle:
-	* Mempunyai dan mengerti penggunaan smartphone android 
-	* Mengerti internet 
-	* Terbiasa dengan engine seperti Google Form 
-	Geografi:
-		Minimum target:
-		* Jabodetabek, Indonesia
-		Big Target:
-		* Asia 
-	Demografi:
-	* 15++ tahun
-	Kultur target pasar:
-	* Membutuhkan hasil cepat dan instan
-	* Deadliner
-	* Teliti dan mementingkan hasil yang tepat
-	* Perfectionis
+
+* Profesi:
+    + **Minimum target**: Akademisi yang terdiri dari pelajar, dosen, dan peneliti dari badan akademis yang membutuhkan target pasar dengan 
+    pendapatan minimum Rp 100.000,- perbulan.
+    + **Big target**: Target besar lainnya adalah para pelaku bisnis dan pekerja kantoran yang membutuhkan data mengenai produk mereka untuk dijadikan benchmark atau prediksi pasar kedepannya dengan pendapatan minimum Rp 100.000,- perbulan.
+* Lifestyle:
+    + Mempunyai dan mengerti penggunaan smartphone Android
+    + Mengerti internet 
+    + Terbiasa dengan engine seperti Google Form
+* Geografi:
+    +  **Minimum target**: Jabodetabek, Indonesia
+    + **Big Target**: Asia 
+* Demografi:
+    + 15++ tahun
+* Kultur target pasar:
+    + Membutuhkan hasil cepat dan instan
+    + Deadliner
+    + Teliti dan mementingkan hasil yang tepat
+    + Perfectionis
 
 ### Keluaran Yang Diharapkan
 Keluaran yang kami harapkan dari pengembangan proyek aplikasi ini:
