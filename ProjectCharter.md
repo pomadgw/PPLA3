@@ -25,6 +25,8 @@ Untuk permasalahan tersebut produk aplikasi ini dibuat. Dengan aplikasi ini diha
 ### Keluaran Yang Diharapkan
 Keluaran yang kami harapkan dari pengembangan proyek aplikasi ini:
 * Aplikasi *mobile* yang dapat membantu orang mencari responden yang sesuai yang bisa mengisi survey.
+* Sistem *backend* untuk aplikasi kami ini.
+* Suatu website yang bisa menjadi halaman untuk aplikasi kami.
 * Bertambahnya *skill* dan ilmu kami.
 * Pengalaman mempraktikkan metodologi pengembangan scrum.
 
