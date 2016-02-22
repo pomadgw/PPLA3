@@ -54,10 +54,10 @@ perbulan.
 
 ##### Geografi:
 * **Minimum target**: Jabodetabek, Indonesia
-* **Big Target**: Asia 
+* **Big Target**: Negara yang tergabung dalam wilayah Asia
 	
 ##### Demografi: 
-* 15++ tahun
+* 15 - 30 tahun
 
 ##### Kultur target pasar:
 * Membutuhkan hasil cepat dan instan
