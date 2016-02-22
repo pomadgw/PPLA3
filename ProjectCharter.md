@@ -55,7 +55,7 @@ perbulan.
 ##### Geografi:
 * **Minimum target**: Jabodetabek, Indonesia
 * **Big Target**: Negara yang tergabung dalam wilayah Asia
-	
+    
 ##### Demografi: 
 * 15 - 30 tahun
 
@@ -80,8 +80,8 @@ Keluaran yang kami harapkan dari pengembangan proyek aplikasi ini:
 * Beberapa dari kelompok kami memiliki pengalaman yang kurang dalam mengembangkan suatu aplikasi seperti proyek yang akan kami kerjakan, sehingga dibutuhkan pembelajaran dan pemahaman yang lebih dalam serta usaha yang lebih tinggi untuk dapat menyelesaikan proyek ini.
 
 ### Technical Risk
-* Jika kami ingin membuat form sendiri, maka harus dipertimbangkan desain untuk basis datanya.
-* Jika kami akan menggunakan teknologi Google Form, maka kami mencari mekanisme konfirmasi bahwa seseorang telah mengisi survey secara lengkap, sedangkan kami belum menemukan API khusus untuk Google Form.
+* Jika kami ingin membuat *form builder* sendiri, maka kami harus mempertimbangkan desain basis datanya, baik untuk menyimpan format form maupun data hasil isian form tersebut.
+* Jika kami akan menggunakan teknologi Google Form, maka kami mencari mekanisme konfirmasi bahwa seseorang telah mengisi survey secara lengkap, tetapi API Google Form yang disediakan hanya bisa digunakan di Google Apps.
 * Beberapa di antara kami belum begitu menguasai pemrograman di Android, sehingga perlu meng-*invest* waktu di awal untuk mempelajarinya.
 
 ### Business Risk
