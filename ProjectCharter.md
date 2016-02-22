@@ -93,10 +93,10 @@ Keluaran yang kami harapkan dari pengembangan proyek aplikasi ini:
 ## Estimasi Waktu, Usaha dan Biaya
 
 ### Estimasi Biaya
-![Estimasi waktu dan usaha](docs/Gant_Chart_of_Glance.png)
+![Estimasi biaya](docs/biaya.png)
 
 ### Estimasi Waktu dan Usaha
-![Estimasi biaya](docs/biaya.png)
+![Estimasi waktu dan usaha](docs/Gant_Chart_of_Glance.png)
 
 ## Project Vision
 Mengembangkan sebuah survei online yang membantu penyurvei untuk mencari responden dengan mudah serta efektif, dan menguntungkan responden yang telah mengisi survei.  
