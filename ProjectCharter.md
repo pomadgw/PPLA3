@@ -95,10 +95,12 @@ Estimasi waktu, usaha dan biaya yang kami buat berdasarkan asumsi dan pengalaman
 
 ### Estimasi Biaya
 Ini adalah estimasi waktu pada tahap *development product*. (Di luar masa bisnis dan *after product*)
+
 ![Estimasi biaya](docs/biaya.png)
 
 ### Estimasi Waktu dan Usaha
 Ini merupakan estimasi biaya untuk pengeluaran yang mungkin akan terjadi.
+
 ![Estimasi waktu dan usaha](docs/Gant_Chart_of_Surverior.png)
 
 ## Project Vision
