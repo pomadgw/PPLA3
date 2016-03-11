@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-// use App\User;
+use App\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,15 +21,14 @@ class DatabaseSeeder extends Seeder
                 ['name' => 'Rahadian Yusuf', 'email' => 'me@localhost',
                  'password' => Hash::make('jangancobacoba'), 'gender' => 'm', 'birth_date' => '1994-05-23',
                  'profession' => 'student', 'city' => 'Bogor', 'province' => 'Jawa Barat'],
-                // ['name' => 'Chris Sevilleja', 'email' => 'chris@scotch.io', 'password' => Hash::make('secret')],
-                // ['name' => 'Holly Lloyd', 'email' => 'holly@scotch.io', 'password' => Hash::make('secret')],
-                // ['name' => 'Adnan Kukic', 'email' => 'adnan@scotch.io', 'password' => Hash::make('secret')],
         );
-            
+
         // Loop through each user above and create the record for them in the database
         foreach ($users as $user)
         {
-            DB::table('users')->insert($user);
+        	$user_obj = User::firstOrCreate($user);
+
+        	// $user_obj->save();
         }
 
         // Model::reguard();
