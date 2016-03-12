@@ -80,9 +80,7 @@ class UserController extends Controller
 
         // simpan ke database
         $new_user->save();
-
-        // kembalikan token untuk login
-        $auth = new AuthenticateController();
-        return $auth->authenticate($request);
+        
+        return response()->json(['error' => 'success_register'], 201);
     }
 }
