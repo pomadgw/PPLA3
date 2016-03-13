@@ -1,5 +1,7 @@
 <?php
 
+// use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Routes File
@@ -28,4 +30,20 @@ Route::get('/', function () {
 
 Route::group(['middleware' => ['web']], function () {
     //
+});
+
+Route::group(['prefix' => 'api'], function()
+{
+    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+
+    // route untuk login
+    Route::post('authenticate', 'AuthenticateController@authenticate');
+
+    // route untuk register
+    // POST /api/users/register
+    Route::post('users/register', 'UserController@register');
+
+    // route untuk mendapatkan info user yang login
+    // GET /api/users/current
+    Route::get('users/current', 'UserController@get_current_user_info');
 });
