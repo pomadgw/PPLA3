@@ -1,1 +1,0 @@
-This is directory for keeping our backend.
