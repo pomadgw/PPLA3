@@ -32,18 +32,17 @@ Route::group(['middleware' => ['web']], function () {
     //
 });
 
-Route::group(['prefix' => 'api'], function()
-{
-    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+$api = app('Dingo\Api\Routing\Router');
 
+$api->version('v1', function ($api) {
     // route untuk login
-    Route::post('authenticate', 'AuthenticateController@authenticate');
+    $api->post('authenticate', 'App\Http\Controllers\AuthenticateController@authenticate');
 
     // route untuk register
     // POST /api/users/register
-    Route::post('users/register', 'UserController@register');
-
+    $api->post('users/register', 'App\Http\Controllers\UserController@register');
+    
     // route untuk mendapatkan info user yang login
     // GET /api/users/current
-    Route::get('users/current', 'UserController@get_current_user_info');
+    $api->get('users/current', 'App\Http\Controllers\UserController@get_current_user_info');
 });
