@@ -4,28 +4,33 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Auth;
+use Dingo\Api\Routing\Helpers;
+
 use Hash;
 use App\Http\Requests;
 use App\User;
-use JWTAuth;
-use TymonJWTAuthExceptionsJWTException;
-use TymonJWTAuthMiddlewareGetUserFromToken;
 
+/**
+ * @Resource("Users", uri="/api/users")
+ */
 class UserController extends Controller
 {
+    use Helpers;
     public function __construct()
     {
        // Apply the jwt.auth middleware to all methods in this controller.
-       $this->middleware('jwt.auth', ['except' => ['register']]);
+       $this->middleware('api.auth', ['except' => ['register']]);
     }
 
     public function get_current_user_info()
     {
-        return Auth::user();
+        $user = $this->auth->user();
+        return $user;
     }
 
     /**
+     * Mendaftarkan user baru
+     *
      * Method ini akan memasukkan data di parameter $request
      * (dari pengiriman info user baru) ke dalam database
      * dan akan mengembalikan token JSON yang siap dipakai.
@@ -34,11 +39,18 @@ class UserController extends Controller
      * - name
      * - password
      * - gender (nilai hanya ada dua: 'm' (untuk laki-laki)
-         dan 'f' (untuk perempuan))
+     *   dan 'f' (untuk perempuan))
      * - birth_date (tanggal lahir, formatnya 'YYYY-MM-DD')
      * - profession
      * - city (kota/kabupaten)
      * - province
+     *
+     * @Post("/register")
+     * @Transaction({
+     *      @Request("username=foo&password=bar", contentType="application/x-www-form-urlencoded"),
+     *      @Response(201, body={"id": 10, "username": "foo"}),
+     *      @Response(409, body={"error": {"email": {"Email is already registered."}}})
+     * })
      */
     public function register(Request $request)
     {
@@ -55,7 +67,7 @@ class UserController extends Controller
         // jika email yang didaftarkan sudah ada di database,
         // kirim error bahwa email sudah ada
         if (User::where('email', $request->email)->exists()) {
-            return response()->json(['error' => 'email_exists'], 409);
+            return response()->json(['error' => ['email' => 'Email is already registered.']], 409);
         }
 
         // jika ada data yang belum lengkap, kirim error

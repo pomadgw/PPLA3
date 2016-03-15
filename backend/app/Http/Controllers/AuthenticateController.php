@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Dingo\Api\Routing\Helpers;
+
 use App\Http\Requests;
 use JWTAuth;
 use TymonJWTAuthExceptionsJWTException;
 
 class AuthenticateController extends Controller
 {
+    use Helpers;
     public function __construct()
     {
        // Apply the jwt.auth middleware to all methods in this controller
@@ -30,11 +33,11 @@ class AuthenticateController extends Controller
         try {
             // verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 401);
+                return $this->response->errorUnauthorized();
             }
         } catch (JWTException $e) {
             // something went wrong
-            return response()->json(['error' => 'could_not_create_token'], 500);
+            return $this->response->error('Can not create token.', 500);
         }
 
         // if no errors are encountered we can return a JWT
