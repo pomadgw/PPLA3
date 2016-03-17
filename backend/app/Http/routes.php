@@ -38,6 +38,12 @@ $api->version('v1', function ($api) {
     // route untuk login
     $api->post('authenticate', 'App\Http\Controllers\AuthenticateController@authenticate');
 
+    // route
+    $api->post('oauth/access_token', 'App\Http\Controllers\AuthenticateController@getAccessToken');
+
+    // route untuk mendapatkan token
+    $api->get('token', 'App\Http\Controllers\AuthenticateController@getJWTToken');
+
     // route untuk register
     // POST /api/users/register
     $api->post('users/register', 'App\Http\Controllers\UserController@register');
