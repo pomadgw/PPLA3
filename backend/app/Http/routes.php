@@ -38,11 +38,14 @@ $api->version('v1', function ($api) {
     // route untuk login
     $api->post('authenticate', 'App\Http\Controllers\AuthenticateController@authenticate');
 
-    // route
+    // route untuk login (lewat OAuth2, eksperimen)
     $api->post('oauth/access_token', 'App\Http\Controllers\AuthenticateController@getAccessToken');
 
     // route untuk mendapatkan token
     $api->get('token', 'App\Http\Controllers\AuthenticateController@getJWTToken');
+    
+    // route untuk men-invalidate token (dengan demikian, logout)
+    $api->get('invalidate', 'App\Http\Controllers\AuthenticateController@invalidate');
 
     // route untuk register
     // POST /api/users/register

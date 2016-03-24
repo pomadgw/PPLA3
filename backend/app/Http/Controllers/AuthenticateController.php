@@ -22,7 +22,7 @@ class AuthenticateController extends Controller
        // Apply the jwt.auth middleware to all methods in this controller
        // except for the authenticate method. We don't want to prevent
        // the user from retrieving their token if they don't already have it
-       $this->middleware('api.auth', ['except' => ['authenticate', 'verifyUser', 'getAccessToken']]);
+       $this->middleware('api.auth', ['except' => ['authenticate', 'verifyUser', 'getAccessToken', 'getJWTToken']]);
     }
 
     public function index()
@@ -82,5 +82,15 @@ class AuthenticateController extends Controller
     public function getAccessToken()
     {
         return Authorizer::issueAccessToken();
+    }
+
+    public function invalidate()
+    {
+        $token = JWTAuth::getToken();
+        if ($token) {
+            JWTAuth::setToken($token)->invalidate();
+        }
+
+        return $this->response->withArray(['error' => 'logout_success']);
     }
 }
