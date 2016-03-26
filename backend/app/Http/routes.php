@@ -32,18 +32,26 @@ Route::group(['middleware' => ['web']], function () {
     //
 });
 
-Route::group(['prefix' => 'api'], function()
-{
-    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+$api = app('Dingo\Api\Routing\Router');
 
+$api->version('v1', function ($api) {
     // route untuk login
-    Route::post('authenticate', 'AuthenticateController@authenticate');
+    $api->post('authenticate', 'App\Http\Controllers\AuthenticateController@authenticate');
+
+    // route untuk login (lewat OAuth2, eksperimen)
+    $api->post('oauth/access_token', 'App\Http\Controllers\AuthenticateController@getAccessToken');
+
+    // route untuk mendapatkan token
+    $api->get('token', 'App\Http\Controllers\AuthenticateController@getJWTToken');
+    
+    // route untuk men-invalidate token (dengan demikian, logout)
+    $api->get('invalidate', 'App\Http\Controllers\AuthenticateController@invalidate');
 
     // route untuk register
     // POST /api/users/register
-    Route::post('users/register', 'UserController@register');
-
+    $api->post('users/register', 'App\Http\Controllers\UserController@register');
+    
     // route untuk mendapatkan info user yang login
     // GET /api/users/current
-    Route::get('users/current', 'UserController@get_current_user_info');
+    $api->get('users/current', 'App\Http\Controllers\UserController@get_current_user_info');
 });

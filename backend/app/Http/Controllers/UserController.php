@@ -4,64 +4,89 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Auth;
+use Dingo\Api\Routing\Helpers;
+
 use Hash;
+use Validator;
 use App\Http\Requests;
 use App\User;
-use JWTAuth;
-use TymonJWTAuthExceptionsJWTException;
-use TymonJWTAuthMiddlewareGetUserFromToken;
 
+/**
+ * @Resource("Users", uri="/api/users")
+ */
 class UserController extends Controller
 {
+    use Helpers;
+
     public function __construct()
     {
-       // Apply the jwt.auth middleware to all methods in this controller.
-       $this->middleware('jwt.auth', ['except' => ['register']]);
-    }
-
-    public function get_current_user_info()
-    {
-        return Auth::user();
+        // buat semua method di bawah ini kecuali `register`
+        // membutuhkan otentikasi
+        $this->middleware('api.auth', ['except' => ['register']]);
+        // $this->scopes('read_user_data', ['get_current_user_info']);
     }
 
     /**
+     * Mendapatkan data user yang sedang login
+     *
+     * Method ini akan mengembalikan data user yang
+     * sedang login (berdasarkan token yang digunakan).
+     * *Endpoint* ini membutuhkan otentikasi.
+     * 
+     * @Get("/current")
+     * @Versions({"v1"})
+     * })
+     */
+    public function get_current_user_info()
+    {
+        $user = $this->auth->user();
+        return $user;
+    }
+
+    /**
+     * Mendaftarkan user baru
+     *
      * Method ini akan memasukkan data di parameter $request
      * (dari pengiriman info user baru) ke dalam database
-     * dan akan mengembalikan token JSON yang siap dipakai.
-     * $request harus berisi:
-     * - email
-     * - name
-     * - password
-     * - gender (nilai hanya ada dua: 'm' (untuk laki-laki)
-         dan 'f' (untuk perempuan))
-     * - birth_date (tanggal lahir, formatnya 'YYYY-MM-DD')
-     * - profession
-     * - city (kota/kabupaten)
-     * - province
+     * dan akan mengembalikan sukses jika tidak ada error.
+     * Jika terdapat error, akan dikembalikan detail errornya.
+     *
+     * @Post("/register")
+     * @Versions({"v1"})
+     * })
      */
     public function register(Request $request)
     {
         $error = [];
-        $params = ['email', 'name', 'password', 'gender', 'birth_date', 'profession',
-                  'city', 'province'];
-        
-        foreach ($params as $param) {
-            if(!$request->has($param)) {
-                array_push($error, $param);
-            }
+
+        // parameter yang dibutuhkan:
+        $params = ['email' => 'required|email',
+                   'name' => 'required',
+                   'password' => 'required|min:8',
+                   'gender' => 'required|size:1', // opsi: m (laki-laki) / f (perempuan)
+                   'birth_date' => 'required|date_format:Y-m-d',
+                   'profession' => 'required',
+                   'city' => 'required',
+                   'province' => 'required'];
+
+        $messages = [
+            'required'=> ':attribute harus ada.',
+            'size' => 'Ukuran :attribute harus tepat :size.',
+            'min' => ':attribute harus minimal berukuran :min karakter.',
+            'email' => ':attribute harus berformat email.',
+        ];
+
+        // Validasi data. Jika ada data yang tidak valid/tidak
+        // diisi, akan memunculkan error.
+        $validator = Validator::make($request->all(), $params, $messages);
+        if ($validator->fails()) {
+            return response()->json(['error' => 'register_failed', 'description' => $validator->errors()], 422);
         }
 
         // jika email yang didaftarkan sudah ada di database,
         // kirim error bahwa email sudah ada
         if (User::where('email', $request->email)->exists()) {
-            return response()->json(['error' => 'email_exists'], 409);
-        }
-
-        // jika ada data yang belum lengkap, kirim error
-        // untuk melengkapi data pendaftaran
-        if (!empty($error)) {
-            return response()->json(['error' => 'missing_data', 'data' => $error], 400);
+            return response()->json(['error' => 'Email is already registered.'], 409);
         }
 
         // jika email belum ada (belum terdaftar) dan datanya
