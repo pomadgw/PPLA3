@@ -1,4 +1,4 @@
-package com.surverior.loginandregistration.app;
+package com.surverior.android.app;
 
 import android.app.Application;
 import android.text.TextUtils;

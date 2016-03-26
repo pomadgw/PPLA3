@@ -3,7 +3,7 @@
  * URL: www.androidhive.info
  * twitter: http://twitter.com/ravitamada
  * */
-package com.surverior.loginandregistration.helper;
+package com.surverior.android.helper;
 
 import android.content.ContentValues;
 import android.content.Context;

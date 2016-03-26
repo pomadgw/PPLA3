@@ -1,4 +1,4 @@
-package com.surverior.loginandregistration.app;
+package com.surverior.android.app;
 
 public class AppConfig {
 	// Server user login url

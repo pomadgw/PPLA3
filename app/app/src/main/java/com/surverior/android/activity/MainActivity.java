@@ -1,4 +1,4 @@
-package com.surverior.loginandregistration.activity;
+package com.surverior.android.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import com.surverior.loginandregistration.R;
-import com.surverior.loginandregistration.helper.SQLiteHandler;
-import com.surverior.loginandregistration.helper.SessionManager;
+import com.surverior.android.R;
+import com.surverior.android.helper.SQLiteHandler;
+import com.surverior.android.helper.SessionManager;
 
 public class MainActivity extends Activity {
 
