@@ -95,6 +95,7 @@
     <orderEntry type="library" exported="" name="appcompat-v7-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-appindexing-8.1.0" level="project" />
+    <orderEntry type="library" exported="" name="java-jwt-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="library-aar-1.0.0" level="project" />
   </component>
 </module>

@@ -31,6 +31,7 @@ import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
 import com.surverior.android.helper.SQLiteHandler;
 import com.surverior.android.helper.SessionManager;
+import com.surverior.android.helper.TokenHandler;
 
 public class LoginActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -124,20 +125,29 @@ public class LoginActivity extends Activity {
 
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
+                    // boolean error = jObj.getBoolean("error");
+                    String token = jObj.getString("token");
+
+//                    Log.d(TAG, "Token:" + token);
+
+                    TokenHandler tokenObj = new TokenHandler(token);
+
+                    Log.d(TAG, "Token:" + tokenObj.getToken());
+                    Log.d(TAG, "Expired:" + tokenObj.getExpire());
 
                     // Check for error node in json
-                    if (!error) {
+                    //if (!error) {
                         // user successfully logged in
                         // Create login session
                         session.setLogin(true);
+                        session.setToken(token);
 
                         // Now store the user in SQLite
-                        String uid = jObj.getString("uid");
+                    //    String uid = jObj.getString("uid");
 
-                        JSONObject user = jObj.getJSONObject("user");
-                        String name = user.getString("name");
-                        String email = user.getString("email");
+                    //    JSONObject user = jObj.getJSONObject("user");
+                    //    String name = user.getString("name");
+                    //    String email = user.getString("email");
 //                        String gender = user.getString("gender");
 //                        String birth_date = user.getString("birth_date");
 //                        String profession = user.getString("profession");
@@ -147,19 +157,19 @@ public class LoginActivity extends Activity {
 //                                .getString("created_at");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid/*,gender,birth_date,profession,city,province, created_at*/);
+                    //    db.addUser(name, email, uid/*,gender,birth_date,profession,city,province, created_at*/);
 
                         // Launch main activity
                         Intent intent = new Intent(LoginActivity.this,
                                 MainActivity.class);
                         startActivity(intent);
                         finish();
-                    } else {
+                    //} else {
                         // Error in login. Get the error message
-                        String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
-                    }
+                    //    String errorMsg = jObj.getString("error_msg");
+                    //    Toast.makeText(getApplicationContext(),
+                    //            errorMsg, Toast.LENGTH_LONG).show();
+                    //}
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
