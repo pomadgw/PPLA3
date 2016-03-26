@@ -4,6 +4,7 @@
     <string name="app_name">Android Login and Registration</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="hint_repassword">Repassword</string>
     <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>
     <string name="btn_register">REGISTER</string>

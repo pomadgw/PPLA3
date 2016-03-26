@@ -3,7 +3,7 @@
  * URL: www.androidhive.info
  * twitter: http://twitter.com/ravitamada
  */
-package info.androidhive.loginandregistration.activity;
+package com.surverior.loginandregistration.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -26,11 +26,11 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import info.androidhive.loginandregistration.R;
-import info.androidhive.loginandregistration.app.AppConfig;
-import info.androidhive.loginandregistration.app.AppController;
-import info.androidhive.loginandregistration.helper.SQLiteHandler;
-import info.androidhive.loginandregistration.helper.SessionManager;
+import com.surverior.loginandregistration.R;
+import com.surverior.loginandregistration.app.AppConfig;
+import com.surverior.loginandregistration.app.AppController;
+import com.surverior.loginandregistration.helper.SQLiteHandler;
+import com.surverior.loginandregistration.helper.SessionManager;
 
 public class LoginActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
