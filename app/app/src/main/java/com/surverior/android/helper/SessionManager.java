@@ -48,6 +48,9 @@ public class SessionManager {
 
     public String getToken() {
         String token = pref.getString(KEY_TOKEN, "");
+
+		TokenHandler tokenObj = new TokenHandler(token, this);
+
         return token;
     }
 

@@ -14,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.surverior.android.R;
+import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
 import com.surverior.android.helper.SQLiteHandler;
 import com.surverior.android.helper.SessionManager;
@@ -24,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends Activity {
+	private static final String TAG = "SurveriorActivity";
 
 	private TextView txtName;
 	private TextView txtEmail;
@@ -59,7 +61,7 @@ public class MainActivity extends Activity {
 
 		SurveriorRequest req;
 
-		req = new SurveriorRequest(Request.Method.GET, "https://surverior.pomadgw.xyz/api/users/current", tokendb,
+		req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_GET_USER_DATA, tokendb,
 				new Response.Listener<String>() {
 					@Override
 					public void onResponse(String response) {
@@ -67,11 +69,11 @@ public class MainActivity extends Activity {
 							JSONObject jObj = new JSONObject(response);
                             JSONObject jUser = jObj.getJSONObject("user");
 
-							Log.d("SurveriorActivity", "response: " + response);
+							Log.d(TAG, "response: " + response);
 							txtName.setText(jUser.getString("name"));
 							txtEmail.setText(jUser.getString("email"));
 						} catch (JSONException e) {
-
+							Log.d(TAG, e.getMessage());
 						}
 					}
 				}, new Response.ErrorListener() {

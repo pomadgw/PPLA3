@@ -3,6 +3,7 @@ package com.surverior.android.helper;
 import com.android.volley.Request;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import java.util.HashMap;
@@ -25,5 +26,15 @@ public class SurveriorRequest extends StringRequest {
         headers.put("Authorization", "Bearer " + token.getToken());
 
         return headers;
+    }
+
+    @Override
+    protected VolleyError parseNetworkError(VolleyError volleyError){
+        if(volleyError.networkResponse != null && volleyError.networkResponse.data != null){
+            VolleyError error = new VolleyError(new String(volleyError.networkResponse.data));
+            volleyError = error;
+        }
+
+        return volleyError;
     }
 }
