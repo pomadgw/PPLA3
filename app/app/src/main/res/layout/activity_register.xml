@@ -137,18 +137,20 @@
 
             </LinearLayout>
 
-            <EditText
+            <Spinner
                 android:id="@+id/job"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:background="@color/input_register_bg"
                 android:hint="@string/hint_job"
-                android:inputType="textCapWords"
                 android:padding="10dp"
+                android:layout_marginBottom="10dp"
                 android:singleLine="true"
+                android:spinnerMode="dialog"
+                android:prompt="@string/hint_job"
+                android:text="@string/hint_job"
                 android:textColor="@color/input_register"
-                android:textColorHint="@color/input_register_hint" />
+                />
 
             <EditText
                 android:id="@+id/city"
@@ -163,18 +165,19 @@
                 android:textColor="@color/input_register"
                 android:textColorHint="@color/input_register_hint" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/province"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:background="@color/input_register_bg"
                 android:hint="@string/hint_province"
-                android:inputType="textCapWords"
                 android:padding="10dp"
                 android:singleLine="true"
+                android:spinnerMode="dialog"
+                android:prompt="@string/hint_province"
+                android:text="@string/hint_province"
                 android:textColor="@color/input_register"
-                android:textColorHint="@color/input_register_hint" />
+                />
 
 
 
