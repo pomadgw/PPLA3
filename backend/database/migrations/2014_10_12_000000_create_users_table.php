@@ -17,11 +17,11 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('gender', ['m', 'f']);
-            $table->date('birth_date');
-            $table->string('profession');
-            $table->string('city');
-            $table->string('province');
+            $table->enum('gender', ['m', 'f'])->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('profession')->nullable();
+            $table->string('city')->nullable();
+            $table->string('province')->nullable();
 
             // Jika butuh konfirmasi email....
 
