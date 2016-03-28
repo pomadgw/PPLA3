@@ -23,6 +23,7 @@ public class SessionManager {
 	
 	private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String KEY_TOKEN = "token";
+    private static final String KEY_TOKEN_EXPIRE = "TOKEN_EXP";
 
 	public SessionManager(Context context) {
 		this._context = context;
@@ -46,16 +47,26 @@ public class SessionManager {
 		Log.d(TAG, "User login session modified!");
 	}
 
+    public void setTokenExpire(int time) {
+        editor.putInt(KEY_TOKEN_EXPIRE, time);
+        editor.commit();
+    }
+
+    public int getTokenExpire() {
+        return pref.getInt(KEY_TOKEN_EXPIRE, 0);
+    }
+
     public String getToken() {
         String token = pref.getString(KEY_TOKEN, "");
 
 		TokenHandler tokenObj = new TokenHandler(token, this);
 
-        return token;
+        return tokenObj.getToken();
     }
 
     public void removeToken() {
         editor.remove(KEY_TOKEN);
+        editor.remove(KEY_TOKEN_EXPIRE);
         editor.commit();
     }
 	

@@ -141,6 +141,7 @@ public class LoginActivity extends Activity {
                         // Create login session
                         session.setLogin(true);
                         session.setToken(token);
+                        session.setTokenExpire(tokenObj.getExpire());
 
                         // Now store the user in SQLite
                     //    String uid = jObj.getString("uid");
@@ -181,9 +182,21 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Login Error: " + error.getMessage());
+                String str = error.getMessage();
+                if (error.networkResponse != null) {
+                    try {
+                        JSONObject jObj = new JSONObject(new String(error.networkResponse.data));
+                        Log.e(TAG, "Login Error JSON: " + jObj);
+                        if(jObj.getInt("status_code") == 401) {
+                            str = getResources().getString(R.string.error_unauthorized);
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Error parsing JSON");
+                    }
+                }
+                Log.e(TAG, "Login Error: " + str);
                 Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                        str, Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         }) {

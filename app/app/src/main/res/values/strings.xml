@@ -21,4 +21,7 @@
     <string name="hint_birthdate">Birthdate</string>
     <string name="selectdate">Select Date</string>
 
+    <!-- ERROR MESSAGES -->
+    <string name="error_unauthorized">Error: Username or password is wrong.</string>
+
 </resources>

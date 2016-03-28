@@ -12,9 +12,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.auth0.jwt.JWTExpiredException;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.JWTVerifyException;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
 
@@ -34,13 +31,15 @@ import java.util.Map;
  */
 public class TokenHandler {
     private String token;
-    private Map<String,Object> decodedPayload;
     private final static String TAG = "TokenHandler";
     private SessionManager session;
+    private JWTToken tokenObj;
+    private boolean updatingToken;
 
     public TokenHandler(String token, SessionManager session) {
         this.token = token;
         this.session = session;
+        updatingToken = false;
         decode();
     }
 
@@ -50,38 +49,22 @@ public class TokenHandler {
 
     public void decode() {
         try {
-            decodedPayload = new JWTVerifier(AppConfig.JWT_SECRET).verify(token);
-
-            for (String key : decodedPayload.keySet()) {
-                Log.d(TAG, key + " " + decodedPayload.get(key));
-            }
+            Log.d(TAG, "Decoding...");
+            tokenObj = new JWTToken(token);
         } catch(NoSuchAlgorithmException e) {
             e.printStackTrace();
             Log.w(TAG, "Algoritma untuk hashingnya nggak ada?? " + e.getMessage());
         } catch(InvalidKeyException e) {
             e.printStackTrace();
             Log.w(TAG, "Salah kunci: " + e.getMessage());
-        } catch(IOException e) {
-            e.printStackTrace();
-            Log.w(TAG, "Masalah dengan IO (jaringan?): " + e.getMessage());
         } catch(SignatureException e) {
-            e.printStackTrace();
-            Log.w(TAG, "Error tanda tangan: " + e.getMessage());
-        } catch(JWTExpiredException e) {
-            Log.w(TAG, "Error token JWT sudah kadaluarsa: " + e.getMessage());
-            renew();
-        } catch(JWTVerifyException e) {
             e.printStackTrace();
             Log.w(TAG, "Error menverifikasi JWT: " + e.getMessage());
         }
     }
 
-    public Object get(String key) {
-        return decodedPayload.get(key);
-    }
-
     public boolean isExpired() {
-        long expiredTime = getExpire();
+        long expiredTime = tokenObj.getExpire();
         long nowTime = System.currentTimeMillis() / 1000L;
 
         Date exp = new Date(expiredTime * 1000);
@@ -96,20 +79,35 @@ public class TokenHandler {
     }
 
     public int getExpire() {
-        Object tmp = decodedPayload.get("exp");
-        if (tmp == null) {
-            Log.d(TAG, "!! WHAT? !!");
-        }
-        return (Integer) tmp;
+        return tokenObj.getExpire();
     }
 
     public String getToken() {
+        Log.d(TAG, "Token lama: " + token);
+
+        if (isExpired()) {
+            String oldToken = token;
+            updatingToken = true;
+            renew();
+            // TODO: karena volley bersifat async,
+            //       harus dicari cara agar tokennya
+            //       ter-update sebelum dipakai
+            //       Belum tahu jika cara ini bisa dipakai...
+            Log.d(TAG, "Blocking to get token...");
+            long start = System.currentTimeMillis();
+            long end = 0;
+            while (oldToken.equals(token)) {
+                end = System.currentTimeMillis();
+                // If token is not updated for 30 seconds...
+                if (end - start >= 30 * 1000) {
+                    break;
+                }
+            }
+            Log.d(TAG, "Stop blocking");
+        }
+        Log.d(TAG, "Token baru: " + token);
         return token;
     }
-
-//    public void renew() {
-//        renew(false);
-//    }
 
     // isChecked: if it's true, it is already checked that the token is expired
     public void renew() {
@@ -123,20 +121,25 @@ public class TokenHandler {
                             JSONObject jObj = new JSONObject(response);
                             Log.d(TAG, "JSON: " + jObj);
                             token = jObj.getString("token");
+                            decode();
                             if (session != null) {
                                 Log.d(TAG, "Memperbarui token ke session");
                                 session.setToken(token);
+                                session.setTokenExpire(getExpire());
+                                Log.d(TAG, "New token expired at: " + getExpire());
                             }
                             Log.d(TAG, "New token: " + token);
-                            decode();
+                            updatingToken = false;
                         } catch(JSONException e) {
                             e.printStackTrace();
+                            updatingToken = false;
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        updatingToken = false;
                         Log.d(TAG, "Error memperbarui token");
                         NetworkResponse response = error.networkResponse;
 
@@ -156,7 +159,6 @@ public class TokenHandler {
                                         Log.d(TAG, "Error " + response.statusCode);
                                 }
                             } catch(JSONException e) {
-
                             }
                             //Additional cases
                         }
