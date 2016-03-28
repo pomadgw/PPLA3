@@ -334,13 +334,14 @@ public class RegisterActivity extends Activity {
                     JSONObject jObj = new JSONObject(response);
                     String error = jObj.getString("type");
                     if (error.equals("success")) {
+                        Log.d(TAG, "Success registering....");
                         // User successfully stored in MySQL
                         // Now store the user in sqlite
-                        String uid = jObj.getString("uid");
+//                        String uid = jObj.getString("uid");
 
-                        JSONObject user = jObj.getJSONObject("user");
-                        String name = user.getString("name");
-                        String email = user.getString("email");
+//                        JSONObject user = jObj.getJSONObject("user");
+//                        String name = user.getString("name");
+//                        String email = user.getString("email");
   /*                      String gender = user.getString("gender");
                         String birth_date = user.getString("birth_date");
                         String profession = user.getString("profession");
@@ -349,7 +350,7 @@ public class RegisterActivity extends Activity {
                         String created_at = user.getString("created_at");
 */
                         // Inserting row in users table
-                        db.addUser(name, email, uid/*, gender, birth_date,profession, city,province, created_at*/);
+//                        db.addUser(name, email, uid/*, gender, birth_date,profession, city,province, created_at*/);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
