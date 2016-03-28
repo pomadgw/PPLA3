@@ -80,13 +80,13 @@ class UserController extends Controller
         // diisi, akan memunculkan error.
         $validator = Validator::make($request->all(), $params, $messages);
         if ($validator->fails()) {
-            return response()->json(['error' => 'register_failed', 'description' => $validator->errors()], 422);
+            return response()->json(['error' => 'Register failed', "type" => "fatal", 'description' => $validator->errors()], 422);
         }
 
         // jika email yang didaftarkan sudah ada di database,
         // kirim error bahwa email sudah ada
         if (User::where('email', $request->email)->exists()) {
-            return response()->json(['error' => 'Email is already registered.'], 409);
+            return response()->json(['error' => 'Email is already registered.', "type" => "fatal"], 409);
         }
 
         // jika email belum ada (belum terdaftar) dan datanya
@@ -106,6 +106,6 @@ class UserController extends Controller
         // simpan ke database
         $new_user->save();
         
-        return response()->json(['error' => 'success_register'], 201);
+        return response()->json(['error' => 'Success register to server', "type" => "success"], 201);
     }
 }
