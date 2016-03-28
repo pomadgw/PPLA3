@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Dingo\Api\Routing\Helpers;
 
 use Hash;
+use Auth;
 use Validator;
 use App\Http\Requests;
 use App\User;
@@ -63,11 +64,11 @@ class UserController extends Controller
         $params = ['email' => 'required|email',
                    'name' => 'required',
                    'password' => 'required|min:8',
-                   'gender' => 'required|size:1', // opsi: m (laki-laki) / f (perempuan)
-                   'birth_date' => 'required|date_format:Y-m-d',
-                   'profession' => 'required',
-                   'city' => 'required',
-                   'province' => 'required'];
+                   'gender' => 'size:1', // opsi: m (laki-laki) / f (perempuan)
+                   'birth_date' => 'date_format:Y-m-d',
+                   'profession' => '',
+                   'city' => '',
+                   'province' => ''];
 
         $messages = [
             'required'=> ':attribute harus ada.',
@@ -80,32 +81,98 @@ class UserController extends Controller
         // diisi, akan memunculkan error.
         $validator = Validator::make($request->all(), $params, $messages);
         if ($validator->fails()) {
-            return response()->json(['error' => 'Register failed', "type" => "fatal", 'description' => $validator->errors()], 422);
+            throw new \Dingo\Api\Exception\StoreResourceFailedException("Register failed", $validator->errors());
+            
         }
 
         // jika email yang didaftarkan sudah ada di database,
         // kirim error bahwa email sudah ada
         if (User::where('email', $request->email)->exists()) {
-            return response()->json(['error' => 'Email is already registered.', "type" => "fatal"], 409);
+            throw new \Symfony\Component\HttpKernel\Exception\ConflictHttpException("Email is already registered.");
         }
 
         // jika email belum ada (belum terdaftar) dan datanya
         // lengkap...
+        var_dump($request->gender);
+        die();
 
         $new_user = new User;
 
         $new_user->name = $request->name;
         $new_user->email = $request->email;
         $new_user->password = Hash::make($request->password);
-        $new_user->gender = $request->gender;
-        $new_user->birth_date = $request->birth_date;
-        $new_user->profession = $request->profession;
-        $new_user->city = $request->city;
-        $new_user->province = $request->province;
+        if (!is_null($request->gender))
+            $new_user->gender = $request->gender;
+        if (!is_null($request->birth_date))
+            $new_user->birth_date = $request->birth_date;
+        if (!is_null($request->profession))
+            $new_user->profession = $request->profession;
+        if (!is_null($request->city))
+            $new_user->city = $request->city;
+        if (!is_null($request->province))
+            $new_user->province = $request->province;
 
         // simpan ke database
         $new_user->save();
         
         return response()->json(['error' => 'Success register to server', "type" => "success"], 201);
+    }
+
+    /**
+     * Men-update data user
+     *
+     * Method ini akan udpate data user berdasarkan parameter $request
+     * ke dalam database
+     * dan akan mengembalikan sukses jika tidak ada error.
+     * Jika terdapat error, akan dikembalikan detail errornya.
+     *
+     * @Post("/{:id}/update")
+     * @Versions({"v1"})
+     * })
+     */
+    public function updateUser($id, Request $request) {
+        $curr_id = Auth::user()->id;
+        if ($curr_id == $id) {
+            $name = $request->name;
+            $password = $request->password;
+            $gender = $request->gender;
+            $birth_date = $request->birth_date;
+            $profession = $request->profession;
+            $city = $request->city;
+            $province = $request->province;
+
+            if (!is_null($password)) {
+                $password = Hash::make($password);
+            }
+
+            if (!is_null($name)) {
+                Auth::user()->name = $name;
+            }
+            if (!is_null($password)) {
+                Auth::user()->password = $password;
+            }
+            if (!is_null($gender)) {
+                Auth::user()->gender = $gender;
+            }
+            if (!is_null($birth_date)) {
+                Auth::user()->birth_date = $birth_date;
+            }
+            if (!is_null($profession)) {
+                Auth::user()->profession = $profession;
+            }
+            if (!is_null($city)) {
+                Auth::user()->city = $city;
+            }
+            if (!is_null($province)) {
+                Auth::user()->province = $province;
+            }
+
+            Auth::user()->save();
+
+            return response()->json(['message' => "Success update info", "statuc_code" => 200], 200);
+        } else {
+            throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("You don't have access to other user.");
+            
+        }
     }
 }

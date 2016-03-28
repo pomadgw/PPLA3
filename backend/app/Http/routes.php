@@ -54,4 +54,7 @@ $api->version('v1', function ($api) {
     // route untuk mendapatkan info user yang login
     // GET /api/users/current
     $api->get('users/current', 'App\Http\Controllers\UserController@get_current_user_info');
+
+    // POST /api/users/{id}/update
+    $api->post('users/{id}/update', 'App\Http\Controllers\UserController@updateUser');
 });
