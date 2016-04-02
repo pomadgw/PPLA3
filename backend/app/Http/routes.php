@@ -56,5 +56,5 @@ $api->version('v1', function ($api) {
     $api->get('users/current', 'App\Http\Controllers\UserController@get_current_user_info');
 
     // POST /api/users/{id}/update
-    $api->post('users/{id}/update', 'App\Http\Controllers\UserController@updateUser');
+    $api->post('users/current/update', 'App\Http\Controllers\UserController@updateUser');
 });

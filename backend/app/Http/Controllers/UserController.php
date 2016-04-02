@@ -130,9 +130,9 @@ class UserController extends Controller
      * @Versions({"v1"})
      * })
      */
-    public function updateUser($id, Request $request) {
-        $curr_id = Auth::user()->id;
-        if ($curr_id == $id) {
+    public function updateUser(Request $request) {
+        $curr_id = Auth::user();
+        // if ($curr_id == $id) {
             $name = $request->name;
             $password = $request->password;
             $gender = $request->gender;
@@ -170,9 +170,9 @@ class UserController extends Controller
             Auth::user()->save();
 
             return response()->json(['message' => "Success update info", "statuc_code" => 200], 200);
-        } else {
-            throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("You don't have access to other user.");
+        // } else {
+        //     throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("You don't have access to other user.");
             
-        }
+        // }
     }
 }
