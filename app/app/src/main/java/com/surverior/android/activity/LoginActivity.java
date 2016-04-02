@@ -33,7 +33,7 @@ import com.surverior.android.helper.SQLiteHandler;
 import com.surverior.android.helper.SessionManager;
 
 public class LoginActivity extends Activity {
-    private static final String TAG = RegisterActivity.class.getSimpleName();
+    private static final String TAG = LoginActivity.class.getSimpleName();
     private Button btnLogin;
     private Button btnLinkToRegister;
     private EditText inputEmail;
@@ -136,24 +136,24 @@ public class LoginActivity extends Activity {
                         String uid = jObj.getString("uid");
 
                         JSONObject user = jObj.getJSONObject("user");
-                        String name = user.getString("name");
                         String email = user.getString("email");
-//                        String gender = user.getString("gender");
-//                        String birth_date = user.getString("birth_date");
-//                        String profession = user.getString("profession");
-//                        String city = user.getString("city");
-//                        String province = user.getString("province");
-//                        String created_at = user
-//                                .getString("created_at");
+                        String name = user.getString("name");
+                        db.addUser( email, uid/*,gender,birth_date,profession,city,province, created_at*/);
 
-                        // Inserting row in users table
-                        db.addUser(name, email, uid/*,gender,birth_date,profession,city,province, created_at*/);
 
                         // Launch main activity
-                        Intent intent = new Intent(LoginActivity.this,
-                                MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        if(name.equals("null")){
+                            Intent intent = new Intent(LoginActivity.this,
+                                    ProfileActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else{
+                            Intent intent = new Intent(LoginActivity.this,
+                                    MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");

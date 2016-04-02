@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.surverior.loginandregistration"
+        applicationId "com.surverior.android"
         minSdkVersion 15
         targetSdkVersion 23
     }
