@@ -34,7 +34,7 @@ import com.surverior.android.helper.SessionManager;
 import com.surverior.android.helper.TokenHandler;
 
 public class LoginActivity extends Activity {
-    private static final String TAG = RegisterActivity.class.getSimpleName();
+    private static final String TAG = LoginActivity.class.getSimpleName();
     private Button btnLogin;
     private Button btnLinkToRegister;
     private EditText inputEmail;
@@ -161,11 +161,19 @@ public class LoginActivity extends Activity {
                     //    db.addUser(name, email, uid/*,gender,birth_date,profession,city,province, created_at*/);
 
                         // Launch main activity
-                        Intent intent = new Intent(LoginActivity.this,
-                                MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    //} else {
+                        if(name.equals("null")){
+                            Intent intent = new Intent(LoginActivity.this,
+                                    ProfileActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else{
+                            Intent intent = new Intent(LoginActivity.this,
+                                    MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                    } else {
                         // Error in login. Get the error message
                     //    String errorMsg = jObj.getString("error_msg");
                     //    Toast.makeText(getApplicationContext(),
