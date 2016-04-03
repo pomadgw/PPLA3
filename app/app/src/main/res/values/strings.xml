@@ -8,8 +8,9 @@
     <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>
     <string name="btn_register">REGISTER</string>
+    <string name="btn_submit">SUBMIT</string>
     <string name="btn_link_to_register">Not a member? Sign up now.</string>
-    <string name="btn_link_to_login">Already registred! Login Me.</string>
+    <string name="btn_link_to_login">Already registered? Login here.</string>
     <string name="welcome">Welcome</string>
     <string name="btn_logout">LOGOUT</string>
     <string name="name">Fullname</string>
@@ -20,5 +21,10 @@
 
     <string name="hint_birthdate">Birthdate</string>
     <string name="selectdate">Select Date</string>
+    <string name="login_title">SURVERIOR</string>
+    <string name="create_account">Create Account</string>
+
+    <!-- ERROR MESSAGES -->
+    <string name="error_unauthorized">Error: Username or password is wrong.</string>
 
 </resources>

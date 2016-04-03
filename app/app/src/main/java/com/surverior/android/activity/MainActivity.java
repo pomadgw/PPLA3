@@ -109,7 +109,7 @@ public class MainActivity extends Activity {
 	private void logoutUser() {
 		session.setLogin(false);
 
-		// db.deleteUsers();
+		db.deleteUsers();
         session.removeToken();
 
 		// Launching the login activity

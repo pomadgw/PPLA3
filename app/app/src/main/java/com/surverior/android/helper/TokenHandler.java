@@ -11,10 +11,8 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
-import com.auth0.jwt.JWTExpiredException;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.JWTVerifyException;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
 
@@ -28,19 +26,24 @@ import java.security.SignatureException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by rahadian.yusuf on 26/03/16.
  */
 public class TokenHandler {
     private String token;
-    private Map<String,Object> decodedPayload;
     private final static String TAG = "TokenHandler";
     private SessionManager session;
+    private JWTToken tokenObj;
+    private boolean updatingToken;
 
     public TokenHandler(String token, SessionManager session) {
         this.token = token;
         this.session = session;
+        updatingToken = false;
         decode();
     }
 
@@ -50,38 +53,22 @@ public class TokenHandler {
 
     public void decode() {
         try {
-            decodedPayload = new JWTVerifier(AppConfig.JWT_SECRET).verify(token);
-
-            for (String key : decodedPayload.keySet()) {
-                Log.d(TAG, key + " " + decodedPayload.get(key));
-            }
+            Log.d(TAG, "Decoding...");
+            tokenObj = new JWTToken(token);
         } catch(NoSuchAlgorithmException e) {
             e.printStackTrace();
             Log.w(TAG, "Algoritma untuk hashingnya nggak ada?? " + e.getMessage());
         } catch(InvalidKeyException e) {
             e.printStackTrace();
             Log.w(TAG, "Salah kunci: " + e.getMessage());
-        } catch(IOException e) {
-            e.printStackTrace();
-            Log.w(TAG, "Masalah dengan IO (jaringan?): " + e.getMessage());
         } catch(SignatureException e) {
-            e.printStackTrace();
-            Log.w(TAG, "Error tanda tangan: " + e.getMessage());
-        } catch(JWTExpiredException e) {
-            Log.w(TAG, "Error token JWT sudah kadaluarsa: " + e.getMessage());
-            renew();
-        } catch(JWTVerifyException e) {
             e.printStackTrace();
             Log.w(TAG, "Error menverifikasi JWT: " + e.getMessage());
         }
     }
 
-    public Object get(String key) {
-        return decodedPayload.get(key);
-    }
-
     public boolean isExpired() {
-        long expiredTime = getExpire();
+        long expiredTime = tokenObj.getExpire();
         long nowTime = System.currentTimeMillis() / 1000L;
 
         Date exp = new Date(expiredTime * 1000);
@@ -96,72 +83,28 @@ public class TokenHandler {
     }
 
     public int getExpire() {
-        Object tmp = decodedPayload.get("exp");
-        if (tmp == null) {
-            Log.d(TAG, "!! WHAT? !!");
-        }
-        return (Integer) tmp;
+        return tokenObj.getExpire();
     }
 
     public String getToken() {
+        Log.d(TAG, "Token lama: " + token);
+
+        if (isExpired()) {
+            String oldToken = token;
+            updatingToken = true;
+            renew();
+        }
+        Log.d(TAG, "Token baru: " + token);
         return token;
     }
-
-//    public void renew() {
-//        renew(false);
-//    }
 
     // isChecked: if it's true, it is already checked that the token is expired
     public void renew() {
         final String oldToken = token;
         Log.d(TAG, "Memperbarui token");
-        StringRequest strReq = new StringRequest(Request.Method.GET, AppConfig.URL_RENEW_TOKEN,
-                new Response.Listener<String>() {
-                    public void onResponse(String response) {
-                        try {
-                            // ambil token baru!
-                            JSONObject jObj = new JSONObject(response);
-                            Log.d(TAG, "JSON: " + jObj);
-                            token = jObj.getString("token");
-                            if (session != null) {
-                                Log.d(TAG, "Memperbarui token ke session");
-                                session.setToken(token);
-                            }
-                            Log.d(TAG, "New token: " + token);
-                            decode();
-                        } catch(JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, "Error memperbarui token");
-                        NetworkResponse response = error.networkResponse;
-
-                        Log.d(TAG, "ERROR: " + error.toString());
-                        Log.d(TAG, "ERROR: is null? " + (error.networkResponse == null));
-
-                        if(response != null){
-                            try {
-                                JSONObject jObj = new JSONObject(new String(response.data));
-                                Log.d(TAG, (String)jObj.get("message"));
-                                switch (response.statusCode) {
-                                    case 401:
-                                    case 500:
-                                        Log.d(TAG, "Tidak diberi akses!");
-                                        break;
-                                    default:
-                                        Log.d(TAG, "Error " + response.statusCode);
-                                }
-                            } catch(JSONException e) {
-
-                            }
-                            //Additional cases
-                        }
-                    }
-                }) {
+        StringRequest strReq;
+        RequestFuture<String> future = RequestFuture.newFuture();
+        strReq = new StringRequest(Request.Method.GET, AppConfig.URL_RENEW_TOKEN, future, future) {
 
             @Override
             protected Map<String, String> getParams() {
@@ -179,23 +122,31 @@ public class TokenHandler {
 
                 return headers;
             }
-
-//            @Override
-//            protected VolleyError parseNetworkError(VolleyError volleyError) {
-//                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
-//                    VolleyError error = new VolleyError(new String(volleyError.networkResponse.data));
-//                    volleyError = error;
-//                }
-//
-//                return volleyError;
-//            }
         };
 
         AppController.getInstance().addToRequestQueue(strReq, "get_new_token");
 
-//        if (session != null) {
-//            Log.d(TAG, "Memperbarui token ke session");
-//            session.setToken(token);
-//        }
+        try {
+            String response = future.get(15, TimeUnit.SECONDS); // Tunggu 15 detik untuk mendapatkan token baru
+            JSONObject jObj = new JSONObject(response);
+            Log.d(TAG, "JSON: " + jObj);
+            token = jObj.getString("token");
+            decode();
+            if (session != null) {
+                Log.d(TAG, "Memperbarui token ke session");
+                session.setToken(token);
+                session.setTokenExpire(getExpire());
+                Log.d(TAG, "New token expired at: " + getExpire());
+            }
+            Log.d(TAG, "New token: " + token);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch(TimeoutException e) {
+            Log.d(TAG, "ERROR: timeout... " + e.toString());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
