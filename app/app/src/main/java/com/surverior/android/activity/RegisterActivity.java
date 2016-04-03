@@ -10,15 +10,21 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request.Method;
@@ -29,8 +35,11 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.surverior.android.R;
@@ -46,14 +55,13 @@ public class RegisterActivity extends Activity {
     private EditText inputFullName;
     private EditText inputEmail;
     private EditText inputPassword;
-    private EditText inputRepassword;
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
     //Editing
     private EditText inputCity;
-    private EditText inputJob;
-    private EditText inputProvince;
+    private Spinner inputJob;
+    private Spinner inputProvince;
     private EditText inputDate;
     private ImageButton ib;
     private Calendar cal;
@@ -73,12 +81,11 @@ public class RegisterActivity extends Activity {
         inputFullName = (EditText) findViewById(R.id.name);
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
-        inputJob = (EditText) findViewById(R.id.job);
+        inputJob = (Spinner) findViewById(R.id.job);
         inputCity = (EditText) findViewById(R.id.city);
-        inputProvince = (EditText) findViewById(R.id.province);
+        inputProvince = (Spinner) findViewById(R.id.province);
         btnRegister = (Button) findViewById(R.id.btnRegister);
         btnLinkToLogin = (Button) findViewById(R.id.btnLinkToLoginScreen);
-        inputRepassword = (EditText) findViewById((R.id.repassword));
 
         //input calendar
         ib = (ImageButton) findViewById(R.id.imageButton1);
@@ -107,11 +114,11 @@ public class RegisterActivity extends Activity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton rb = (RadioButton) group.findViewById(checkedId);
-                if(null!=rb && checkedId > -1){
+                if (null != rb && checkedId > -1) {
                     Toast.makeText(RegisterActivity.this, rb.getText(), Toast.LENGTH_SHORT).show();
-                    if(rb.getText().equals("Male")){
+                    if (rb.getText().equals("Male")) {
                         gender = "m";
-                    }else{
+                    } else {
                         gender = "f";
                     }
 
@@ -129,6 +136,132 @@ public class RegisterActivity extends Activity {
         // SQLite database handler
         db = new SQLiteHandler(getApplicationContext());
 
+        // Initializing a String Array
+        String[] provinceArray = new String[]{
+                "-- Select Province --",
+                "Aceh",
+                "Bali",
+                "Banten",
+                "Bengkulu",
+                "D.I.Yogyakarta",
+                "Gorontalo",
+                "Jakarta",
+                "Jambi",
+                "Jawa Barat",
+                "Jawa Tengah",
+                "Jawa Timur",
+                "Kalimantan Barat",
+                "Kalimantan Selatan",
+                "Kalimantan Tengah",
+                "Kalimantan Timur",
+                "Kalimantan Utara",
+                "Kepulauan Bangka Belitung",
+                "Kepulauan Riau",
+                "Lampung",
+                "Maluku",
+                "Maluku Utara",
+                "Nusa Tenggara Barat",
+                "Nusa Tenggara Timur",
+                "Papua",
+                "Papua Barat",
+                "Riau",
+                "Sulawesi Barat",
+                "Sulawesi Selatan",
+                "Sulawesi Tenggara",
+                "Sulawesi Utara",
+                "Sumatera Barat",
+                "Sumatera Selatan",
+                "Sumatera Utara",
+        };
+
+        String[] jobArray = new String[]{
+                "-- Select Job --",
+                "Pelajar",
+                "Mahasiswa",
+                "Karyawan",
+                "Wiraswasta"
+        };
+
+        final List<String> provinceList = new ArrayList<>(Arrays.asList(provinceArray));
+        final List<String> jobList = new ArrayList<>(Arrays.asList(jobArray));
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this,R.layout.spinner_item,provinceList){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 1)
+                {
+                    // Disable the second item from Spinner
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position==0) {
+                    // Set the disable item text color
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        // Apply the adapter to the spinner
+        inputProvince.setAdapter(adapter);
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
+                this,R.layout.spinner_item,jobList){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 1)
+                {
+                    // Disable the second item from Spinner
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position==0) {
+                    // Set the disable item text color
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        // Apply the adapter to the spinner
+        inputJob.setAdapter(adapter2);
+        /*// Province input list
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.province_array2, android.R.layout.simple_spinner_item);;
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        */
+
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
@@ -144,25 +277,20 @@ public class RegisterActivity extends Activity {
                 String name = inputFullName.getText().toString().trim();
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
-                String repassword = inputRepassword.getText().toString().trim();
                 String city = inputCity.getText().toString().trim();
-                String province = inputProvince.getText().toString().trim();
-                String job = inputJob.getText().toString().trim();
+                String province = inputProvince.getSelectedItem().toString().trim();
+                String job = inputJob.getSelectedItem().toString().trim();
                 String birth= inputDate.getText().toString().trim();
 
-                if (inputPassword.equals(inputRepassword)) {
-                    if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()
-                            && !city.isEmpty() && !province.isEmpty()
-                            && !job.isEmpty() && !birth.equals("Birthday") && !gender.equals("x")) {
-                        registerUser(name, email, password, gender, birth, job, city, province);
-                    } else {
-                        Toast.makeText(getApplicationContext(),
-                                "There is empty!", Toast.LENGTH_LONG)
-                                .show();
-                    }
-                }else{
+
+                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()
+                        && !city.isEmpty() && !province.isEmpty() && !province.equals("-- Select Province --")
+                        && !job.isEmpty() && !job.equals("-- Select Job --")
+                        && !birth.equals("Birthday") && !gender.equals("x")) {
+                    registerUser(name, email, password,gender,birth,job,city,province);
+                } else {
                     Toast.makeText(getApplicationContext(),
-                            "password not matching!", Toast.LENGTH_LONG)
+                            "There is empty!", Toast.LENGTH_LONG)
                             .show();
                 }
             }
@@ -204,15 +332,16 @@ public class RegisterActivity extends Activity {
 
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-                    if (!error) {
+                    String error = jObj.getString("type");
+                    if (error.equals("success")) {
+                        Log.d(TAG, "Success registering....");
                         // User successfully stored in MySQL
                         // Now store the user in sqlite
-                        String uid = jObj.getString("uid");
+//                        String uid = jObj.getString("uid");
 
-                        JSONObject user = jObj.getJSONObject("user");
-                        String name = user.getString("name");
-                        String email = user.getString("email");
+//                        JSONObject user = jObj.getJSONObject("user");
+//                        String name = user.getString("name");
+//                        String email = user.getString("email");
   /*                      String gender = user.getString("gender");
                         String birth_date = user.getString("birth_date");
                         String profession = user.getString("profession");
@@ -221,7 +350,7 @@ public class RegisterActivity extends Activity {
                         String created_at = user.getString("created_at");
 */
                         // Inserting row in users table
-                        db.addUser(name, email, uid/*, gender, birth_date,profession, city,province, created_at*/);
+//                        db.addUser(name, email, uid/*, gender, birth_date,profession, city,province, created_at*/);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
@@ -232,10 +361,9 @@ public class RegisterActivity extends Activity {
                         startActivity(intent);
                         finish();
                     } else {
-
                         // Error occurred in registration. Get the error
                         // message
-                        String errorMsg = jObj.getString("error_msg");
+                        String errorMsg = jObj.getString("error");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
                     }
@@ -248,9 +376,19 @@ public class RegisterActivity extends Activity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Registration Error: " + error.getMessage());
+                String errorStr = "";
+                Log.e(TAG, "Registration Error: " + error.toString());
+                Log.d(TAG, "ERROR: is null? " + (error.networkResponse == null));
+                if (error.networkResponse != null) {
+                    try {
+                        JSONObject jObj = new JSONObject(new String(error.networkResponse.data));
+                        errorStr = "Error: " + jObj.getString("error");
+                    } catch(JSONException e) {
+                        errorStr = "Error parse JSON";
+                    }
+                }
                 Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                        errorStr, Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         }) {
@@ -262,11 +400,11 @@ public class RegisterActivity extends Activity {
                 params.put("name", name);
                 params.put("email", email);
                 params.put("password", password);
-                params.put("gender",gender);
-                params.put("birth_date",birthdate);
-                params.put("profession",job);
-                params.put("city",city);
-                params.put("province",province);
+                params.put("gender", gender);
+                params.put("birth_date", birthdate);
+                params.put("profession", job);
+                params.put("city", city);
+                params.put("province", province);
                 return params;
             }
 
