@@ -11,6 +11,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
@@ -25,6 +26,9 @@ import java.security.SignatureException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by rahadian.yusuf on 26/03/16.
@@ -89,21 +93,6 @@ public class TokenHandler {
             String oldToken = token;
             updatingToken = true;
             renew();
-            // TODO: karena volley bersifat async,
-            //       harus dicari cara agar tokennya
-            //       ter-update sebelum dipakai
-            //       Belum tahu jika cara ini bisa dipakai...
-            Log.d(TAG, "Blocking to get token...");
-            long start = System.currentTimeMillis();
-            long end = 0;
-            while (oldToken.equals(token)) {
-                end = System.currentTimeMillis();
-                // If token is not updated for 30 seconds...
-                if (end - start >= 30 * 1000) {
-                    break;
-                }
-            }
-            Log.d(TAG, "Stop blocking");
         }
         Log.d(TAG, "Token baru: " + token);
         return token;
@@ -113,57 +102,9 @@ public class TokenHandler {
     public void renew() {
         final String oldToken = token;
         Log.d(TAG, "Memperbarui token");
-        StringRequest strReq = new StringRequest(Request.Method.GET, AppConfig.URL_RENEW_TOKEN,
-                new Response.Listener<String>() {
-                    public void onResponse(String response) {
-                        try {
-                            // ambil token baru!
-                            JSONObject jObj = new JSONObject(response);
-                            Log.d(TAG, "JSON: " + jObj);
-                            token = jObj.getString("token");
-                            decode();
-                            if (session != null) {
-                                Log.d(TAG, "Memperbarui token ke session");
-                                session.setToken(token);
-                                session.setTokenExpire(getExpire());
-                                Log.d(TAG, "New token expired at: " + getExpire());
-                            }
-                            Log.d(TAG, "New token: " + token);
-                            updatingToken = false;
-                        } catch(JSONException e) {
-                            e.printStackTrace();
-                            updatingToken = false;
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        updatingToken = false;
-                        Log.d(TAG, "Error memperbarui token");
-                        NetworkResponse response = error.networkResponse;
-
-                        Log.d(TAG, "ERROR: " + error.toString());
-                        Log.d(TAG, "ERROR: is null? " + (error.networkResponse == null));
-
-                        if(response != null){
-                            try {
-                                JSONObject jObj = new JSONObject(new String(response.data));
-                                Log.d(TAG, (String)jObj.get("message"));
-                                switch (response.statusCode) {
-                                    case 401:
-                                    case 500:
-                                        Log.d(TAG, "Tidak diberi akses!");
-                                        break;
-                                    default:
-                                        Log.d(TAG, "Error " + response.statusCode);
-                                }
-                            } catch(JSONException e) {
-                            }
-                            //Additional cases
-                        }
-                    }
-                }) {
+        StringRequest strReq;
+        RequestFuture<String> future = RequestFuture.newFuture();
+        strReq = new StringRequest(Request.Method.GET, AppConfig.URL_RENEW_TOKEN, future, future) {
 
             @Override
             protected Map<String, String> getParams() {
@@ -181,23 +122,31 @@ public class TokenHandler {
 
                 return headers;
             }
-
-//            @Override
-//            protected VolleyError parseNetworkError(VolleyError volleyError) {
-//                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
-//                    VolleyError error = new VolleyError(new String(volleyError.networkResponse.data));
-//                    volleyError = error;
-//                }
-//
-//                return volleyError;
-//            }
         };
 
         AppController.getInstance().addToRequestQueue(strReq, "get_new_token");
 
-//        if (session != null) {
-//            Log.d(TAG, "Memperbarui token ke session");
-//            session.setToken(token);
-//        }
+        try {
+            String response = future.get(15, TimeUnit.SECONDS); // Tunggu 15 detik untuk mendapatkan token baru
+            JSONObject jObj = new JSONObject(response);
+            Log.d(TAG, "JSON: " + jObj);
+            token = jObj.getString("token");
+            decode();
+            if (session != null) {
+                Log.d(TAG, "Memperbarui token ke session");
+                session.setToken(token);
+                session.setTokenExpire(getExpire());
+                Log.d(TAG, "New token expired at: " + getExpire());
+            }
+            Log.d(TAG, "New token: " + token);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch(TimeoutException e) {
+            Log.d(TAG, "ERROR: timeout... " + e.toString());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

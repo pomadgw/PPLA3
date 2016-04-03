@@ -2,7 +2,7 @@ package com.surverior.android.app;
 
 public class AppConfig {
 	// URL
-	public static String URL_ROOT = "https://surverior.pomadgw.xyz"
+	public static String URL_ROOT = "https://surverior.pomadgw.xyz";
 
 	// Server user login url
 	public static String URL_LOGIN = URL_ROOT + "/api/authenticate";

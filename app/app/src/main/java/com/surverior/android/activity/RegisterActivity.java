@@ -126,7 +126,7 @@ public class RegisterActivity extends Activity {
                         Log.d(TAG, "Success registering....");
                         // User successfully stored in MySQL
                         // Now store the user in sqlite
-//                        String uid = jObj.getString("uid");
+                        String uid = jObj.getString("uid");
 
                         JSONObject user = jObj.getJSONObject("user");
                         String email = user.getString("email");
@@ -181,14 +181,6 @@ public class RegisterActivity extends Activity {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("email", email);
                 params.put("password", password);
-<<<<<<< HEAD
-                params.put("gender", gender);
-                params.put("birth_date", birthdate);
-                params.put("profession", job);
-                params.put("city", city);
-                params.put("province", province);
-=======
->>>>>>> 9e54ee0e5a8bb0885f2fc5046e3b15f83147445e
                 return params;
             }
 

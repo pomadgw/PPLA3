@@ -125,7 +125,7 @@ public class LoginActivity extends Activity {
 
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    // boolean error = jObj.getBoolean("error");
+                     boolean error = jObj.getBoolean("error");
                     String token = jObj.getString("token");
 
 //                    Log.d(TAG, "Token:" + token);
@@ -136,7 +136,7 @@ public class LoginActivity extends Activity {
                     Log.d(TAG, "Expired:" + tokenObj.getExpire());
 
                     // Check for error node in json
-                    //if (!error) {
+                    if (!error) {
                         // user successfully logged in
                         // Create login session
                         session.setLogin(true);
@@ -144,21 +144,12 @@ public class LoginActivity extends Activity {
                         session.setTokenExpire(tokenObj.getExpire());
 
                         // Now store the user in SQLite
-                    //    String uid = jObj.getString("uid");
+                       JSONObject user = jObj.getJSONObject("user");
 
-                    //    JSONObject user = jObj.getJSONObject("user");
-                    //    String name = user.getString("name");
-                    //    String email = user.getString("email");
-//                        String gender = user.getString("gender");
-//                        String birth_date = user.getString("birth_date");
-//                        String profession = user.getString("profession");
-//                        String city = user.getString("city");
-//                        String province = user.getString("province");
-//                        String created_at = user
-//                                .getString("created_at");
-
-                        // Inserting row in users table
-                    //    db.addUser(name, email, uid/*,gender,birth_date,profession,city,province, created_at*/);
+                       String uid = user.getString("id");
+                       String name = user.getString("name");
+                       String email = user.getString("email");
+                       db.addUser(email, uid/*,gender,birth_date,profession,city,province, created_at*/);
 
                         // Launch main activity
                         if(name.equals("null")){
@@ -175,10 +166,10 @@ public class LoginActivity extends Activity {
 
                     } else {
                         // Error in login. Get the error message
-                    //    String errorMsg = jObj.getString("error_msg");
-                    //    Toast.makeText(getApplicationContext(),
-                    //            errorMsg, Toast.LENGTH_LONG).show();
-                    //}
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
