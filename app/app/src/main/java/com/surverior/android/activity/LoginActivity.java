@@ -31,6 +31,7 @@ import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
 import com.surverior.android.helper.SQLiteHandler;
 import com.surverior.android.helper.SessionManager;
+import com.surverior.android.helper.TokenHandler;
 
 public class LoginActivity extends Activity {
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -124,22 +125,31 @@ public class LoginActivity extends Activity {
 
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
+                     boolean error = jObj.getBoolean("error");
+                    String token = jObj.getString("token");
+
+//                    Log.d(TAG, "Token:" + token);
+
+                    TokenHandler tokenObj = new TokenHandler(token);
+
+                    Log.d(TAG, "Token:" + tokenObj.getToken());
+                    Log.d(TAG, "Expired:" + tokenObj.getExpire());
 
                     // Check for error node in json
                     if (!error) {
                         // user successfully logged in
                         // Create login session
                         session.setLogin(true);
+                        session.setToken(token);
+                        session.setTokenExpire(tokenObj.getExpire());
 
                         // Now store the user in SQLite
-                        String uid = jObj.getString("uid");
+                       JSONObject user = jObj.getJSONObject("user");
 
-                        JSONObject user = jObj.getJSONObject("user");
-                        String email = user.getString("email");
-                        String name = user.getString("name");
-                        db.addUser( email, uid/*,gender,birth_date,profession,city,province, created_at*/);
-
+                       String uid = user.getString("id");
+                       String name = user.getString("name");
+                       String email = user.getString("email");
+                       db.addUser(email, uid/*,gender,birth_date,profession,city,province, created_at*/);
 
                         // Launch main activity
                         if(name.equals("null")){
@@ -171,9 +181,21 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Login Error: " + error.getMessage());
+                String str = error.getMessage();
+                if (error.networkResponse != null) {
+                    try {
+                        JSONObject jObj = new JSONObject(new String(error.networkResponse.data));
+                        Log.e(TAG, "Login Error JSON: " + jObj);
+                        if(jObj.getInt("status_code") == 401) {
+                            str = getResources().getString(R.string.error_unauthorized);
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Error parsing JSON");
+                    }
+                }
+                Log.e(TAG, "Login Error: " + str);
                 Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                        str, Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         }) {

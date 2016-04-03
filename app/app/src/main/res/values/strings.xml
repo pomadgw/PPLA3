@@ -24,4 +24,7 @@
     <string name="login_title">SURVERIOR</string>
     <string name="create_account">Create Account</string>
 
+    <!-- ERROR MESSAGES -->
+    <string name="error_unauthorized">Error: Username or password is wrong.</string>
+
 </resources>

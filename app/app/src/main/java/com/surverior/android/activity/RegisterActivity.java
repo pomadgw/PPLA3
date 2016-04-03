@@ -121,8 +121,9 @@ public class RegisterActivity extends Activity {
 
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-                    if (!error) {
+                    String error = jObj.getString("type");
+                    if (error.equals("success")) {
+                        Log.d(TAG, "Success registering....");
                         // User successfully stored in MySQL
                         // Now store the user in sqlite
                         String uid = jObj.getString("uid");
@@ -142,10 +143,9 @@ public class RegisterActivity extends Activity {
                         startActivity(intent);
                         finish();
                     } else {
-
                         // Error occurred in registration. Get the error
                         // message
-                        String errorMsg = jObj.getString("error_msg");
+                        String errorMsg = jObj.getString("error");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
                     }
@@ -158,9 +158,19 @@ public class RegisterActivity extends Activity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Registration Error: " + error.getMessage());
+                String errorStr = "";
+                Log.e(TAG, "Registration Error: " + error.toString());
+                Log.d(TAG, "ERROR: is null? " + (error.networkResponse == null));
+                if (error.networkResponse != null) {
+                    try {
+                        JSONObject jObj = new JSONObject(new String(error.networkResponse.data));
+                        errorStr = "Error: " + jObj.getString("error");
+                    } catch(JSONException e) {
+                        errorStr = "Error parse JSON";
+                    }
+                }
                 Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                        errorStr, Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         }) {

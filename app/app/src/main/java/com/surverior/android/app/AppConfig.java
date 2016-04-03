@@ -1,12 +1,20 @@
 package com.surverior.android.app;
 
 public class AppConfig {
+	// URL
+	public static String URL_ROOT = "https://surverior.pomadgw.xyz";
+
 	// Server user login url
-	public static String URL_LOGIN = "http://192.168.100.2/android_login_api/login.php";
+	public static String URL_LOGIN = URL_ROOT + "/api/authenticate";
 
 	// Server user register url
-	public static String URL_REGISTER = "http://192.168.100.2/android_login_api/register.php";
+	public static String URL_REGISTER = URL_ROOT + "/api/users/register";
 
-	//Server user update url
-	public static String URL_UPDATE = "http://192.168.100.2/android_login_api/profile.php";
+    public static String URL_RENEW_TOKEN = URL_ROOT + "/api/token";
+
+	public static String URL_GET_USER_DATA = URL_ROOT + "/api/users/current";
+
+	public static String URL_UPDATE = URL_ROOT + "/api/users/current/update";
+
+	public static String JWT_SECRET = "yGZw4lv9pDXWcptjEXU9ozHctQe7X5Rv";
 }
