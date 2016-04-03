@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/primary"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Registration is success!"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:layout_marginTop="50dp"
+        android:gravity="center_horizontal"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"/>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Please check your email for confirmation."
+        android:textColor="#ffffff"
+        android:layout_marginBottom="20dp"
+        android:textSize="15sp"
+        android:gravity="center_horizontal"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"/>
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:background="@drawable/btn_login"
+        android:text="@string/btn_login"
+        android:textColor="#ffffff" />
+
+</LinearLayout>
