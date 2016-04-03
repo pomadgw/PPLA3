@@ -37,15 +37,17 @@ class AuthenticateController extends Controller
         try {
             // verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {
-                return $this->response->errorUnauthorized();
+                return $this->response->withArray(['error' => true, 'error_msg' => 'Unauthorized', 'status_code' => 401])->setStatusCode(401);
             }
         } catch (JWTException $e) {
             // something went wrong
             return $this->response->error('Can not create token.', 500);
         }
 
+        $user = \App\User::where('email', $request->input('email'))->first();
+
         // if no errors are encountered we can return a JWT
-        return response()->json(compact('token'));
+        return $this->response->withArray(['token' => $token, 'error' => false, 'user' => $user, 'status_code' => 200]);
     }
 
     // dari https://laracasts.com/discuss/channels/general-discussion/how-to-refreshing-jwt-token
@@ -91,6 +93,6 @@ class AuthenticateController extends Controller
             JWTAuth::setToken($token)->invalidate();
         }
 
-        return $this->response->withArray(['error' => 'logout_success']);
+        return $this->response->withArray(['error' => false, 'error_msg' => 'Logout success']);
     }
 }
