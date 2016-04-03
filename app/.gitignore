@@ -31,3 +31,9 @@ local.properties
 *.ipr
 *~
 *.swp
+
+# From http://stackoverflow.com/questions/16736856/what-should-be-in-my-gitignore-for-an-android-studio-project
+# Update: Since Android Studio 1.0, new projects are created with this gitignore file:
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
