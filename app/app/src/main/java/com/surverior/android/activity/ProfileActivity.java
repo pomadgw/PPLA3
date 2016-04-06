@@ -30,6 +30,8 @@ import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
 import com.surverior.android.helper.SQLiteHandler;
 import com.surverior.android.helper.SessionManager;
+import com.surverior.android.helper.SurveriorRequest;
+import com.surverior.android.helper.TokenHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -296,46 +298,50 @@ public class ProfileActivity extends Activity {
                               final String city, final String province, final String email) {
         // Tag used to cancel the request
         String tag_string_req = "req_update";
+        String token = session.getToken();
+        Log.d("MainActivity", "AAA:" + token);
+        TokenHandler tokendb = new TokenHandler(token, session);
 
         pDialog.setMessage("Update ...");
         showDialog();
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_UPDATE, new Response.Listener<String>() {
+        StringRequest strReq = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, tokendb, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Update Response: " + response.toString());
                 hideDialog();
 
+                Toast.makeText(getApplicationContext(), "User successfully updated. Try login now!", Toast.LENGTH_LONG).show();
 
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-                    if (!error) {
-                        Toast.makeText(getApplicationContext(), "User successfully updated. Try login now!", Toast.LENGTH_LONG).show();
-
-                        // Launch login activity
-                        Intent intent = new Intent(
-                                ProfileActivity.this,
-                                MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
-                    }
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                // Launch login activity
+                Intent intent = new Intent(
+                        ProfileActivity.this,
+                        MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                String errorStr = "Error: ";
+
                 Log.e(TAG, "Update Error: " + error.getMessage());
+                Log.d(TAG, "ERROR: is null? " + (error.networkResponse == null));
+
+                if (error.networkResponse != null) {
+                    Log.d(TAG, "ERROR: response data " + new String(error.networkResponse.data));
+                    try {
+                        JSONObject jObj = new JSONObject(new String(error.networkResponse.data));
+                        errorStr += jObj.getString("message");
+                    } catch(JSONException e) {
+                        errorStr = "Error parse JSON: " + e.getMessage();
+                    }
+                }
+
                 Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                        errorStr, Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         }) {

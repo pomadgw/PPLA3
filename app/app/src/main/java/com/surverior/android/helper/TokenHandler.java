@@ -77,9 +77,14 @@ public class TokenHandler {
         Log.d(TAG, "Expired at " + exp);
         Log.d(TAG, "Now is     " + now);
 
-        nowTime -= 120; // check two minutes before expire
+        nowTime += 120; // check two minutes before expire
 
-        return expiredTime <= nowTime;
+        Log.d(TAG, "LExpired at " + expiredTime);
+        Log.d(TAG, "LNow is     " + nowTime);
+
+        Log.d(TAG, "IS EXPIRED? => " + (nowTime > expiredTime));
+
+        return nowTime > expiredTime;
     }
 
     public int getExpire() {
@@ -94,6 +99,7 @@ public class TokenHandler {
             updatingToken = true;
             renew();
         }
+
         Log.d(TAG, "Token baru: " + token);
         return token;
     }
@@ -127,7 +133,7 @@ public class TokenHandler {
         AppController.getInstance().addToRequestQueue(strReq, "get_new_token");
 
         try {
-            String response = future.get(15, TimeUnit.SECONDS); // Tunggu 15 detik untuk mendapatkan token baru
+            String response = future.get(60, TimeUnit.SECONDS); // Tunggu 60 detik untuk mendapatkan token baru
             JSONObject jObj = new JSONObject(response);
             Log.d(TAG, "JSON: " + jObj);
             token = jObj.getString("token");
@@ -145,6 +151,9 @@ public class TokenHandler {
             Log.d(TAG, "ERROR: timeout... " + e.toString());
         } catch (ExecutionException e) {
             e.printStackTrace();
+            VolleyError error = (VolleyError) e.getCause();
+            if(error.networkResponse != null)
+                Log.d(TAG, "ERROR ExecutionException: " + new String(error.networkResponse.data));
         } catch (JSONException e) {
             e.printStackTrace();
         }
