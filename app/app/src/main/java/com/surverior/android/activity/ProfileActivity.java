@@ -312,6 +312,8 @@ public class ProfileActivity extends Activity {
                 Log.d(TAG, "Update Response: " + response.toString());
                 hideDialog();
 
+                session.remove("INCOMPLETE_DATA");
+
                 Toast.makeText(getApplicationContext(), "User successfully updated. Try login now!", Toast.LENGTH_LONG).show();
 
                 // Launch login activity

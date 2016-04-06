@@ -59,6 +59,13 @@ public class MainActivity extends Activity {
 			logoutUser();
 		}
 
+		if (session.getBoolean("INCOMPLETE_DATA")) {
+			Intent intent = new Intent(MainActivity.this,
+					ProfileActivity.class);
+			startActivity(intent);
+			finish();
+		}
+
 		SurveriorRequest req;
 
 		req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_GET_USER_DATA, tokendb,
