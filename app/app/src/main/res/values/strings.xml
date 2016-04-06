@@ -27,5 +27,6 @@
     <!-- ERROR MESSAGES -->
     <!-- TODO: semua teks yang akan ditampilkan di UI disimpan di string.xml -->
     <string name="error_unauthorized">Error: Email atau password salah.</string>
+    <string name="hint_fullname">Full Name</string>
 
 </resources>
