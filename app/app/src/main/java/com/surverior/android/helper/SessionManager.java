@@ -36,6 +36,11 @@ public class SessionManager {
         Log.d(TAG, "Token session modified!");
     }
 
+	public void set(String key, boolean val) {
+		editor.putBoolean(key, val);
+		editor.commit();
+	}
+
 	public void setLogin(boolean isLoggedIn) {
 
 		editor.putBoolean(KEY_IS_LOGGED_IN, isLoggedIn);
@@ -53,6 +58,15 @@ public class SessionManager {
 
         return tokenObj.getToken();
     }
+
+	public void remove(String key) {
+		editor.remove(key);
+		editor.commit();
+	}
+
+	public boolean getBoolean(String key) {
+		return pref.getBoolean(key, false);
+	}
 
     public void removeToken() {
         editor.remove(KEY_TOKEN);

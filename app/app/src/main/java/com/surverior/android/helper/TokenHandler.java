@@ -141,7 +141,6 @@ public class TokenHandler {
             if (session != null) {
                 Log.d(TAG, "Memperbarui token ke session");
                 session.setToken(token);
-                session.setTokenExpire(getExpire());
                 Log.d(TAG, "New token expired at: " + getExpire());
             }
             Log.d(TAG, "New token: " + token);

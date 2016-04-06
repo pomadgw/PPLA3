@@ -146,10 +146,12 @@ public class LoginActivity extends Activity {
                     String uid = user.getString("id");
                     String name = user.getString("name");
                     String email = user.getString("email");
+
                     db.addUser(email, uid/*,gender,birth_date,profession,city,province, created_at*/);
 
                     // Launch main activity
                     if(name.equals("null")){
+                        session.set("INCOMPLETE_DATA", true);
                         Intent intent = new Intent(LoginActivity.this,
                                 ProfileActivity.class);
                         startActivity(intent);
