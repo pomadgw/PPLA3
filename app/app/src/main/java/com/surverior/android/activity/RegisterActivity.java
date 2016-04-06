@@ -121,14 +121,13 @@ public class RegisterActivity extends Activity {
 
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    String error = jObj.getString("type");
-                    if (error.equals("success")) {
-                        Log.d(TAG, "Success registering....");
+//                    boolean error = jObj.getBoolean("error");
+//                    if (!error) {
                         // User successfully stored in MySQL
                         // Now store the user in sqlite
-                        String uid = jObj.getString("uid");
 
                         JSONObject user = jObj.getJSONObject("user");
+                        String uid = user.getString("id");
                         String email = user.getString("email");
 
                         // Inserting row in users table
@@ -142,15 +141,16 @@ public class RegisterActivity extends Activity {
                                 LoginActivity.class);
                         startActivity(intent);
                         finish();
-                    } else {
-                        // Error occurred in registration. Get the error
-                        // message
-                        String errorMsg = jObj.getString("error");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
-                    }
+//                    } else {
+//                        // Error occurred in registration. Get the error
+//                        // message
+//                        String errorMsg = jObj.getString("error_msg");
+//                        Toast.makeText(getApplicationContext(),
+//                                errorMsg, Toast.LENGTH_LONG).show();
+//                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.d(TAG, "ERROR at JSON:" + e.toString());
                 }
 
             }
@@ -158,15 +158,16 @@ public class RegisterActivity extends Activity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                String errorStr = "";
-                Log.e(TAG, "Registration Error: " + error.toString());
+                String errorStr = "Error: ";
+                Log.e(TAG, "Registration Error: " + error.getMessage());
                 Log.d(TAG, "ERROR: is null? " + (error.networkResponse == null));
                 if (error.networkResponse != null) {
+                    Log.d(TAG, "ERROR: response data " + new String(error.networkResponse.data));
                     try {
                         JSONObject jObj = new JSONObject(new String(error.networkResponse.data));
-                        errorStr = "Error: " + jObj.getString("error");
+                        errorStr += jObj.getString("message");
                     } catch(JSONException e) {
-                        errorStr = "Error parse JSON";
+                        errorStr = "Error parse JSON: " + e.getMessage();
                     }
                 }
                 Toast.makeText(getApplicationContext(),

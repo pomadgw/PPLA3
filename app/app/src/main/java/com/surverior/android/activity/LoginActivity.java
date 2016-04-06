@@ -125,77 +125,70 @@ public class LoginActivity extends Activity {
 
                 try {
                     JSONObject jObj = new JSONObject(response);
-                     boolean error = jObj.getBoolean("error");
+
                     String token = jObj.getString("token");
 
-//                    Log.d(TAG, "Token:" + token);
+                    Log.d(TAG, "Token:" + token);
 
                     TokenHandler tokenObj = new TokenHandler(token);
 
                     Log.d(TAG, "Token:" + tokenObj.getToken());
                     Log.d(TAG, "Expired:" + tokenObj.getExpire());
 
-                    // Check for error node in json
-                    if (!error) {
-                        // user successfully logged in
-                        // Create login session
-                        session.setLogin(true);
-                        session.setToken(token);
-                        session.setTokenExpire(tokenObj.getExpire());
+                    // user successfully logged in
+                    // Create login session
+                    session.setLogin(true);
+                    session.setToken(token);
 
-                        // Now store the user in SQLite
-                       JSONObject user = jObj.getJSONObject("user");
+                    // Now store the user in SQLite
+                    JSONObject user = jObj.getJSONObject("user");
 
-                       String uid = user.getString("id");
-                       String name = user.getString("name");
-                       String email = user.getString("email");
-                       db.addUser(email, uid/*,gender,birth_date,profession,city,province, created_at*/);
+                    String uid = user.getString("id");
+                    String name = user.getString("name");
+                    String email = user.getString("email");
+                    db.addUser(email, uid/*,gender,birth_date,profession,city,province, created_at*/);
 
-                        // Launch main activity
-                        if(name.equals("null")){
-                            Intent intent = new Intent(LoginActivity.this,
-                                    ProfileActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }else{
-                            Intent intent = new Intent(LoginActivity.this,
-                                    MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-
+                    // Launch main activity
+                    if(name.equals("null")){
+                        Intent intent = new Intent(LoginActivity.this,
+                                ProfileActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
-                        // Error in login. Get the error message
-                        String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(LoginActivity.this,
+                                MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
+
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "ERROR parse JSON: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
-
             }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                String str = error.getMessage();
+                String errorStr = error.getMessage();
                 if (error.networkResponse != null) {
                     try {
                         JSONObject jObj = new JSONObject(new String(error.networkResponse.data));
                         Log.e(TAG, "Login Error JSON: " + jObj);
                         if(jObj.getInt("status_code") == 401) {
-                            str = getResources().getString(R.string.error_unauthorized);
+                            // Username or password must be wrong
+                            errorStr = getResources().getString(R.string.error_unauthorized);
+                        } else {
+                            errorStr = jObj.getString("message");
                         }
                     } catch (JSONException e) {
                         Log.e(TAG, "Error parsing JSON");
                     }
                 }
-                Log.e(TAG, "Login Error: " + str);
+                Log.e(TAG, "Login Error: " + errorStr);
                 Toast.makeText(getApplicationContext(),
-                        str, Toast.LENGTH_LONG).show();
+                        errorStr, Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         }) {

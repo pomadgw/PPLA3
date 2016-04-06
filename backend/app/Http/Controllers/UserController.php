@@ -81,14 +81,14 @@ class UserController extends Controller
         // diisi, akan memunculkan error.
         $validator = Validator::make($request->all(), $params, $messages);
         if ($validator->fails()) {
-            return response()->json(['error' => true, 'error_msg' => 'Register failed', "type" => "failed", 'data' => $validator->errors(), "status_code" => 422], 422);
+            return response()->json(['error' => true, 'message' => 'Register failed', "type" => "failed", 'data' => $validator->errors(), "status_code" => 422], 422);
             
         }
 
         // jika email yang didaftarkan sudah ada di database,
         // kirim error bahwa email sudah ada
         if (User::where('email', $request->email)->exists()) {
-            return response()->json(['error' => true, 'error_msg' => 'Email is already registered.', "type" => "failed", 'data' => $validator->errors(), "status_code" => 409], 409);
+            return response()->json(['error' => true, 'message' => 'Email is already registered.', "type" => "failed", 'data' => $validator->errors(), "status_code" => 409], 409);
         }
 
         // jika email belum ada (belum terdaftar) dan datanya
@@ -113,7 +113,7 @@ class UserController extends Controller
         // simpan ke database
         $new_user->save();
         
-        return response()->json(['error' => false, 'error_msg' => 'Success register to server', "type" => "success", "status_code" => 201], 201);
+        return response()->json(['error' => false, 'message' => 'Success register to server', "type" => "success", "status_code" => 201, "user" => $new_user], 201);
     }
 
     /**
@@ -167,7 +167,7 @@ class UserController extends Controller
 
             Auth::user()->save();
 
-            return response()->json(['error' => false, 'error_msg' => "Success update info", "status_code" => 200], 200);
+            return response()->json(['error' => false, 'message' => "Success update info", "status_code" => 200], 200);
         // } else {
         //     throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("You don't have access to other user.");
             
