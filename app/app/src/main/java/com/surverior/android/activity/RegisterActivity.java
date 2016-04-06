@@ -20,10 +20,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import com.surverior.android.R;
@@ -38,6 +40,7 @@ public class RegisterActivity extends Activity {
     private Button btnLinkToLogin;
     private EditText inputEmail;
     private EditText inputPassword;
+    private EditText inputRepassword;
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
@@ -52,6 +55,7 @@ public class RegisterActivity extends Activity {
         inputPassword = (EditText) findViewById(R.id.password);
         btnRegister = (Button) findViewById(R.id.btnRegister);
         btnLinkToLogin = (Button) findViewById(R.id.btnLinkToLoginScreen);
+        inputRepassword = (EditText) findViewById(R.id.repassword);
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -77,12 +81,19 @@ public class RegisterActivity extends Activity {
             public void onClick(View view) {
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
+                String repassword = inputRepassword.getText().toString().trim();
 
-                if (!email.isEmpty() && !password.isEmpty()) {
-                    registerUser(email, password);
+                if (!email.isEmpty() && !password.isEmpty() && !repassword.isEmpty()) {
+                    if (repassword.equals(password)) {
+                        registerUser(email, password);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "Password dan repassword tidak sama", Toast.LENGTH_LONG)
+                                .show();
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "There is empty!", Toast.LENGTH_LONG)
+                            "Form tidak boleh kosong", Toast.LENGTH_LONG)
                             .show();
                 }
             }
@@ -166,9 +177,27 @@ public class RegisterActivity extends Activity {
                     try {
                         JSONObject jObj = new JSONObject(new String(error.networkResponse.data));
                         errorStr += jObj.getString("message");
+
+                        // Error saat isi data
+                        if (error.networkResponse.statusCode == 422) {
+                            JSONObject dataError = jObj.getJSONObject("data");
+
+                            Iterator<String> attrs = dataError.keys();
+
+                            errorStr += "\n";
+                            while(attrs.hasNext()) {
+                                JSONArray tmp = dataError.getJSONArray(attrs.next());
+                                errorStr += tmp.get(0);
+                                if (attrs.hasNext()) {
+                                    errorStr += "\n";
+                                }
+                            }
+                        }
                     } catch(JSONException e) {
                         errorStr = "Error parse JSON: " + e.getMessage();
                     }
+                } else {
+                    errorStr += error.getMessage();
                 }
                 Toast.makeText(getApplicationContext(),
                         errorStr, Toast.LENGTH_LONG).show();

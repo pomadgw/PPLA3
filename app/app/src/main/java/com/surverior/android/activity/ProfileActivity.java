@@ -314,7 +314,7 @@ public class ProfileActivity extends Activity {
 
                 session.remove("INCOMPLETE_DATA");
 
-                Toast.makeText(getApplicationContext(), "User successfully updated. Try login now!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Data sudah diupdate!", Toast.LENGTH_LONG).show();
 
                 // Launch login activity
                 Intent intent = new Intent(

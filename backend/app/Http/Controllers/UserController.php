@@ -71,24 +71,24 @@ class UserController extends Controller
                    'province' => ''];
 
         $messages = [
-            'required'=> ':attribute harus ada.',
+            'required'=> 'Parameter :attribute harus ada.',
             'size' => 'Ukuran :attribute harus tepat :size.',
-            'min' => ':attribute harus minimal berukuran :min karakter.',
-            'email' => ':attribute harus berformat email.',
+            'min' => 'Parameter :attribute harus minimal berukuran :min karakter.',
+            'email' => 'Parameter :attribute harus berformat email.',
         ];
 
         // Validasi data. Jika ada data yang tidak valid/tidak
         // diisi, akan memunculkan error.
         $validator = Validator::make($request->all(), $params, $messages);
         if ($validator->fails()) {
-            return response()->json(['error' => true, 'message' => 'Register failed', "type" => "failed", 'data' => $validator->errors(), "status_code" => 422], 422);
+            return response()->json(['error' => true, 'message' => 'Register gagal', "type" => "failed", 'data' => $validator->errors(), "status_code" => 422], 422);
             
         }
 
         // jika email yang didaftarkan sudah ada di database,
         // kirim error bahwa email sudah ada
         if (User::where('email', $request->email)->exists()) {
-            return response()->json(['error' => true, 'message' => 'Email is already registered.', "type" => "failed", 'data' => $validator->errors(), "status_code" => 409], 409);
+            return response()->json(['error' => true, 'message' => 'Email sudah ada.', "type" => "failed", 'data' => $validator->errors(), "status_code" => 409], 409);
         }
 
         // jika email belum ada (belum terdaftar) dan datanya

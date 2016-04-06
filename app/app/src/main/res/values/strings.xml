@@ -25,6 +25,7 @@
     <string name="create_account">Create Account</string>
 
     <!-- ERROR MESSAGES -->
-    <string name="error_unauthorized">Error: Username or password is wrong.</string>
+    <!-- TODO: semua teks yang akan ditampilkan di UI disimpan di string.xml -->
+    <string name="error_unauthorized">Error: Email atau password salah.</string>
 
 </resources>
