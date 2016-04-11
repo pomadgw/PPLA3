@@ -149,7 +149,7 @@ public class RegisterActivity extends Activity {
                         // Launch login activity
                         Intent intent = new Intent(
                                 RegisterActivity.this,
-                                LoginActivity.class);
+                                ConfirmationActivity.class);
                         startActivity(intent);
                         finish();
 //                    } else {
