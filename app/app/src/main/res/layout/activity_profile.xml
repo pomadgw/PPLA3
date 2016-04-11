@@ -41,34 +41,41 @@
                 android:inputType="textCapWords"
                 android:padding="10dp"
                 android:singleLine="true"
-                android:textColor="@color/input_register"
-                android:textColorHint="@color/input_register_hint" />
+                android:textColor="#000000"
+                android:textColorHint="#000000" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Gender"
-                android:textColor="@color/input_register"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textColor="#000000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:paddingLeft="10dp" />
 
             <RadioGroup
                 android:id="@+id/radioGroup"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp">
 
                 <RadioButton
                     android:id="@+id/radioButton1"
-                    android:layout_width="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/input_register"
+                    android:checked="true"
+                    android:textColor="#000000"
                     android:text="Male" />
 
                 <RadioButton
                     android:id="@+id/radioButton2"
-                    android:layout_width="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/input_register"
+                    android:textColor="#000000"
                     android:text="Female" />
             </RadioGroup>
 
@@ -104,14 +111,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_job"
-                android:padding="10dp"
                 android:layout_marginBottom="10dp"
                 android:singleLine="true"
                 android:spinnerMode="dialog"
                 android:prompt="@string/hint_job"
                 android:text="@string/hint_job"
                 android:textColor="@color/input_register"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp" />
 
             <EditText
                 android:id="@+id/city"
@@ -122,22 +131,24 @@
                 android:inputType="textCapWords"
                 android:padding="10dp"
                 android:singleLine="true"
-                android:textColor="@color/input_register"
-                android:textColorHint="@color/input_register_hint" />
+                android:textColor="#000000"
+                android:textColorHint="#000000" />
 
             <Spinner
                 android:id="@+id/province"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_province"
-                android:padding="10dp"
                 android:singleLine="true"
                 android:spinnerMode="dialog"
                 android:prompt="@string/hint_province"
                 android:text="@string/hint_province"
                 android:textColor="@color/input_register"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp" />
 
 
             <!-- Login Button -->
