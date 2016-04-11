@@ -181,7 +181,7 @@ public class ProfileActivity extends Activity {
                 this,R.layout.spinner_item,provinceList){
             @Override
             public boolean isEnabled(int position){
-                if(position == 1)
+                if(position == 0)
                 {
                     // Disable the second item from Spinner
                     return false;
