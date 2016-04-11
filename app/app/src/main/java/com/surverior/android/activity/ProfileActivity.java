@@ -96,6 +96,13 @@ public class ProfileActivity extends Activity {
         // set text date input default
         inputDate.setText(new StringBuilder().append("Birthday"));
 
+        inputDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(DATE_ID);
+            }
+        });
+
         //calendar image listener
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +137,7 @@ public class ProfileActivity extends Activity {
 
         // Initializing a String Array
         String[] provinceArray = new String[]{
-                "-- Select Province --",
+                "Province",
                 "Aceh",
                 "Bali",
                 "Banten",
@@ -167,7 +174,7 @@ public class ProfileActivity extends Activity {
         };
 
         String[] jobArray = new String[]{
-                "-- Select Job --",
+                "Job",
                 "Pelajar",
                 "Mahasiswa",
                 "Karyawan",
@@ -181,7 +188,7 @@ public class ProfileActivity extends Activity {
                 this,R.layout.spinner_item,provinceList){
             @Override
             public boolean isEnabled(int position){
-                if(position == 0)
+                if(position == 1)
                 {
                     // Disable the second item from Spinner
                     return false;
@@ -274,8 +281,8 @@ public class ProfileActivity extends Activity {
                 String email = user.get("email");
 
                 if (!name.isEmpty()
-                        && !city.isEmpty() && !province.isEmpty() && !province.equals("-- Select Province --")
-                        && !job.isEmpty() && !job.equals("-- Select Job --")
+                        && !city.isEmpty() && !province.isEmpty() && !province.equals("Province")
+                        && !job.isEmpty() && !job.equals("Job")
                         && !birth.equals("Birthday") && !gender.equals("x")) {
                     updateProfileUser(name,gender,birth,job,city,province,email);
                 } else {
