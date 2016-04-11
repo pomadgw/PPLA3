@@ -21,6 +21,8 @@ public class ConfirmationActivity extends Activity {
                 Intent intent = new Intent(
                         ConfirmationActivity.this,
                         LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
 
         });
