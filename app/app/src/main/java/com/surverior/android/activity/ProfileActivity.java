@@ -347,6 +347,8 @@ public class ProfileActivity extends Activity {
                     } catch(JSONException e) {
                         errorStr = "Error parse JSON: " + e.getMessage();
                     }
+                } else {
+                    errorStr += error.getMessage();
                 }
 
                 Toast.makeText(getApplicationContext(),
