@@ -32,7 +32,6 @@ class UserController extends Controller
         // buat semua method di bawah ini kecuali `register`
         // membutuhkan otentikasi
         $this->middleware(['api.auth'], ['except' => ['register']]);
-        $this->middleware(['get.token'], ['except' => ['register']]);
     }
 
     /**
