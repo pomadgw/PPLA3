@@ -15,9 +15,9 @@
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
 
-    <color name="colorPrimary">#FF9800</color>
-    <color name="colorPrimaryDark">#F57C00</color>
-    <color name="colorPrimaryLight">#FFB74D</color>
+    <color name="colorPrimary">#F8A33F</color>
+    <color name="colorPrimaryDark">#4F3D31</color>
+    <color name="colorPrimaryLight">#F9C68A</color>
     <color name="colorAccent">#0068B2</color>
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#727272</color>
