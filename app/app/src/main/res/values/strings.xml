@@ -13,6 +13,7 @@
     <string name="btn_link_to_login">Already registered? Login here.</string>
     <string name="welcome">Welcome</string>
     <string name="btn_logout">LOGOUT</string>
+    <string name="btn_viewProfile">VIEW PROFILE</string>
     <string name="name">Fullname</string>
 
     <string name="hint_job">Job</string>

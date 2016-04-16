@@ -14,7 +14,6 @@
     <color name="btn_login_bg">#eceef1</color>
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
-
     <color name="colorPrimary">#F8A33F</color>
     <color name="colorPrimaryDark">#4F3D31</color>
     <color name="colorPrimaryLight">#F9C68A</color>
@@ -25,5 +24,6 @@
     <color name="divider">#B6B6B6</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
+    <color name="btn_viewUser_bg">#428bca</color>
 
 </resources>
