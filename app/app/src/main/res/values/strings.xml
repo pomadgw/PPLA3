@@ -13,6 +13,7 @@
     <string name="btn_link_to_login">Already registered? Login here.</string>
     <string name="welcome">Welcome</string>
     <string name="btn_logout">LOGOUT</string>
+    <string name="btn_viewProfile">VIEW PROFILE</string>
     <string name="name">Fullname</string>
 
     <string name="hint_job">Job</string>
@@ -28,5 +29,26 @@
     <!-- TODO: semua teks yang akan ditampilkan di UI disimpan di string.xml -->
     <string name="error_unauthorized">Error: Email atau password salah.</string>
     <string name="hint_fullname">Full Name</string>
+
+    <!--Keperluan eksperimen-->
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="nav_item_survey">Survey</string>
+    <string name="nav_item_coins">Coins</string>
+    <string name="nav_item_profile">Profile</string>
+
+    <!-- navigation drawer item labels  -->
+    <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_survey</item>
+        <item>@string/nav_item_coins</item>
+        <item>@string/nav_item_profile</item>
+    </string-array>
+
+    <string name="title_survey">Survey</string>
+    <string name="title_coins">Coins</string>
+    <string name="title_profile">Profile</string>
 
 </resources>
