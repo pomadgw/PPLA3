@@ -10,39 +10,25 @@
         android:layout_centerInParent="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:gravity="center"
+        android:gravity="left"
         android:orientation="vertical" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/welcome"
-            android:textSize="20sp" />
+            android:padding="10dp"
+            android:textColor="@color/lbl_name"
+            android:text="@string/name"
+            android:textSize="18sp" />
 
-        <TextView
+        <EditText
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:layout_marginLeft="10dp"
             android:textColor="@color/lbl_name"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp" />
-
-        <Button
-            android:id="@+id/btnViewProfile"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dip"
-            android:background="@color/btn_viewUser_bg"
-            android:text="@string/btn_viewProfile"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btnLogout"

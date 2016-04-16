@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
 
 	private TextView txtName;
 	private TextView txtEmail;
+	private Button btnViewProfile;
 	private Button btnLogout;
 
 	private SQLiteHandler db;
@@ -42,6 +43,7 @@ public class MainActivity extends Activity {
 
 		txtName = (TextView) findViewById(R.id.name);
 		txtEmail = (TextView) findViewById(R.id.email);
+		btnViewProfile = (Button) findViewById(R.id.btnViewProfile);
 		btnLogout = (Button) findViewById(R.id.btnLogout);
 
 		// SqLite database handler
@@ -100,6 +102,15 @@ public class MainActivity extends Activity {
 		// Displaying the user details on the screen
 
 		// Logout button click event
+		btnViewProfile.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, ViewProfileActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		});
 		btnLogout.setOnClickListener(new View.OnClickListener() {
 
 			@Override

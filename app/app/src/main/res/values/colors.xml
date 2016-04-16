@@ -14,8 +14,6 @@
     <color name="btn_login_bg">#eceef1</color>
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
-
-    <color name="primary">#FF9800</color>
     <color name="primary_dark">#F57C00</color>
     <color name="primary_light">#FFB74D</color>
     <color name="accent">#0068B2</color>
@@ -23,5 +21,7 @@
     <color name="secondary_text">#727272</color>
     <color name="icons">#212121</color>
     <color name="divider">#B6B6B6</color>
+    <color name="btn_viewUser_bg">#428bca</color>
+    <color name="primary">#F7A33F</color>
 
 </resources>
