@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -36,10 +37,12 @@ public class ViewProfileActivity extends Activity {
     private TextView city;
 
     private Button btnLogout;
+    private ImageButton btnEdit;
 
     private SQLiteHandler db;
     private TokenHandler tokendb;
     private SessionManager session;
+    public static final String DATA_NAMA="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,7 @@ public class ViewProfileActivity extends Activity {
         province = (TextView) findViewById(R.id.province);
         city = (TextView) findViewById(R.id.city);
         btnLogout = (Button) findViewById(R.id.btnLogout);
+        btnEdit = (ImageButton) findViewById(R.id.imageEditButton);
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
@@ -108,6 +112,19 @@ public class ViewProfileActivity extends Activity {
         });
 
         AppController.getInstance().addToRequestQueue(req, "get_user");
+
+        //edit name
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewProfileActivity.this, EditProfileActivity.class);
+                intent.putExtra(DATA_NAMA, name.getText());
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
 
