@@ -34,10 +34,21 @@
             android:textSize="13sp" />
 
         <Button
-            android:id="@+id/btnLogout"
+            android:id="@+id/btnViewProfile"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dip"
+            android:background="@color/btn_viewUser_bg"
+            android:text="@string/btn_viewProfile"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
             android:background="@color/btn_logut_bg"
             android:text="@string/btn_logout"
             android:textAllCaps="false"
