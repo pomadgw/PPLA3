@@ -32,6 +32,7 @@ import com.surverior.android.app.AppController;
 import com.surverior.android.helper.SQLiteHandler;
 import com.surverior.android.helper.SessionManager;
 import com.surverior.android.helper.TokenHandler;
+import com.surverior.android.helper.Validator;
 
 public class LoginActivity extends Activity {
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -80,8 +81,19 @@ public class LoginActivity extends Activity {
 
                 // Check for empty data in the form
                 if (!email.isEmpty() && !password.isEmpty()) {
-                    // login user
-                    checkLogin(email, password);
+                    if(!Validator.isValidEmail(email)){
+                        Toast.makeText(getApplicationContext(),
+                                "Email tidak valid", Toast.LENGTH_LONG)
+                                .show();
+                    }else if (!Validator.isValidPassword(password)){
+                        Toast.makeText(getApplicationContext(),
+                                "Password harus lebih atau sama dengan 8 karakter", Toast.LENGTH_LONG)
+                                .show();
+                    }else{
+                        // login user
+                        checkLogin(email, password);
+                    }
+
                 } else {
                     // Prompt user to enter credentials
                     Toast.makeText(getApplicationContext(),

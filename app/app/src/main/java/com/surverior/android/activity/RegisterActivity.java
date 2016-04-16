@@ -33,6 +33,7 @@ import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
 import com.surverior.android.helper.SQLiteHandler;
 import com.surverior.android.helper.SessionManager;
+import com.surverior.android.helper.Validator;
 
 public class RegisterActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -84,12 +85,20 @@ public class RegisterActivity extends Activity {
                 String repassword = inputRepassword.getText().toString().trim();
 
                 if (!email.isEmpty() && !password.isEmpty() && !repassword.isEmpty()) {
-                    if (repassword.equals(password)) {
-                        registerUser(email, password);
-                    } else {
+                    if(!Validator.isValidEmail(email)){
+                        Toast.makeText(getApplicationContext(),
+                                "Email tidak valid", Toast.LENGTH_LONG)
+                                .show();
+                    }else if(!Validator.isValidPassword(password)){
+                        Toast.makeText(getApplicationContext(),
+                                "Password harus lebih atau sama dengan 8 karakter", Toast.LENGTH_LONG)
+                                .show();
+                    } else if (!repassword.equals(password)) {
                         Toast.makeText(getApplicationContext(),
                                 "Password dan repassword tidak sama", Toast.LENGTH_LONG)
                                 .show();
+                    } else {
+                        registerUser(email, password);
                     }
                 } else {
                     Toast.makeText(getApplicationContext(),
