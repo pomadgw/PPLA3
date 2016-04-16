@@ -67,43 +67,44 @@ public class EditProfileActivity extends Activity{
                     Toast.makeText(getApplicationContext(),
                             "Nama tidak valid", Toast.LENGTH_LONG)
                             .show();
-                }
-                SurveriorRequest req = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, tokendb,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                try {
-                                    JSONObject jObj = new JSONObject(response);
-                                    Log.d(TAG, "response: " + response);
+                }else{
+                    SurveriorRequest req = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, tokendb,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject jObj = new JSONObject(response);
+                                        Log.d(TAG, "response: " + response);
+                                        session.remove("INCOMPLETE_DATA");
+                                        Toast.makeText(getApplicationContext(), "Name Updated", Toast.LENGTH_LONG).show();
+                                        // Launch view profile activity
+                                        Intent intent = new Intent(
+                                                EditProfileActivity.this,
+                                                ViewProfileActivity.class);
+                                        startActivity(intent);
+                                        finish();
 
-                                    session.remove("INCOMPLETE_DATA");
-                                    Toast.makeText(getApplicationContext(), "Name Updated", Toast.LENGTH_LONG).show();
-                                    // Launch view profile activity
-                                    Intent intent = new Intent(
-                                            EditProfileActivity.this,
-                                            ViewProfileActivity.class);
-                                    startActivity(intent);
-                                    finish();
-
-                                } catch (JSONException e) {
-                                    Log.d(TAG, e.getMessage());
+                                    } catch (JSONException e) {
+                                        Log.d(TAG, e.getMessage());
+                                    }
                                 }
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
 
-                    }
-                }) {
-                    @Override
-                    protected Map<String, String> getParams() {
-                        // Posting params to update url
-                        Map<String, String> params = new HashMap<>();
-                        params.put("name", newName);
-                        return params;
-                    }
-                };
-                AppController.getInstance().addToRequestQueue(req, "update_user");
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() {
+                            // Posting params to update url
+                            Map<String, String> params = new HashMap<>();
+                            params.put("name", newName);
+                            return params;
+                        }
+                    };
+                    AppController.getInstance().addToRequestQueue(req, "update_user");
+                }
+
             }
         });
 
