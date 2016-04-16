@@ -35,15 +35,15 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
-    <string name="nav_item_home">Home</string>
-    <string name="nav_item_friends">Friends</string>
-    <string name="nav_item_notifications">Messages</string>
+    <string name="nav_item_survey">Survey</string>
+    <string name="nav_item_coins">Coins</string>
+    <string name="nav_item_profile">Profile</string>
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
-        <item>@string/nav_item_home</item>
-        <item>@string/nav_item_friends</item>
-        <item>@string/nav_item_notifications</item>
+        <item>@string/nav_item_survey</item>
+        <item>@string/nav_item_coins</item>
+        <item>@string/nav_item_profile</item>
     </string-array>
 
     <string name="title_survey">Survey</string>
