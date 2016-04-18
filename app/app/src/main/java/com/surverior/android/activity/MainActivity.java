@@ -35,10 +35,10 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener{
 	private static final String TAG = "SurveriorActivity";
 
-	private TextView txtName;
-	private TextView txtEmail;
-	private Button btnViewProfile;
-	private Button btnLogout;
+//	private TextView txtName;
+//	private TextView txtEmail;
+//	private Button btnViewProfile;
+//	private Button btnLogout;
 
 	private SQLiteHandler db;
 	private TokenHandler tokendb;
@@ -64,10 +64,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 		// display the first navigation drawer view on app launch
 		displayView(0);
 
-		txtName = (TextView) findViewById(R.id.name);
-		txtEmail = (TextView) findViewById(R.id.email);
-		btnViewProfile = (Button) findViewById(R.id.btnViewProfile);
-		btnLogout = (Button) findViewById(R.id.btnLogout);
+//		txtName = (TextView) findViewById(R.id.name);
+//		txtEmail = (TextView) findViewById(R.id.email);
+//		btnViewProfile = (Button) findViewById(R.id.btnViewProfile);
+//		btnLogout = (Button) findViewById(R.id.btnLogout);
 
 		// SqLite database handler
 		db = new SQLiteHandler(getApplicationContext());
@@ -102,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                             JSONObject jUser = jObj.getJSONObject("user");
 
 							Log.d(TAG, "response: " + response);
-							txtName.setText(jUser.getString("name"));
-							txtEmail.setText(jUser.getString("email"));
+//							txtName.setText(jUser.getString("name"));
+//							txtEmail.setText(jUser.getString("email"));
 						} catch (JSONException e) {
 							Log.d(TAG, e.getMessage());
 						}
@@ -125,22 +125,22 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 		// Displaying the user details on the screen
 
 		// Logout button click event
-		btnViewProfile.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this, ViewProfileActivity.class);
-				startActivity(intent);
-				finish();
-			}
-		});
-		btnLogout.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				logoutUser();
-			}
-		});
+//		btnViewProfile.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				Intent intent = new Intent(MainActivity.this, ViewProfileActivity.class);
+//				startActivity(intent);
+//				finish();
+//			}
+//		});
+//		btnLogout.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				logoutUser();
+//			}
+//		});
 	}
 
 	@Override

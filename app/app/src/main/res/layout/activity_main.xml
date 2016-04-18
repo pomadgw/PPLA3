@@ -22,47 +22,47 @@
             <include
                 android:id="@+id/toolbar"
                 layout="@layout/toolbar" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/welcome"
-                android:textSize="20sp" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/welcome"-->
+                <!--android:textSize="20sp" />-->
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textColor="@color/lbl_name"
-                android:textSize="24sp" />
+            <!--<TextView-->
+                <!--android:id="@+id/name"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:padding="10dp"-->
+                <!--android:textColor="@color/lbl_name"-->
+                <!--android:textSize="24sp" />-->
 
-            <TextView
-                android:id="@+id/email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="13sp" />
+            <!--<TextView-->
+                <!--android:id="@+id/email"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textSize="13sp" />-->
 
-            <Button
-                android:id="@+id/btnViewProfile"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dip"
-                android:background="@color/btn_viewUser_bg"
-                android:text="@string/btn_viewProfile"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
+            <!--<Button-->
+                <!--android:id="@+id/btnViewProfile"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="40dip"-->
+                <!--android:background="@color/btn_viewUser_bg"-->
+                <!--android:text="@string/btn_viewProfile"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="15sp" />-->
 
-            <Button
-                android:id="@+id/btnLogout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dip"
-                android:background="@color/btn_logut_bg"
-                android:text="@string/btn_logout"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
+            <!--<Button-->
+                <!--android:id="@+id/btnLogout"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="40dip"-->
+                <!--android:background="@color/btn_logut_bg"-->
+                <!--android:text="@string/btn_logout"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="15sp" />-->
         </LinearLayout>
 
         <FrameLayout
