@@ -14,11 +14,6 @@ use App\User;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Response;
-use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
 /**
  * @Resource("Users", uri="/api/users")
@@ -31,7 +26,7 @@ class UserController extends Controller
     {
         // buat semua method di bawah ini kecuali `register`
         // membutuhkan otentikasi
-        $this->middleware(['api.auth'], ['except' => ['register']]);
+        $this->middleware(['get.token'], ['except' => ['register']]);
     }
 
     /**
