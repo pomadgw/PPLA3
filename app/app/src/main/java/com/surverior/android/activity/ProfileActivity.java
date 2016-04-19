@@ -90,7 +90,7 @@ public class ProfileActivity extends Activity {
         year = cal.get(Calendar.YEAR);
         inputDate = (EditText) findViewById(R.id.birthdate);
 
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroupGender);
         radioGroup.clearCheck();
 
 
