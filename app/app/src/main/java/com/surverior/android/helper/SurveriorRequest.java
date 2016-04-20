@@ -1,10 +1,17 @@
 package com.surverior.android.helper;
 
+import android.util.Log;
+
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,17 +20,18 @@ import java.util.Map;
  * Created by rahadian.yusuf on 26/03/16.
  */
 public class SurveriorRequest extends StringRequest {
-    private TokenHandler token;
+    private SessionManager session;
 
-    public SurveriorRequest(int method, String url, TokenHandler token, Listener<String> listener, ErrorListener errorListener) {
+    public SurveriorRequest(int method, String url, SessionManager session, Listener<String> listener, ErrorListener errorListener) {
         super(method, url, listener, errorListener);
-        this.token = token;
+        this.session = session;
+        this.setRetryPolicy(new RetryWithNewToken(session));
     }
 
     public Map<String,String> getHeaders() {
         final Map<String, String> headers = new HashMap<String, String>();
 
-        headers.put("Authorization", "Bearer " + token.getToken());
+        headers.put("Authorization", "Bearer " + session.getToken());
 
         return headers;
     }
@@ -37,4 +45,5 @@ public class SurveriorRequest extends StringRequest {
 
         return volleyError;
     }
+
 }

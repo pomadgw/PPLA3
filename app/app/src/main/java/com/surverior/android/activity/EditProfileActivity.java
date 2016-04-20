@@ -56,10 +56,6 @@ public class EditProfileActivity extends Activity{
         // session manager
         session = new SessionManager(getApplicationContext());
 
-        String token = session.getToken();
-        Log.d("MainActivity", "AAA:" + token);
-        tokendb = new TokenHandler(token, session);
-
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final String newName = inputName.getText().toString().trim();
@@ -68,7 +64,7 @@ public class EditProfileActivity extends Activity{
                             "Nama tidak valid", Toast.LENGTH_LONG)
                             .show();
                 }else{
-                    SurveriorRequest req = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, tokendb,
+                    SurveriorRequest req = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, session,
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {

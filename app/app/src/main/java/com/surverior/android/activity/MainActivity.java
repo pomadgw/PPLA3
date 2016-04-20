@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 	private Button btnLogout;
 
 	private SQLiteHandler db;
-	private TokenHandler tokendb;
 	private SessionManager session;
 
 	private Toolbar mToolbar;
@@ -76,10 +75,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 		// session manager
 		session = new SessionManager(getApplicationContext());
 
-        String token = session.getToken();
-        Log.d("MainActivity", "AAA:" + token);
-        tokendb = new TokenHandler(token, session);
-
 		if (!session.isLoggedIn()) {
 			logoutUser();
 		}
@@ -93,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
 		SurveriorRequest req;
 
-		req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_GET_USER_DATA, tokendb,
+		req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_GET_USER_DATA, session,
 				new Response.Listener<String>() {
 					@Override
 					public void onResponse(String response) {

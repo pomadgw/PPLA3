@@ -65,10 +65,6 @@ public class ViewProfileActivity extends Activity {
         // session manager
         session = new SessionManager(getApplicationContext());
 
-        String token = session.getToken();
-        Log.d("MainActivity", "AAA:" + token);
-        tokendb = new TokenHandler(token, session);
-
         if (!session.isLoggedIn()) {
             logoutUser();
         }
@@ -82,7 +78,7 @@ public class ViewProfileActivity extends Activity {
 
         SurveriorRequest req;
 
-        req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_GET_USER_DATA, tokendb,
+        req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_GET_USER_DATA, session,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
