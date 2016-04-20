@@ -147,25 +147,25 @@ class UserController extends Controller
             }
 
             if ($request->has('name')) {
-                Auth::user()->name = $name;
+                $this->auth->user()->name = $name;
             }
             if ($request->has('password')) {
-                Auth::user()->password = $password;
+                $this->auth->user()->password = $password;
             }
             if ($request->has('gender')) {
-                Auth::user()->gender = $gender;
+                $this->auth->user()->gender = $gender;
             }
             if ($request->has('birth_date')) {
-                Auth::user()->birth_date = $birth_date;
+                $this->auth->user()->birth_date = $birth_date;
             }
             if ($request->has('profession')) {
-                Auth::user()->profession = $profession;
+                $this->auth->user()->profession = $profession;
             }
             if ($request->has('city')) {
-                Auth::user()->city = $city;
+                $this->auth->user()->city = $city;
             }
             if ($request->has('province')) {
-                Auth::user()->province = $province;
+                $this->auth->user()->province = $province;
             }
             if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
                 $folder = "/photo/users/" . $curr_id;
@@ -182,10 +182,10 @@ class UserController extends Controller
                 // $request->file('photo')->move($destinationPath);
 
                 UserController::cropImage($originalFile, $destinationPath);
-                Auth::user()->photo = $uri;
+                $this->auth->user()->photo = $uri;
             }
 
-            Auth::user()->save();
+            $this->auth->user()->save();
 
             return response()->json(['error' => false, 'message' => "Success update info", "status_code" => 200], 200);
         // } else {
