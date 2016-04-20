@@ -42,16 +42,16 @@ class GetNewTokenMiddleware
             $token = $tmp[0];
             $isRefreshed = $tmp[1];
         } catch (TokenInvalidException $e) {
-            return response()->json(['token_invalid'], $e->getStatusCode());
+            return response()->json(['message' => 'Token is invalid. Please relogin'], $e->getStatusCode());
         } catch (JWTException $e) {
-            return response()->json(['token_absent'], $e->getStatusCode());
+            return response()->json(['message' => 'No token is detected.'], $e->getStatusCode());
         }
 
-        if (!$isRefreshed) {
-            $tmp = GetNewTokenMiddleware::refresh($token);
-            $token = $tmp[0];
-            $isRefreshed = $tmp[1];
-        }
+        // if (!$isRefreshed) {
+        //     $tmp = GetNewTokenMiddleware::refresh($token);
+        //     $token = $tmp[0];
+        //     $isRefreshed = $tmp[1];
+        // }
         $response->headers->set('Authorization', 'Bearer '.$token);
 
         return $response;

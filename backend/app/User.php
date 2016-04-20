@@ -13,7 +13,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'email', 'password', 'gender', 'profession', 'birth_date',
-        'city', 'province'
+        'city', 'province', 'coins', 'photo'
     ];
 
     /**
@@ -24,4 +24,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function surveys() {
+        return $this->hasMany('App\Survey', 'user_id', 'id');
+    }
+
+    public function answers() {
+        return $this->hasMany('App\Answer', 'user_id', 'id');
+    }
 }

@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->enum('gender', ['m', 'f'])->nullable();
@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('profession')->nullable();
             $table->string('city')->nullable();
             $table->string('province')->nullable();
+            $table->string('photo')->nullable();
+            $table->bigInteger('sum_coins')->default(0);
 
             // Jika butuh konfirmasi email....
 
