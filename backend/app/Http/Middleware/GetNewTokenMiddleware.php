@@ -28,46 +28,36 @@ class GetNewTokenMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $response = $next($request);
-
-        $isRefreshed = false;
         $token = JWTAuth::getToken();
 
         try {
             if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['user_not_found'], 404);
+                return response()->json(['message' => 'User tidak ditemukan'], 404);
             }
         } catch (TokenExpiredException $e) {
-            $tmp = GetNewTokenMiddleware::refresh($token);
-            $token = $tmp[0];
-            $isRefreshed = $tmp[1];
+            $token = GetNewTokenMiddleware::refresh($token);
+
+            return response()->json(['message' => 'Token is invalid. New token is provided', 'token' => $token], $e->getStatusCode());
         } catch (TokenInvalidException $e) {
             return response()->json(['message' => 'Token is invalid. Please relogin'], $e->getStatusCode());
         } catch (JWTException $e) {
             return response()->json(['message' => 'No token is detected.'], $e->getStatusCode());
         }
 
-        // if (!$isRefreshed) {
-        //     $tmp = GetNewTokenMiddleware::refresh($token);
-        //     $token = $tmp[0];
-        //     $isRefreshed = $tmp[1];
-        // }
-        $response->headers->set('Authorization', 'Bearer '.$token);
+        $response = $next($request);
 
         return $response;
     }
 
     public static function refresh($token) {
-        $isRefreshed = false;
         try {
             $token = JWTAuth::refresh($token);
-            $isRefreshed = true;
         } catch(TokenInvalidException $e){
             throw new AccessDeniedHttpException('The token is invalid');
         } catch (TokenBlacklistedException $e) {
             return response()->json(['message' => "Token can no longer be refresh. Please re-login" ], $e->getStatusCode());
         }
 
-        return [$token, $isRefreshed];
+        return $token;
     }
 }
