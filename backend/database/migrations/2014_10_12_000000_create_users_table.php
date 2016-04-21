@@ -24,6 +24,8 @@ class CreateUsersTable extends Migration
             $table->string('province')->nullable();
             $table->string('photo')->nullable();
             $table->bigInteger('sum_coins')->default(0);
+            $table->string('confirmation_code')->nullable();
+            $table->boolean('confirmed')->default(false);
 
             // Jika butuh konfirmasi email....
 
