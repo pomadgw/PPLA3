@@ -55,7 +55,7 @@ class GetNewTokenMiddleware
         } catch(TokenInvalidException $e){
             throw new AccessDeniedHttpException('The token is invalid');
         } catch (TokenBlacklistedException $e) {
-            return response()->json(['message' => "Token can no longer be refresh. Please re-login" ], $e->getStatusCode());
+            return response()->json(['message' => "Token can no longer be refreshed. Please re-login" ], $e->getStatusCode());
         }
 
         return $token;

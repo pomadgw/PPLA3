@@ -118,6 +118,11 @@ class UserController extends Controller
         return response()->json(['error' => false, 'message' => 'Success register to server', "type" => "success", "status_code" => 201, "user" => $new_user], 201);
     }
 
+    public function getSurveys() {
+        $user = $this->auth->user();
+        return $user->surveys;
+    }
+
     /**
      * Men-update data user
      *
