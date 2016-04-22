@@ -92,16 +92,13 @@ public class TokenHandler {
     }
 
     public String getToken() {
-        Log.d(TAG, "Token lama: " + token);
-
-        if (isExpired()) {
-            String oldToken = token;
-            updatingToken = true;
-            renew();
-        }
-
-        Log.d(TAG, "Token baru: " + token);
         return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+        decode();
+        session.setToken(token);
     }
 
     // isChecked: if it's true, it is already checked that the token is expired

@@ -501,14 +501,11 @@ public class ProfileActivity extends Activity {
                               final String city, final String province, final String email) {
         // Tag used to cancel the request
         String tag_string_req = "req_update";
-        String token = session.getToken();
-        Log.d("MainActivity", "AAA:" + token);
-        TokenHandler tokendb = new TokenHandler(token, session);
 
         pDialog.setMessage("Update ...");
         showDialog();
 
-        StringRequest strReq = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, tokendb, new Response.Listener<String>() {
+        StringRequest strReq = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, session, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
