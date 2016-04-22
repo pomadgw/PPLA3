@@ -11,6 +11,9 @@ use Auth;
 use Validator;
 use App\Http\Requests;
 use App\User;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Response;
 
 /**
  * @Resource("Users", uri="/api/users")
@@ -23,8 +26,7 @@ class UserController extends Controller
     {
         // buat semua method di bawah ini kecuali `register`
         // membutuhkan otentikasi
-        $this->middleware('api.auth', ['except' => ['register']]);
-        // $this->scopes('read_user_data', ['get_current_user_info']);
+        $this->middleware(['get.token'], ['except' => ['register']]);
     }
 
     /**
@@ -116,6 +118,11 @@ class UserController extends Controller
         return response()->json(['error' => false, 'message' => 'Success register to server', "type" => "success", "status_code" => 201, "user" => $new_user], 201);
     }
 
+    public function getSurveys() {
+        $user = $this->auth->user();
+        return $user->surveys;
+    }
+
     /**
      * Men-update data user
      *
@@ -129,7 +136,8 @@ class UserController extends Controller
      * })
      */
     public function updateUser(Request $request) {
-        $curr_id = Auth::user();
+        $curr_id = $this->auth->user()->id;
+
         // if ($curr_id == $id) {
             $name = $request->name;
             $password = $request->password;
@@ -139,38 +147,104 @@ class UserController extends Controller
             $city = $request->city;
             $province = $request->province;
 
-            if (!is_null($password)) {
+            if ($request->has('password')) {
                 $password = Hash::make($password);
             }
 
-            if (!is_null($name)) {
-                Auth::user()->name = $name;
+            if ($request->has('name')) {
+                $this->auth->user()->name = $name;
             }
-            if (!is_null($password)) {
-                Auth::user()->password = $password;
+            if ($request->has('password')) {
+                $this->auth->user()->password = $password;
             }
-            if (!is_null($gender)) {
-                Auth::user()->gender = $gender;
+            if ($request->has('gender')) {
+                $this->auth->user()->gender = $gender;
             }
-            if (!is_null($birth_date)) {
-                Auth::user()->birth_date = $birth_date;
+            if ($request->has('birth_date')) {
+                $this->auth->user()->birth_date = $birth_date;
             }
-            if (!is_null($profession)) {
-                Auth::user()->profession = $profession;
+            if ($request->has('profession')) {
+                $this->auth->user()->profession = $profession;
             }
-            if (!is_null($city)) {
-                Auth::user()->city = $city;
+            if ($request->has('city')) {
+                $this->auth->user()->city = $city;
             }
-            if (!is_null($province)) {
-                Auth::user()->province = $province;
+            if ($request->has('province')) {
+                $this->auth->user()->province = $province;
+            }
+            if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+                $folder = "/photo/users/" . $curr_id;
+                $uri = $folder . "/photo.jpg";
+                $destinationPath = public_path() . $uri;
+
+                if (!file_exists(public_path() . $folder)) {
+                    mkdir(public_path() . $folder, 0775, true);
+                }
+                
+                $originalFile = $request->file('photo')->getPathname();
+
+                // $image = imagecreatefrompng($originalFile);
+                // $request->file('photo')->move($destinationPath);
+
+                UserController::cropImage($originalFile, $destinationPath);
+                $this->auth->user()->photo = $uri;
             }
 
-            Auth::user()->save();
+            $this->auth->user()->save();
 
             return response()->json(['error' => false, 'message' => "Success update info", "status_code" => 200], 200);
         // } else {
         //     throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("You don't have access to other user.");
             
         // }
+    }
+
+    // Taken from https://gist.github.com/jasdeepkhalsa/4339969
+    private static function cropImage($source, $dest, $thumb_width=300, $thumb_height=300) {
+        list($width, $height, $type) = getimagesize($source);
+        $image = NULL;
+        switch ($type) {
+            case IMAGETYPE_GIF  :
+                $image = imagecreatefromgif($source);
+                break;
+            case IMAGETYPE_JPEG :
+                $image = imagecreatefromjpeg($source);
+                break;
+            case IMAGETYPE_PNG  :
+                $image = imagecreatefrompng($source);
+                break;
+            default             :
+                throw new InvalidArgumentException("Image type $type not supported");
+        }
+
+        $filename = $dest;
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $original_aspect = $width / $height;
+        $thumb_aspect = $thumb_width / $thumb_height;
+        if ( $original_aspect >= $thumb_aspect )
+        {
+           // If image is wider than thumbnail (in aspect ratio sense)
+           $new_height = $thumb_height;
+           $new_width = $width / ($height / $thumb_height);
+        }
+        else
+        {
+           // If the thumbnail is wider than the image
+           $new_width = $thumb_width;
+           $new_height = $height / ($width / $thumb_width);
+        }
+        $thumb = imagecreatetruecolor( $thumb_width, $thumb_height );
+
+        // Resize and crop
+        imagecopyresampled($thumb,
+                           $image,
+                           0 - ($new_width - $thumb_width) / 2, // Center the image horizontally
+                           0 - ($new_height - $thumb_height) / 2, // Center the image vertically
+                           0, 0,
+                           $new_width, $new_height,
+                           $width, $height);
+
+        imagejpeg($thumb, $filename, 80);
     }
 }
