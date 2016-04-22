@@ -13,6 +13,7 @@ use App\QuestionMultipleChoices;
 use App\QuestionScale;
 use App\Options;
 use App\MultipleChoices;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class SurveyController extends Controller
 {
@@ -26,7 +27,7 @@ class SurveyController extends Controller
     }
 
     public function createSurvey(Request $request) {
-        $user_id = $user = $this->auth->user()->id;
+        $user_id = $this->auth->user()->id;
 
         $newSurvey = new Survey;
         $newSurvey->title = $request->title;
@@ -70,6 +71,13 @@ class SurveyController extends Controller
 }
      */
     public function createQuestion($surveyId, Request $request) {
+        // Verifikasi
+        $user_id = $this->auth->user()->id;
+        $survey = Survey::find($surveyId);
+        if ($survey->user_id != $user_id) {
+            throw new AccessDeniedHttpException("Anda tidak bisa memodifikasi survey ini.");
+        }
+
         $type = $request->input('type');
 
         $newQuestion = new Question;
