@@ -1,6 +1,5 @@
 package com.surverior.android.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,10 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
-import java.util.HashMap;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -175,12 +170,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 		String title = getString(R.string.app_name);
 		switch (position) {
 			case 0:
-				fragment = new SurveyFragment();
-				title = getString(R.string.title_survey);
+				fragment = new TimelineFragment();
+				title = getString(R.string.title_timeline);
 				break;
 			case 1:
-				fragment = new CoinsFragment();
-				title = getString(R.string.title_coins);
+				fragment = new MySurveyFragment();
+				title = getString(R.string.title_mysurvey);
 				break;
 			case 2:
 				fragment = new ProfileFragment();
@@ -195,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 			fragmentTransaction.replace(R.id.container_body, fragment);
 			fragmentTransaction.commit();
+
 
 			// set the toolbar title
 			getSupportActionBar().setTitle(title);
