@@ -4,6 +4,7 @@ package com.surverior.android.activity;
  * Created by bambang on 4/15/16.
  */
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -43,5 +44,10 @@ public class MySurveyFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public void createSurvey(View view){
+        Intent intent = new Intent(view.getContext(), CreateSurveyActivity.class);
+        startActivity(intent);
     }
 }
