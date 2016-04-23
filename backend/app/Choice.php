@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MultipleChoices extends Model
+class Choice extends Model
 {
     //
     /**
@@ -12,9 +12,9 @@ class MultipleChoices extends Model
      *
      * @var string
      */
-    protected $table = 'multichoice_val';
+    protected $table = 'checkbox_val';
     
     public function question() {
-        return $this->belongsTo('App\QuestionMultipleChoices', 'question_id', 'id');
+        return $this->belongsTo('App\QuestionCheckbox', 'question_id', 'id');
     }
 }

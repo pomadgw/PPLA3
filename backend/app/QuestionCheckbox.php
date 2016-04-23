@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class QuestionMultipleChoices extends Model
+class QuestionCheckbox extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'multichoice_questions';
+    protected $table = 'checkbox_questions';
 
     public function question()
     {
@@ -20,6 +20,6 @@ class QuestionMultipleChoices extends Model
 
     public function choices()
     {
-        return $this->hasMany('App\MultipleChoices', 'question_id', 'id');
+        return $this->hasMany('App\Choice', 'question_id', 'id');
     }
 }

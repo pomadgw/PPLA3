@@ -17,8 +17,8 @@ class Question extends Model
 
     public $question_types = ['text' => '', 'paragraph' => '',
                               'option' => 'App\QuestionOptions',
-                              'multiple_choice' => 'App\QuestionMultipleChoices',
-                              'scale' => 'QuestionScale'];
+                              'checkbox' => 'App\QuestionCheckbox',
+                              'scale' => 'App\QuestionScale'];
 
     protected $table = 'questions';
 

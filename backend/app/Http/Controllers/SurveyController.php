@@ -9,10 +9,10 @@ use App\Http\Requests;
 use App\Survey;
 use App\Question;
 use App\QuestionOptions;
-use App\QuestionMultipleChoices;
+use App\QuestionCheckbox;
 use App\QuestionScale;
 use App\Options;
-use App\MultipleChoices;
+use App\Checkbox;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class SurveyController extends Controller
@@ -58,7 +58,7 @@ class SurveyController extends Controller
         "options": [ 
             // daftar pilihan di sini, dalam bentuk array
          ]
-        // untuk multiple choices:
+        // untuk checkbox:
         "choices": [
             // pilihan di sini, dalam bentuk array
         ]
@@ -94,8 +94,8 @@ class SurveyController extends Controller
                 $specific = new QuestionOptions;
                 $specific->type = $request->input('arguments.type');
                 break;
-            case "multiple_choice":
-                $specific = new QuestionMultipleChoices;
+            case "checkbox":
+                $specific = new QuestionCheckbox;
                 break;
             case "scale":
                 $specific = new QuestionScale;
@@ -140,7 +140,7 @@ class SurveyController extends Controller
 
     public function addChoices($id, $choices) {
         foreach ($choices as $choice) {
-            $newChoice = new MultipleChoices;
+            $newChoice = new Choice;
             $newChoice->question_id = $id;
             $newChoice->choice = $choice;
 
