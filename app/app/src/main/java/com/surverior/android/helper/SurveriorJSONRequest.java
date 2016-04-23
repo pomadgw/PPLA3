@@ -1,29 +1,26 @@
 package com.surverior.android.helper;
 
-import android.util.Log;
-
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.RetryPolicy;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by rahadian.yusuf on 26/03/16.
+ * Created by rahadian.yusuf on 22/04/16.
  */
-public class SurveriorRequest extends StringRequest {
+public class SurveriorJSONRequest extends JsonObjectRequest {
     private SessionManager session;
 
-    public SurveriorRequest(int method, String url, SessionManager session, Listener<String> listener, ErrorListener errorListener) {
-        super(method, url, listener, errorListener);
+    public SurveriorJSONRequest(String url,
+                                JSONObject jsonBody,
+                                SessionManager session,
+                                Response.Listener<JSONObject> listener,
+                                Response.ErrorListener errorListener) {
+        super(url, jsonBody, listener, errorListener);
         this.session = session;
         this.setRetryPolicy(new RetryWithNewToken(session));
     }

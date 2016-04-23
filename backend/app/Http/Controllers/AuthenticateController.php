@@ -23,11 +23,7 @@ class AuthenticateController extends Controller
        // except for the authenticate method. We don't want to prevent
        // the user from retrieving their token if they don't already have it
        $this->middleware('api.auth', ['except' => ['authenticate', 'verifyUser', 'getAccessToken', 'getJWTToken']]);
-    }
-
-    public function index()
-    {
-        // TODO: show users
+       $this->middleware('get.token', ['only' => 'getJWTToken']);
     }
     
     public function authenticate(Request $request)
@@ -53,18 +49,17 @@ class AuthenticateController extends Controller
     // dari https://laracasts.com/discuss/channels/general-discussion/how-to-refreshing-jwt-token
     public function getJWTToken()
     {
-        $token = JWTAuth::getToken();
-        if(!$token){
-            throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException('Token not provided');
-        }
+        // $token = JWTAuth::getToken();
+        // if(!$token){
+        //     throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException('Token not provided');
+        // }
 
-        try {
-            $token = JWTAuth::refresh($token);
-        } catch(TokenInvalidException $e){
-            throw new AccessDeniedHttpException('The token is invalid');
-        }
-
-        return $this->response->withArray(['token'=>$token]);
+        // try {
+        //     $token = JWTAuth::refresh($token);
+        //     return $this->response->withArray(['token'=>$token]);
+        // } catch(TokenInvalidException $e){
+        //     throw new AccessDeniedHttpException('The token is invalid');
+        // }
     }
 
     public function verifyUser($email, $password)

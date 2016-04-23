@@ -12,4 +12,9 @@ class QuestionScale extends Model
      * @var string
      */
     protected $table = 'questions_scale';
+    
+    public function question()
+    {
+        return $this->belongsTo('App\Question', 'id', 'id');
+    }
 }
