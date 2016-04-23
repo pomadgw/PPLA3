@@ -58,7 +58,10 @@ $api->version('v1', function ($api) {
     // POST /api/users/{id}/update
     $api->post('users/current/update', 'App\Http\Controllers\UserController@updateUser');
 
-    $api->get('surveys', 'App\Http\Controllers\UserController@getSurveys');
+
+    // survey things
+
+    $api->get('surveys', 'App\Http\Controllers\SurveyController@getUserSurveys');
 
     $api->get('surveys/{id}', 'App\Http\Controllers\SurveyController@getSurvey');
 

@@ -12,6 +12,8 @@ class QuestionCheckbox extends Model
      * @var string
      */
     protected $table = 'checkbox_questions';
+    protected $hidden = ['id', 'created_at', 'updated_at'];
+    protected $appends = ['choices'];
 
     public function question()
     {
@@ -21,5 +23,13 @@ class QuestionCheckbox extends Model
     public function choices()
     {
         return $this->hasMany('App\Choice', 'question_id', 'id');
+    }
+
+    public function getChoicesAttribute() {
+        $ret = array();
+        foreach($this->choices()->get() as $choice) {
+            array_push($ret, $choice->choice);
+        }
+        return $ret;
     }
 }

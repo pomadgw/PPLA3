@@ -13,7 +13,8 @@ class Choice extends Model
      * @var string
      */
     protected $table = 'checkbox_val';
-    
+    protected $hidden = ['id', 'question_id', 'created_at', 'updated_at'];
+
     public function question() {
         return $this->belongsTo('App\QuestionCheckbox', 'question_id', 'id');
     }

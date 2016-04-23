@@ -12,6 +12,7 @@ class Options extends Model
      * @var string
      */
     protected $table = 'options_val';
+    protected $hidden = ['id', 'question_id', 'created_at', 'updated_at'];
 
     public function question() {
         return $this->belongsTo('App\QuestionOptions', 'question_id', 'id');

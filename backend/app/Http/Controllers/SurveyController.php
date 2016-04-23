@@ -12,9 +12,12 @@ use App\QuestionOptions;
 use App\QuestionCheckbox;
 use App\QuestionScale;
 use App\Options;
-use App\Checkbox;
+use App\Choice;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+/**
+ * @Resource("Survey", uri="/api/surveys")
+ */
 class SurveyController extends Controller
 {
     use Helpers;
@@ -26,6 +29,16 @@ class SurveyController extends Controller
         $this->middleware(['get.token']);
     }
 
+    /**
+     * Membuat survey baru
+     *
+     * Method ini akan membuat survey baru.
+     * *Endpoint* ini membutuhkan otentikasi.
+     *
+     * @Post("/add")
+     * @Versions({"v1"})
+     * })
+     */
     public function createSurvey(Request $request) {
         $user_id = $this->auth->user()->id;
 
@@ -41,34 +54,50 @@ class SurveyController extends Controller
     }
 
     public function getSurvey($id) {
-        return Survey::find($id);
+        $ret = Survey::with('questions')->find($id);
+        // $questions = $ret->questions;
+        // foreach($questions as $question) {
+        //     if ($question->type == 'option') {;
+        //         $optionq = QuestionOptions::find($question->id);
+        //         $question['args'] = $optionq;
+        //         $question['args']['options'] = $optionq->options;
+        //     }
+        // }
+        // $ret['questions'] = $questions;
+        return $ret->toArray();
     }
+
+    public function getUserSurveys() {
+        $user = $this->auth->user();
+        return $user->surveys;
+    }
+
 
     /**
      * Untuk endpoint ini, dia memerlukan data yang di-post
      * berformat JSON. Formatnya:
      *
-{
-    "type": "<tipe pertanyaan>",
-    "question": "<pertanyaan>",
-    "arguments": {
-        // argument di sini
-        // untuk type option:
-        "type": "[dropdown|option_button]",
-        "options": [ 
-            // daftar pilihan di sini, dalam bentuk array
-         ]
-        // untuk checkbox:
-        "choices": [
-            // pilihan di sini, dalam bentuk array
-        ]
-        // untuk scale:
-        "min_val": 0,
-        "max_val": 10,
-        "min_label": "<label di sini>",
-        "max_label": "<label di sini>"
-    }
-}
+        {
+            "type": "<tipe pertanyaan>",
+            "question": "<pertanyaan>",
+            "arguments": {
+                // argument di sini
+                // untuk type option:
+                "type": "[dropdown|option_button]",
+                "options": [
+                    // daftar pilihan di sini, dalam bentuk array
+                 ]
+                // untuk checkbox:
+                "choices": [
+                    // pilihan di sini, dalam bentuk array
+                ]
+                // untuk scale:
+                "min_val": 0,
+                "max_val": 10,
+                "min_label": "<label di sini>",
+                "max_label": "<label di sini>"
+            }
+        }
      */
     public function createQuestion($surveyId, Request $request) {
         // Verifikasi
@@ -81,11 +110,11 @@ class SurveyController extends Controller
         $type = $request->input('type');
 
         $newQuestion = new Question;
-        
+
         $newQuestion->question = $request->input('question');
         $newQuestion->type = $type;
         $newQuestion->survey_id = $surveyId;
-        
+
         $newQuestion->save();
         $specific = NULL;
 
@@ -107,7 +136,7 @@ class SurveyController extends Controller
             default:
                 break;
         }
-        
+
         $specific->id = $newQuestion->id;
         $specific->save();
 
@@ -116,14 +145,13 @@ class SurveyController extends Controller
                 case "option":
                     SurveyController::addOptions($specific->id, $request->input('arguments.options'));
                     break;
-                case "multiple_choice":
+                case "checkbox":
                     SurveyController::addChoices($specific->id, $request->input('arguments.choices'));
                     break;
                 default:
                     break;
             }
         }
-
 
         return response()->json(['error' => false, 'message' => "Sukses menambah pertanyaan", "status_code" => 200], 200);
     }
