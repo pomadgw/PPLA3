@@ -22,7 +22,6 @@ import com.surverior.android.app.AppController;
 import com.surverior.android.helper.SQLiteHandler;
 import com.surverior.android.helper.SessionManager;
 import com.surverior.android.helper.SurveriorRequest;
-import com.surverior.android.helper.TokenHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
