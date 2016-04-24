@@ -33,22 +33,23 @@
     <!--Keperluan eksperimen-->
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
+    <string name="action_back">Back</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
-    <string name="nav_item_survey">Survey</string>
-    <string name="nav_item_coins">Coins</string>
+    <string name="nav_item_timeline">Timeline</string>
+    <string name="nav_item_mysurvey">My Survey</string>
     <string name="nav_item_profile">Profile</string>
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
-        <item>@string/nav_item_survey</item>
-        <item>@string/nav_item_coins</item>
+        <item>@string/nav_item_timeline</item>
+        <item>@string/nav_item_mysurvey</item>
         <item>@string/nav_item_profile</item>
     </string-array>
 
-    <string name="title_survey">Survey</string>
-    <string name="title_coins">Coins</string>
+    <string name="title_timeline">Timeline</string>
+    <string name="title_mysurvey">My Survey</string>
     <string name="title_profile">Profile</string>
 
 </resources>

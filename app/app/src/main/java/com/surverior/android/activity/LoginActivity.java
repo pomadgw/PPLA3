@@ -31,7 +31,6 @@ import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
 import com.surverior.android.helper.SQLiteHandler;
 import com.surverior.android.helper.SessionManager;
-import com.surverior.android.helper.TokenHandler;
 import com.surverior.android.helper.Validator;
 
 public class LoginActivity extends Activity {
@@ -141,12 +140,6 @@ public class LoginActivity extends Activity {
                     String token = jObj.getString("token");
 
                     Log.d(TAG, "Token:" + token);
-
-                    TokenHandler tokenObj = new TokenHandler(token);
-
-                    Log.d(TAG, "Token:" + tokenObj.getToken());
-                    Log.d(TAG, "Expired:" + tokenObj.getExpire());
-
                     // user successfully logged in
                     // Create login session
                     session.setLogin(true);

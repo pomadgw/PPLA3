@@ -53,10 +53,7 @@ public class SessionManager {
 
     public String getToken() {
         String token = pref.getString(KEY_TOKEN, "");
-
-		TokenHandler tokenObj = new TokenHandler(token, this);
-
-        return tokenObj.getToken();
+        return token;
     }
 
 	public void remove(String key) {
