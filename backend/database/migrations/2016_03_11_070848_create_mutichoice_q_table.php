@@ -12,12 +12,12 @@ class CreateMutichoiceQTable extends Migration
      */
     public function up()
     {
-        Schema::create('multichoice_questions', function (Blueprint $table) {
+        Schema::create('checkbox_questions', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
         });
 
-        Schema::table('multichoice_questions', function ($table) {
+        Schema::table('checkbox_questions', function ($table) {
             $table->foreign('id')->references('id')->on('questions')->onDelete('cascade');
         });
     }
@@ -29,9 +29,9 @@ class CreateMutichoiceQTable extends Migration
      */
     public function down()
     {
-        Schema::table('multichoice_questions', function ($table) {
+        Schema::table('checkbox_questions', function ($table) {
             $table->dropForeign(['id']);
         });
-        Schema::drop('multichoice_questions');
+        Schema::drop('checkbox_questions');
     }
 }

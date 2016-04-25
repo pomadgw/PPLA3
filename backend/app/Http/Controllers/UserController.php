@@ -13,6 +13,7 @@ use App\Http\Requests;
 use App\User;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Response;
 
 /**
@@ -35,7 +36,7 @@ class UserController extends Controller
      * Method ini akan mengembalikan data user yang
      * sedang login (berdasarkan token yang digunakan).
      * *Endpoint* ini membutuhkan otentikasi.
-     * 
+     *
      * @Get("/current")
      * @Versions({"v1"})
      * })
@@ -84,7 +85,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), $params, $messages);
         if ($validator->fails()) {
             return response()->json(['error' => true, 'message' => 'Register gagal', "type" => "failed", 'data' => $validator->errors(), "status_code" => 422], 422);
-            
+
         }
 
         // jika email yang didaftarkan sudah ada di database,
@@ -114,13 +115,8 @@ class UserController extends Controller
 
         // simpan ke database
         $new_user->save();
-        
-        return response()->json(['error' => false, 'message' => 'Success register to server', "type" => "success", "status_code" => 201, "user" => $new_user], 201);
-    }
 
-    public function getSurveys() {
-        $user = $this->auth->user();
-        return $user->surveys;
+        return response()->json(['error' => false, 'message' => 'Success register to server', "type" => "success", "status_code" => 201, "user" => $new_user], 201);
     }
 
     /**
@@ -138,67 +134,111 @@ class UserController extends Controller
     public function updateUser(Request $request) {
         $curr_id = $this->auth->user()->id;
 
-        // if ($curr_id == $id) {
-            $name = $request->name;
-            $password = $request->password;
-            $gender = $request->gender;
-            $birth_date = $request->birth_date;
-            $profession = $request->profession;
-            $city = $request->city;
-            $province = $request->province;
+        $name = $request->name;
+        $password = $request->password;
+        $gender = $request->gender;
+        $birth_date = $request->birth_date;
+        $profession = $request->profession;
+        $city = $request->city;
+        $province = $request->province;
 
-            if ($request->has('password')) {
-                $password = Hash::make($password);
+        if ($request->has('password')) {
+            $password = Hash::make($password);
+        }
+
+        if ($request->has('name')) {
+            $this->auth->user()->name = $name;
+        }
+        if ($request->has('password')) {
+            $this->auth->user()->password = $password;
+        }
+        if ($request->has('gender')) {
+            $this->auth->user()->gender = $gender;
+        }
+        if ($request->has('birth_date')) {
+            $this->auth->user()->birth_date = $birth_date;
+        }
+        if ($request->has('profession')) {
+            $this->auth->user()->profession = $profession;
+        }
+        if ($request->has('city')) {
+            $this->auth->user()->city = $city;
+        }
+        if ($request->has('province')) {
+            $this->auth->user()->province = $province;
+        }
+
+        if ($request->has('photo')) {
+            $folder = "/photo/users/" . $curr_id;
+            $uri = $folder . "/photo.jpg";
+            $destinationPath = public_path() . $uri;
+
+            if (!file_exists(public_path() . $folder)) {
+                mkdir(public_path() . $folder, 0775, true);
             }
 
-            if ($request->has('name')) {
-                $this->auth->user()->name = $name;
-            }
-            if ($request->has('password')) {
-                $this->auth->user()->password = $password;
-            }
-            if ($request->has('gender')) {
-                $this->auth->user()->gender = $gender;
-            }
-            if ($request->has('birth_date')) {
-                $this->auth->user()->birth_date = $birth_date;
-            }
-            if ($request->has('profession')) {
-                $this->auth->user()->profession = $profession;
-            }
-            if ($request->has('city')) {
-                $this->auth->user()->city = $city;
-            }
-            if ($request->has('province')) {
-                $this->auth->user()->province = $province;
-            }
-            if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
-                $folder = "/photo/users/" . $curr_id;
-                $uri = $folder . "/photo.jpg";
-                $destinationPath = public_path() . $uri;
-
-                if (!file_exists(public_path() . $folder)) {
-                    mkdir(public_path() . $folder, 0775, true);
-                }
-                
-                $originalFile = $request->file('photo')->getPathname();
-
-                // $image = imagecreatefrompng($originalFile);
-                // $request->file('photo')->move($destinationPath);
-
-                UserController::cropImage($originalFile, $destinationPath);
+            $data = base64_decode($request->photo);
+            $im = imagecreatefromstring($data);
+            if ($im !== false) {
+                UserController::cropImageFromString($data, $destinationPath);
                 $this->auth->user()->photo = $uri;
+            } else {
+                throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException('Wrong image format!');
+            }
+        }
+        elseif ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+            $folder = "/photo/users/" . $curr_id;
+            $uri = $folder . "/photo.jpg";
+            $destinationPath = public_path() . $uri;
+
+            if (!file_exists(public_path() . $folder)) {
+                mkdir(public_path() . $folder, 0775, true);
             }
 
-            $this->auth->user()->save();
+            $originalFile = $request->file('photo')->getPathname();
 
-            return response()->json(['error' => false, 'message' => "Success update info", "status_code" => 200], 200);
-        // } else {
-        //     throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("You don't have access to other user.");
-            
-        // }
+            UserController::cropImage($originalFile, $destinationPath);
+            $this->auth->user()->photo = $uri;
+        }
+
+        $this->auth->user()->save();
+
+        return response()->json(['error' => false, 'message' => "Success update info", "status_code" => 200], 200);
     }
 
+    // Taken from https://gist.github.com/jasdeepkhalsa/4339969
+    private static function cropImageFromString($data, $dest, $thumb_width=300, $thumb_height=300) {
+        $image = imagecreatefromstring($data);
+        $filename = $dest;
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $original_aspect = $width / $height;
+        $thumb_aspect = $thumb_width / $thumb_height;
+        if ( $original_aspect >= $thumb_aspect )
+        {
+           // If image is wider than thumbnail (in aspect ratio sense)
+           $new_height = $thumb_height;
+           $new_width = $width / ($height / $thumb_height);
+        }
+        else
+        {
+           // If the thumbnail is wider than the image
+           $new_width = $thumb_width;
+           $new_height = $height / ($width / $thumb_width);
+        }
+        $thumb = imagecreatetruecolor( $thumb_width, $thumb_height );
+
+        // Resize and crop
+        imagecopyresampled($thumb,
+                           $image,
+                           0 - ($new_width - $thumb_width) / 2, // Center the image horizontally
+                           0 - ($new_height - $thumb_height) / 2, // Center the image vertically
+                           0, 0,
+                           $new_width, $new_height,
+                           $width, $height);
+
+        imagejpeg($thumb, $filename, 80);
+    }
     // Taken from https://gist.github.com/jasdeepkhalsa/4339969
     private static function cropImage($source, $dest, $thumb_width=300, $thumb_height=300) {
         list($width, $height, $type) = getimagesize($source);
@@ -214,7 +254,7 @@ class UserController extends Controller
                 $image = imagecreatefrompng($source);
                 break;
             default             :
-                throw new InvalidArgumentException("Image type $type not supported");
+                throw new BadRequestHttpException("Image type $type not supported");
         }
 
         $filename = $dest;
@@ -247,4 +287,5 @@ class UserController extends Controller
 
         imagejpeg($thumb, $filename, 80);
     }
+
 }
