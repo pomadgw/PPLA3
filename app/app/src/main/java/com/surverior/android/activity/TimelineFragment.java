@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import com.surverior.android.R;
 
 
-public class SurveyFragment extends Fragment {
+public class TimelineFragment extends Fragment {
 
-    public SurveyFragment() {
+    public TimelineFragment() {
         // Required empty public constructor
     }
 
@@ -28,7 +28,7 @@ public class SurveyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_survey, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_timeline, container, false);
 
 
         // Inflate the layout for this fragment

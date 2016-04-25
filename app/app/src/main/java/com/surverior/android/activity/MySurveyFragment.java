@@ -4,6 +4,7 @@ package com.surverior.android.activity;
  * Created by bambang on 4/15/16.
  */
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,9 +14,9 @@ import android.view.ViewGroup;
 import com.surverior.android.R;
 
 
-public class CoinsFragment extends Fragment {
+public class MySurveyFragment extends Fragment {
 
-    public CoinsFragment() {
+    public MySurveyFragment() {
         // Required empty public constructor
     }
 
@@ -28,7 +29,7 @@ public class CoinsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_coins, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_mysurvey, container, false);
 
 
         // Inflate the layout for this fragment
@@ -43,5 +44,10 @@ public class CoinsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public void createSurvey(View view){
+        Intent intent = new Intent(view.getContext(), CreateSurveyActivity.class);
+        startActivity(intent);
     }
 }

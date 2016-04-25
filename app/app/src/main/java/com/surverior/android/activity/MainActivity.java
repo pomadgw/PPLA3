@@ -1,6 +1,5 @@
 package com.surverior.android.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,10 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
-import java.util.HashMap;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -27,7 +22,6 @@ import com.surverior.android.app.AppController;
 import com.surverior.android.helper.SQLiteHandler;
 import com.surverior.android.helper.SessionManager;
 import com.surverior.android.helper.SurveriorRequest;
-import com.surverior.android.helper.TokenHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,10 +29,10 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener{
 	private static final String TAG = "SurveriorActivity";
 
-	private TextView txtName;
-	private TextView txtEmail;
-	private Button btnViewProfile;
-	private Button btnLogout;
+//	private TextView txtName;
+//	private TextView txtEmail;
+//	private Button btnViewProfile;
+//	private Button btnLogout;
 
 	private SQLiteHandler db;
 	private SessionManager session;
@@ -63,10 +57,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 		// display the first navigation drawer view on app launch
 		displayView(0);
 
-		txtName = (TextView) findViewById(R.id.name);
-		txtEmail = (TextView) findViewById(R.id.email);
-		btnViewProfile = (Button) findViewById(R.id.btnViewProfile);
-		btnLogout = (Button) findViewById(R.id.btnLogout);
+//		txtName = (TextView) findViewById(R.id.name);
+//		txtEmail = (TextView) findViewById(R.id.email);
+//		btnViewProfile = (Button) findViewById(R.id.btnViewProfile);
+//		btnLogout = (Button) findViewById(R.id.btnLogout);
 
 		// SqLite database handler
 		db = new SQLiteHandler(getApplicationContext());
@@ -97,8 +91,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                             JSONObject jUser = jObj.getJSONObject("user");
 
 							Log.d(TAG, "response: " + response);
-							txtName.setText(jUser.getString("name"));
-							txtEmail.setText(jUser.getString("email"));
+//							txtName.setText(jUser.getString("name"));
+//							txtEmail.setText(jUser.getString("email"));
 						} catch (JSONException e) {
 							Log.d(TAG, e.getMessage());
 						}
@@ -120,22 +114,22 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 		// Displaying the user details on the screen
 
 		// Logout button click event
-		btnViewProfile.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this, ViewProfileActivity.class);
-				startActivity(intent);
-				finish();
-			}
-		});
-		btnLogout.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				logoutUser();
-			}
-		});
+//		btnViewProfile.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				Intent intent = new Intent(MainActivity.this, ViewProfileActivity.class);
+//				startActivity(intent);
+//				finish();
+//			}
+//		});
+//		btnLogout.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				logoutUser();
+//			}
+//		});
 	}
 
 	@Override
@@ -170,12 +164,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 		String title = getString(R.string.app_name);
 		switch (position) {
 			case 0:
-				fragment = new SurveyFragment();
-				title = getString(R.string.title_survey);
+				fragment = new TimelineFragment();
+				title = getString(R.string.title_timeline);
 				break;
 			case 1:
-				fragment = new CoinsFragment();
-				title = getString(R.string.title_coins);
+				fragment = new MySurveyFragment();
+				title = getString(R.string.title_mysurvey);
 				break;
 			case 2:
 				fragment = new ProfileFragment();
@@ -190,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 			fragmentTransaction.replace(R.id.container_body, fragment);
 			fragmentTransaction.commit();
+
 
 			// set the toolbar title
 			getSupportActionBar().setTitle(title);
