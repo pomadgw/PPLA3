@@ -43,14 +43,14 @@ $api->version('v1', function ($api) {
 
     // route untuk mendapatkan token
     $api->get('token', 'App\Http\Controllers\AuthenticateController@getJWTToken');
-    
+
     // route untuk men-invalidate token (dengan demikian, logout)
     $api->get('invalidate', 'App\Http\Controllers\AuthenticateController@invalidate');
 
     // route untuk register
     // POST /api/users/register
     $api->post('users/register', 'App\Http\Controllers\UserController@register');
-    
+
     // route untuk mendapatkan info user yang login
     // GET /api/users/current
     $api->get('users/current', 'App\Http\Controllers\UserController@get_current_user_info');
