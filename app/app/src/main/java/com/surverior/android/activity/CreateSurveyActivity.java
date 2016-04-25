@@ -22,6 +22,10 @@ public class CreateSurveyActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Create New Survey");
+        getSupportActionBar().setSubtitle("Set Criteria");
+        getSupportActionBar().setElevation(4);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
