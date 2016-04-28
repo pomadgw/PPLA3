@@ -55,15 +55,6 @@ class SurveyController extends Controller
 
     public function getSurvey($id) {
         $ret = Survey::with('questions')->find($id);
-        // $questions = $ret->questions;
-        // foreach($questions as $question) {
-        //     if ($question->type == 'option') {;
-        //         $optionq = QuestionOptions::find($question->id);
-        //         $question['args'] = $optionq;
-        //         $question['args']['options'] = $optionq->options;
-        //     }
-        // }
-        // $ret['questions'] = $questions;
         return $ret->toArray();
     }
 
@@ -154,6 +145,30 @@ class SurveyController extends Controller
         }
 
         return response()->json(['error' => false, 'message' => "Sukses menambah pertanyaan", "status_code" => 200], 200);
+    }
+
+    public function editSurvey($surveyId, Request $request) {
+        // Verifikasi
+        $user_id = $this->auth->user()->id;
+        $survey = Survey::find($surveyId);
+
+        if ($survey->user_id != $user_id) {
+            throw new AccessDeniedHttpException("Anda tidak bisa memodifikasi survey ini.");
+        }
+
+        if ($request->has('title')) {
+            $survey->title = $request->title;
+        }
+
+        if ($request->has('description')) {
+            $survey->description = $request->description;
+        }
+        if ($request->has('coins')) {
+            $survey->coins = $request->coins;
+        }
+
+        $survey->save();
+        return $this->response->array(['message' => 'Sukses mengubah survey', 'status_code' => 200]);
     }
 
     public function addOptions($id, $options) {

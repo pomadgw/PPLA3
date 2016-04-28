@@ -65,6 +65,8 @@ $api->version('v1', function ($api) {
 
     $api->get('surveys/{id}', 'App\Http\Controllers\SurveyController@getSurvey');
 
+    $api->post('surveys/{id}/edit', 'App\Http\Controllers\SurveyController@editSurvey');
+
     $api->post('surveys/add', 'App\Http\Controllers\SurveyController@createSurvey');
 
     $api->post('surveys/{id}/questions/add', 'App\Http\Controllers\SurveyController@createQuestion');
