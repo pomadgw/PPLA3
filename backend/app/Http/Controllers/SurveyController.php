@@ -137,10 +137,10 @@ class SurveyController extends Controller
                 break;
         }
 
-        $specific->id = $newQuestion->id;
-        $specific->save();
-
         if (!is_null($specific)) {
+            $specific->id = $newQuestion->id;
+            $specific->save();
+
             switch($type) {
                 case "option":
                     SurveyController::addOptions($specific->id, $request->input('arguments.options'));
