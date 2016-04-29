@@ -1,22 +1,26 @@
 package com.surverior.android.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.surverior.android.R;
 
 
-public class CreateSurveyActivity extends AppCompatActivity {
+public class CreateSurveyCriteriaActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    private Button btnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_survey);
+        setContentView(R.layout.activity_create_survey_criteria);
 
         //Membuat Toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -26,6 +30,14 @@ public class CreateSurveyActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Create New Survey");
         getSupportActionBar().setSubtitle("Set Criteria");
         getSupportActionBar().setElevation(4);
+
+        btnNext = (Button) findViewById(R.id.btnNext);
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), CreateSurveyTitleActivity.class);
+                startActivity(i);
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

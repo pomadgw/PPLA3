@@ -22,4 +22,9 @@
         <item name="android:textSize">@dimen/abc_text_size_subhead_material</item>
     </style>
 
+    <style name="MyButton" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
+    </style>
+
 </resources>

@@ -64,7 +64,9 @@
             android:name=".activity.EditProfileActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop" />
-        <activity android:name=".activity.CreateSurveyActivity"></activity>
+        <activity android:name=".activity.CreateSurveyCriteriaActivity"></activity>
+        <activity android:name=".activity.CreateSurveyTitleActivity"></activity>
+        <activity android:name=".activity.CreateSurveyQuestionActivity"></activity>
     </application>
 
 </manifest>
