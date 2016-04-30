@@ -1,24 +1,27 @@
 package com.surverior.android.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.surverior.android.R;
 
 
-public class QuestionActivity extends AppCompatActivity {
+public class QuestionListActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_question);
+        setContentView(R.layout.activity_question_list);
 
         //Membuat Toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -26,9 +29,16 @@ public class QuestionActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Create New Survey");
-        getSupportActionBar().setSubtitle("New Question");
+        getSupportActionBar().setSubtitle("Your Question List");
         getSupportActionBar().setElevation(4);
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent i = new Intent(getApplication(), QuestionActivity.class);
+                startActivity(i);
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,8 +54,9 @@ public class QuestionActivity extends AppCompatActivity {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_done:
-                Intent i = new Intent(getApplication(), QuestionListActivity.class);
-                startActivity(i);
+//                Intent i = new Intent(getApplication(), TitleActivity.class);
+//                startActivity(i);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
