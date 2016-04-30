@@ -88,14 +88,13 @@ public class UploadImageActivity extends Activity {
 
     public void setImage(){
         final String url = AppConfig.URL_PHOTO + "/" + id + "/photo.jpg";
-        if(bitmapCache.getBitmap(url) != null){
+
             ImageRequest request = new ImageRequest(url,
                     new Response.Listener<Bitmap>() {
                         String urla = url;
                         @Override
                         public void onResponse(Bitmap bitmap) {
                             photo.setImageBitmap(bitmap);
-                            bitmapCache.putBitmap(urla, bitmap);
                         }
                     }, 0, 0, null,
                     new Response.ErrorListener() {
@@ -105,10 +104,6 @@ public class UploadImageActivity extends Activity {
                     });
             // Access the RequestQueue.
             AppController.getInstance().addToRequestQueue(request);
-        }else{
-            Bitmap photo = bit
-        }
-
 
 //
 //        mRequestQueue = AppController.getInstance().getRequestQueue();
