@@ -106,7 +106,7 @@ public class UploadImageActivity extends Activity {
             // Access the RequestQueue.
             AppController.getInstance().addToRequestQueue(request);
         }else{
-            Bitmap photo = bit
+            //Bitmap photo = bit
         }
 
 
