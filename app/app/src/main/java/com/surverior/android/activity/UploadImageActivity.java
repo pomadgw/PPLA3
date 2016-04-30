@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -38,15 +39,14 @@ import java.util.Map;
  */
 public class UploadImageActivity extends Activity {
 
-    private RequestQueue mRequestQueue;
     private ImageButton pen;
+    private Button save;
     private ImageView photo;
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
     private SessionManager session;
     private File file;
     private String id;
-    private LruBitmapCache bitmapCache;
 
 
     @Override
@@ -56,6 +56,7 @@ public class UploadImageActivity extends Activity {
 
         photo = (ImageView) findViewById(R.id.photo);
         pen = (ImageButton) findViewById(R.id.pen);
+        save = (Button) findViewById(R.id.save);
 
         // session manager
         session = new SessionManager(getApplicationContext());
@@ -63,7 +64,6 @@ public class UploadImageActivity extends Activity {
         //getId
         Intent intent = getIntent();
         id = intent.getStringExtra(ViewProfileActivity.DATA_ID);
-        setImage();
 
         //button Click
         pen.setOnClickListener(new View.OnClickListener() {
@@ -71,48 +71,43 @@ public class UploadImageActivity extends Activity {
             public void onClick(View v) {
                 //choose photo/image
                 showFileChooser();
-                uploadImage();
-                setImage();
-
             }
         });
 
-        //setimage
-
-
-
-
-
-
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadImage();
+            }
+        });
     }
 
-    public void setImage(){
-        final String url = AppConfig.URL_PHOTO + "/" + id + "/photo.jpg";
-
-            ImageRequest request = new ImageRequest(url,
-                    new Response.Listener<Bitmap>() {
-                        String urla = url;
-                        @Override
-                        public void onResponse(Bitmap bitmap) {
-                            photo.setImageBitmap(bitmap);
-                        }
-                    }, 0, 0, null,
-                    new Response.ErrorListener() {
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    });
-            // Access the RequestQueue.
-            AppController.getInstance().addToRequestQueue(request);
-
+//    public void setImage(){
+//        final String url = AppConfig.URL_PHOTO + "/" + id + "/photo.jpg";
 //
-//        mRequestQueue = AppController.getInstance().getRequestQueue();
-//        ImageLoader mImageLoader = new ImageLoader(mRequestQueue, new LruBitmapCache(
-//                LruBitmapCache.getCacheSize(getApplicationContext())));
+//            ImageRequest request = new ImageRequest(url,
+//                    new Response.Listener<Bitmap>() {
+//                        String urla = url;
+//                        @Override
+//                        public void onResponse(Bitmap bitmap) {
+//                            photo.setImageBitmap(bitmap);
+//                        }
+//                    }, 0, 0, null,
+//                    new Response.ErrorListener() {
+//                        public void onErrorResponse(VolleyError error) {
 //
-//        mImageLoader.get(url,ImageLoader.getImageListener(photo,R.drawable.no_image,0));
-
-    }
+//                        }
+//                    });
+//            // Access the RequestQueue.
+//            AppController.getInstance().addToRequestQueue(request);
+//
+////        mRequestQueue = AppController.getInstance().getRequestQueue();
+////        ImageLoader mImageLoader = new ImageLoader(mRequestQueue, new LruBitmapCache(
+////                LruBitmapCache.getCacheSize(getApplicationContext())));
+////
+////        mImageLoader.get(url,ImageLoader.getImageListener(photo,R.drawable.no_image,0));
+//
+//    }
 
 
     public String getStringImage(Bitmap bmp){
@@ -133,7 +128,7 @@ public class UploadImageActivity extends Activity {
                         //Disimissing the progress dialog
                         loading.dismiss();
                         //Showing toast message of the response
-                        Toast.makeText(UploadImageActivity.this, s , Toast.LENGTH_LONG).show();
+                        Toast.makeText(UploadImageActivity.this, "Uploaded" , Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -164,6 +159,8 @@ public class UploadImageActivity extends Activity {
 
         //Adding request to the queue
         AppController.getInstance().addToRequestQueue(stringRequest);
+
+
     }
 
     private void showFileChooser() {
@@ -187,6 +184,7 @@ public class UploadImageActivity extends Activity {
                 file = new File (filePath.getPath());
                 //Setting the Bitmap to ImageView
                 photo.setImageBitmap(bitmap);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
