@@ -15,23 +15,41 @@ class Question extends Model
         'question', 'type'
     ];
 
-    public $question_types = ['text' => '', 'paragraph' => '',
+    public static $question_types = ['text' => '', 'paragraph' => '',
                               'option' => 'App\QuestionOptions',
-                              'multiple_choice' => 'App\QuestionMultipleChoices',
-                              'scale' => 'QuestionScale'];
+                              'checkbox' => 'App\QuestionCheckbox',
+                              'scale' => 'App\QuestionScale'];
+
+    public static $question_class = ['text' => '', 'paragraph' => '',
+                            'option' => \App\QuestionOptions::class,
+                            'checkbox' => \App\QuestionCheckbox::class,
+                            'scale' => \App\QuestionScale::class];
 
     protected $table = 'questions';
+    protected $hidden = ['survey_id', 'created_at', 'updated_at'];
+    protected $appends = ['args'];
 
     public function survey() {
         return $this->belongsTo('App\Survey', 'survey_id');
     }
 
-    public function getQuestionDetail() {
+    public function getArgsAttribute() {
         $type = $this->type;
         if ($type == 'text' || $type == 'paragraph') {
             return null;
         } else {
-            return $this->hasOne($question_types[$type], 'id', 'id');
+            return Question::$question_class[$type]::find($this->id);
         }
     }
+
+    public function attributes() {
+        $type = $this->type;
+        if ($type == 'text' || $type == 'paragraph') {
+            return null;
+        } else {
+            return $this->hasOne(Question::$question_types[$type], 'id', 'id');
+        }
+    }
+
+
 }

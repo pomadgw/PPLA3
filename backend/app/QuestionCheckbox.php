@@ -4,31 +4,31 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class QuestionOptions extends Model
+class QuestionCheckbox extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'option_questions';
+    protected $table = 'checkbox_questions';
     protected $hidden = ['id', 'created_at', 'updated_at'];
-    protected $appends = ['options'];
+    protected $appends = ['choices'];
 
     public function question()
     {
         return $this->belongsTo('App\Question', 'id', 'id');
     }
 
-    public function options()
+    public function choices()
     {
-        return $this->hasMany('App\Options', 'question_id', 'id');
+        return $this->hasMany('App\Choice', 'question_id', 'id');
     }
 
-    public function getOptionsAttribute() {
+    public function getChoicesAttribute() {
         $ret = array();
-        foreach($this->options()->get() as $option) {
-            array_push($ret, $option->options);
+        foreach($this->choices()->get() as $choice) {
+            array_push($ret, $choice->choice);
         }
         return $ret;
     }

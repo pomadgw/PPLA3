@@ -11,8 +11,9 @@ class QuestionScale extends Model
      *
      * @var string
      */
-    protected $table = 'questions_scale';
-    
+    protected $table = 'scale_questions';
+    protected $hidden = ['id', 'created_at', 'updated_at'];
+
     public function question()
     {
         return $this->belongsTo('App\Question', 'id', 'id');
