@@ -1,6 +1,7 @@
 package com.surverior.android.activity;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,7 +16,7 @@ import com.surverior.android.R;
 public class CreateSurveyQuestionActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    private Button btnNext;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +32,14 @@ public class CreateSurveyQuestionActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle("Set Question");
         getSupportActionBar().setElevation(4);
 
-//        btnNext = (Button) findViewById(R.id.btnNext);
-//        btnNext.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view) {
-//                Intent i = new Intent(getApplicationContext(), CreateSurveyTitleActivity.class);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+//                Intent i = new Intent(CreateSurveyQuestionActivity.class, CreateSurveyCriteriaActivity.class);
 //                startActivity(i);
-//            }
-//        });
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
