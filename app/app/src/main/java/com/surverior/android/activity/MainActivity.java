@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
 		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_settings) {
+
 			return true;
 		}
 

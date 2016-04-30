@@ -6,6 +6,7 @@ package com.surverior.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.surverior.android.R;
 
 public class MySurveyFragment extends Fragment {
 
+    private FloatingActionButton fab;
+
     public MySurveyFragment() {
         // Required empty public constructor
     }
@@ -24,6 +27,13 @@ public class MySurveyFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                doMyThing();
+//            }
+//        });
+
     }
 
     @Override
@@ -31,7 +41,14 @@ public class MySurveyFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_mysurvey, container, false);
 
+        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
 
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), CriteriaActivity.class);
+                startActivity(i);
+            }
+        });
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -46,8 +63,6 @@ public class MySurveyFragment extends Fragment {
         super.onDetach();
     }
 
-    public void createSurvey(View view){
-        Intent intent = new Intent(view.getContext(), CreateSurveyActivity.class);
-        startActivity(intent);
-    }
+
+
 }
