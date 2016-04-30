@@ -11,14 +11,14 @@ import android.view.MenuItem;
 import com.surverior.android.R;
 
 
-public class QuestionActivity extends AppCompatActivity {
+public class NewTextTypeActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_question);
+        setContentView(R.layout.activity_new_text_type);
 
         //Membuat Toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -26,7 +26,7 @@ public class QuestionActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Create New Survey");
-        getSupportActionBar().setSubtitle("New Question");
+        getSupportActionBar().setSubtitle("New Text Type Question");
         getSupportActionBar().setElevation(4);
 
     }

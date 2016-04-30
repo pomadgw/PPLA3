@@ -85,8 +85,8 @@
                 android:value=".activity.TitleActivity" />
         </activity>
         <activity
-            android:name=".activity.QuestionActivity"
-            android:parentActivityName=".activity.QuestionActivity">
+            android:name=".activity.NewTextTypeActivity"
+            android:parentActivityName=".activity.NewTextTypeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.QuestionListActivity" />

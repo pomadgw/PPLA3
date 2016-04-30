@@ -1,7 +1,6 @@
 package com.surverior.android.activity;
 
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +15,11 @@ import com.surverior.android.R;
 public class QuestionListActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    private FloatingActionButton fab;
+    private com.github.clans.fab.FloatingActionButton textFab;
+    private com.github.clans.fab.FloatingActionButton multiFab;
+    private com.github.clans.fab.FloatingActionButton checkFab;
+    private com.github.clans.fab.FloatingActionButton dropFab;
+    private com.github.clans.fab.FloatingActionButton scaleFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +35,17 @@ public class QuestionListActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle("Your Question List");
         getSupportActionBar().setElevation(4);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        //Inisialisasi FAB untuk tiap question type
+        textFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_text);
+        multiFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_multiplechoice);
+        checkFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_checkboxes);
+        dropFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_dropdown);
+        scaleFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_scale);
+
+        //Set listener untuk masing-masing FAB
+        textFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent i = new Intent(getApplication(), QuestionActivity.class);
+                Intent i = new Intent(getApplication(), NewTextTypeActivity.class);
                 startActivity(i);
             }
         });
