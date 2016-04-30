@@ -69,5 +69,10 @@ $api->version('v1', function ($api) {
 
     $api->post('surveys/add', 'App\Http\Controllers\SurveyController@createSurvey');
 
-    $api->post('surveys/{id}/questions/add', 'App\Http\Controllers\SurveyController@createQuestion');
+    $api->post('surveys/{id}/questions/add', 'App\Http\Controllers\SurveyController@createQuestionEndpoint');
+
+    $api->delete('surveys/{surveyId}/questions/{questionId}/delete', 'App\Http\Controllers\SurveyController@deleteQuestion');
+
+
+    $api->delete('surveys/{surveyId}/delete', 'App\Http\Controllers\SurveyController@deleteSurvey');
 });

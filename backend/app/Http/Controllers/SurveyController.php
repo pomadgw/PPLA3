@@ -50,11 +50,24 @@ class SurveyController extends Controller
 
         $newSurvey->save();
 
+        foreach($request->questions as $question) {
+            SurveyController::createQuestion($newSurvey->id, $question);
+        }
+
         return response()->json(['error' => false, 'message' => "Sukses menambah survey", "status_code" => 200], 200);
     }
 
     public function getSurvey($id) {
         $ret = Survey::with('questions')->find($id);
+        // $questions = $ret->questions;
+        // foreach($questions as $question) {
+        //     if ($question->type == 'option') {;
+        //         $optionq = QuestionOptions::find($question->id);
+        //         $question['args'] = $optionq;
+        //         $question['args']['options'] = $optionq->options;
+        //     }
+        // }
+        // $ret['questions'] = $questions;
         return $ret->toArray();
     }
 
@@ -90,19 +103,23 @@ class SurveyController extends Controller
             }
         }
      */
-    public function createQuestion($surveyId, Request $request) {
+    public function createQuestionEndpoint($surveyId, Request $request)
+    {
+        return SurveyController::createQuestion($surveyId, $request->all());
+    }
+    public function createQuestion($surveyId, $request) {
         // Verifikasi
-        $user_id = $this->auth->user()->id;
-        $survey = Survey::find($surveyId);
-        if ($survey->user_id != $user_id) {
-            throw new AccessDeniedHttpException("Anda tidak bisa memodifikasi survey ini.");
-        }
+        // $user_id = $this->auth->user()->id;
+        // $survey = Survey::find($surveyId);
+        // if ($survey->user_id != $user_id) {
+        //     throw new AccessDeniedHttpException("Anda tidak bisa memodifikasi survey ini.");
+        // }
 
-        $type = $request->input('type');
+        $type = $request['type'];
 
         $newQuestion = new Question;
 
-        $newQuestion->question = $request->input('question');
+        $newQuestion->question = $request['question'];
         $newQuestion->type = $type;
         $newQuestion->survey_id = $surveyId;
 
@@ -112,17 +129,17 @@ class SurveyController extends Controller
         switch($type) {
             case "option":
                 $specific = new QuestionOptions;
-                $specific->type = $request->input('arguments.type');
+                $specific->type = $request['args']['type'];
                 break;
             case "checkbox":
                 $specific = new QuestionCheckbox;
                 break;
             case "scale":
                 $specific = new QuestionScale;
-                $specific->min_val = $request->input('arguments.min_val');
-                $specific->max_val = $request->input('arguments.max_val');
-                $specific->min_label = $request->input('arguments.min_label');
-                $specific->max_label = $request->input('arguments.max_label');
+                $specific->min_val = $request['args']['min_val'];
+                $specific->max_val = $request['args']['max_val'];
+                $specific->min_label = $request['args']['min_label'];
+                $specific->max_label = $request['args']['max_label'];
                 break;
             default:
                 break;
@@ -131,13 +148,12 @@ class SurveyController extends Controller
         if (!is_null($specific)) {
             $specific->id = $newQuestion->id;
             $specific->save();
-
             switch($type) {
                 case "option":
-                    SurveyController::addOptions($specific->id, $request->input('arguments.options'));
+                    SurveyController::addOptions($specific->id, $request['args']['options']);
                     break;
                 case "checkbox":
-                    SurveyController::addChoices($specific->id, $request->input('arguments.choices'));
+                    SurveyController::addChoices($specific->id, $request['args']['choices']);
                     break;
                 default:
                     break;
@@ -145,30 +161,6 @@ class SurveyController extends Controller
         }
 
         return response()->json(['error' => false, 'message' => "Sukses menambah pertanyaan", "status_code" => 200], 200);
-    }
-
-    public function editSurvey($surveyId, Request $request) {
-        // Verifikasi
-        $user_id = $this->auth->user()->id;
-        $survey = Survey::find($surveyId);
-
-        if ($survey->user_id != $user_id) {
-            throw new AccessDeniedHttpException("Anda tidak bisa memodifikasi survey ini.");
-        }
-
-        if ($request->has('title')) {
-            $survey->title = $request->title;
-        }
-
-        if ($request->has('description')) {
-            $survey->description = $request->description;
-        }
-        if ($request->has('coins')) {
-            $survey->coins = $request->coins;
-        }
-
-        $survey->save();
-        return $this->response->array(['message' => 'Sukses mengubah survey', 'status_code' => 200]);
     }
 
     public function addOptions($id, $options) {
@@ -189,5 +181,52 @@ class SurveyController extends Controller
 
             $newChoice->save();
         }
+    }
+
+    public function deleteSurvey($surveyId) {
+        $survey = Survey::find($surveyId);
+
+        foreach($survey->questions as $question) {
+            SurveyController::deleteQuestion($surveyId, $question->id);
+        }
+
+        $survey->delete();
+
+        return response()->json(['error' => false, 'message' => "Sukses menghapus survey", "status_code" => 200], 200);
+    }
+
+    public function deleteQuestion($surveyId, $questionId) {
+        $question = Question::find($questionId);
+        $specific = NULL;
+        switch($question->type) {
+            case "option":
+                $specific = QuestionOptions::find($questionId);
+                SurveyController::deleteOptions($questionId);
+                break;
+            case "checkbox":
+                $specific = QuestionCheckbox::find($questionId);
+                SurveyController::deleteCheckbox($questionId);
+                break;
+            default:
+                break;
+        }
+
+        if (!is_null($specific)) {
+            $specific->delete();
+        }
+
+        $question->delete();
+
+        return response()->json(['error' => false, 'message' => "Sukses menghapus pertanyaan", "status_code" => 200], 200);
+    }
+
+    public function deleteCheckbox($questionId)
+    {
+        Options::where('question_id', $questionId)->delete();
+    }
+
+    public function deleteOptions($questionId)
+    {
+        Choice::where('question_id', $questionId)->delete();
     }
 }
