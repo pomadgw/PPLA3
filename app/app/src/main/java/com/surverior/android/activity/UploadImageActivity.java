@@ -15,12 +15,15 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
 import com.surverior.android.R;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
+import com.surverior.android.helper.LruBitmapCache;
 import com.surverior.android.helper.SessionManager;
 import com.surverior.android.helper.SurveriorRequest;
 
@@ -35,6 +38,7 @@ import java.util.Map;
  */
 public class UploadImageActivity extends Activity {
 
+    private RequestQueue mRequestQueue;
     private ImageButton pen;
     private ImageView photo;
     private int PICK_IMAGE_REQUEST = 1;
@@ -42,6 +46,7 @@ public class UploadImageActivity extends Activity {
     private SessionManager session;
     private File file;
     private String id;
+    private LruBitmapCache bitmapCache;
 
 
     @Override
@@ -58,7 +63,7 @@ public class UploadImageActivity extends Activity {
         //getId
         Intent intent = getIntent();
         id = intent.getStringExtra(ViewProfileActivity.DATA_ID);
-
+        setImage();
 
         //button Click
         pen.setOnClickListener(new View.OnClickListener() {
@@ -67,35 +72,51 @@ public class UploadImageActivity extends Activity {
                 //choose photo/image
                 showFileChooser();
                 uploadImage();
+                setImage();
 
             }
         });
 
         //setimage
-        if(photo.getDrawable() != null){
-            setImage();
-        }
+
+
+
 
 
 
     }
 
     public void setImage(){
-        String url = AppConfig.URL_PHOTO + "/" + id + "/photo.jpg";
-        ImageRequest request = new ImageRequest(url,
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        photo.setImageBitmap(bitmap);
-                    }
-                }, 0, 0, null,
-                new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError error) {
+        final String url = AppConfig.URL_PHOTO + "/" + id + "/photo.jpg";
+        if(bitmapCache.getBitmap(url) != null){
+            ImageRequest request = new ImageRequest(url,
+                    new Response.Listener<Bitmap>() {
+                        String urla = url;
+                        @Override
+                        public void onResponse(Bitmap bitmap) {
+                            photo.setImageBitmap(bitmap);
+                            bitmapCache.putBitmap(urla, bitmap);
+                        }
+                    }, 0, 0, null,
+                    new Response.ErrorListener() {
+                        public void onErrorResponse(VolleyError error) {
 
-                    }
-                });
-        // Access the RequestQueue.
-        AppController.getInstance().addToRequestQueue(request);
+                        }
+                    });
+            // Access the RequestQueue.
+            AppController.getInstance().addToRequestQueue(request);
+        }else{
+            Bitmap photo = bit
+        }
+
+
+//
+//        mRequestQueue = AppController.getInstance().getRequestQueue();
+//        ImageLoader mImageLoader = new ImageLoader(mRequestQueue, new LruBitmapCache(
+//                LruBitmapCache.getCacheSize(getApplicationContext())));
+//
+//        mImageLoader.get(url,ImageLoader.getImageListener(photo,R.drawable.no_image,0));
+
     }
 
 

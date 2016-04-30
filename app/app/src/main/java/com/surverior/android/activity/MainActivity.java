@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
 //		txtName = (TextView) findViewById(R.id.name);
 //		txtEmail = (TextView) findViewById(R.id.email);
-		btnViewProfile = (Button) findViewById(R.id.btnViewProfile);
-//		btnLogout = (Button) findViewById(R.id.btnLogout);
+//		btnViewProfile = (Button) findViewById(R.id.btnViewProfile);
+//			btnLogout = (Button) findViewById(R.id.btnLogout);
 
 		// SqLite database handler
 		db = new SQLiteHandler(getApplicationContext());
@@ -115,15 +115,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 		// Displaying the user details on the screen
 
 		// Logout button click event
-		btnViewProfile.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this, ViewProfileActivity.class);
-				startActivity(intent);
-				finish();
-			}
-		});
+//		btnViewProfile.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				Intent intent = new Intent(MainActivity.this, ViewProfileActivity.class);
+//				startActivity(intent);
+//				finish();
+//			}
+//		});
 //		btnLogout.setOnClickListener(new View.OnClickListener() {
 //
 //			@Override
