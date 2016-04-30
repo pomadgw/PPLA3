@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -37,10 +38,13 @@ public class ViewProfileActivity extends Activity {
 
     private Button btnLogout;
     private ImageButton btnEdit;
+    private ImageView image;
 
     private SQLiteHandler db;
     private SessionManager session;
     public static final String DATA_NAMA="";
+    public static final String DATA_ID="";
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,18 @@ public class ViewProfileActivity extends Activity {
         city = (TextView) findViewById(R.id.city);
         btnLogout = (Button) findViewById(R.id.btnLogout);
         btnEdit = (ImageButton) findViewById(R.id.imageEditButton);
+        image = (ImageView) findViewById(R.id.editphoto);
+
+        //change image
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewProfileActivity.this, UploadImageActivity.class);
+                intent.putExtra(DATA_ID, id);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
@@ -94,6 +110,7 @@ public class ViewProfileActivity extends Activity {
                             job.setText(jUser.getString("profession"));
                             province.setText(jUser.getString("province"));
                             city.setText(jUser.getString("city"));
+                            id=jUser.getString("id");
                         } catch (JSONException e) {
                             Log.d(TAG, e.getMessage());
                         }

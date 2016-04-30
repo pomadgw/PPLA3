@@ -43,6 +43,7 @@
                     android:layout_marginLeft="32dp" />
 
                 <TextView
+                    android:id="@+id/name_frag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bambang Adi Prakoso"
@@ -72,6 +73,7 @@
                     android:layout_marginLeft="32dp" />
 
                 <TextView
+                    android:id="@+id/gender_frag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pria"
@@ -100,6 +102,7 @@
                     android:layout_marginLeft="32dp" />
 
                 <TextView
+                    android:id="@+id/birthday_frag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="31 Agustus 1995"
@@ -128,6 +131,7 @@
                     android:layout_marginLeft="32dp" />
 
                 <TextView
+                    android:id="@+id/job_frag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mahasiswa"
@@ -149,6 +153,7 @@
                 android:paddingBottom="12dp">
 
                 <ImageView
+                    android:id="@+id/photo_frag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:tint="@color/icons"
@@ -156,6 +161,7 @@
                     android:layout_marginLeft="32dp" />
 
                 <TextView
+                    android:id="@+id/address_frag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Jakarta Timur, DKI Jakarta"

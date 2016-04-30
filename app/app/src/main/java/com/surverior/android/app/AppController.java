@@ -1,13 +1,20 @@
 package com.surverior.android.app;
 
 import android.app.Application;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 public class AppController extends Application {
+
+	private ImageLoader mImageLoader;
+	private static Context mCtx;
 
 	public static final String TAG = AppController.class.getSimpleName();
 
@@ -47,5 +54,9 @@ public class AppController extends Application {
 		if (mRequestQueue != null) {
 			mRequestQueue.cancelAll(tag);
 		}
+	}
+
+	public ImageLoader getImageLoader() {
+		return mImageLoader;
 	}
 }
