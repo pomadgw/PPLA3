@@ -16,7 +16,6 @@ public class QuestionListActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private com.github.clans.fab.FloatingActionButton textFab;
-    private com.github.clans.fab.FloatingActionButton multiFab;
     private com.github.clans.fab.FloatingActionButton checkFab;
     private com.github.clans.fab.FloatingActionButton dropFab;
     private com.github.clans.fab.FloatingActionButton scaleFab;
@@ -37,7 +36,6 @@ public class QuestionListActivity extends AppCompatActivity {
 
         //Inisialisasi FAB untuk tiap question type
         textFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_text);
-        multiFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_multiplechoice);
         checkFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_checkboxes);
         dropFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_dropdown);
         scaleFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_scale);
@@ -47,6 +45,24 @@ public class QuestionListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(getApplication(), NewTextTypeActivity.class);
                 startActivity(i);
+            }
+        });
+        checkFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent j = new Intent(getApplication(), NewCheckboxTypeActivity.class);
+                startActivity(j);
+            }
+        });
+        dropFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent k = new Intent(getApplication(), NewDropdownTypeActivity.class);
+                startActivity(k);
+            }
+        });
+        scaleFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent l = new Intent(getApplication(), NewScaleTypeActivity.class);
+                startActivity(l);
             }
         });
     }
@@ -64,8 +80,6 @@ public class QuestionListActivity extends AppCompatActivity {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_done:
-//                Intent i = new Intent(getApplication(), TitleActivity.class);
-//                startActivity(i);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

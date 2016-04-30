@@ -86,7 +86,28 @@
         </activity>
         <activity
             android:name=".activity.NewTextTypeActivity"
-            android:parentActivityName=".activity.NewTextTypeActivity">
+            android:parentActivityName=".activity.QuestionListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.QuestionListActivity" />
+        </activity>
+        <activity
+            android:name=".activity.NewCheckboxTypeActivity"
+            android:parentActivityName=".activity.QuestionListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.QuestionListActivity" />
+        </activity>
+        <activity
+            android:name=".activity.NewDropdownTypeActivity"
+            android:parentActivityName=".activity.QuestionListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.QuestionListActivity" />
+        </activity>
+        <activity
+            android:name=".activity.NewScaleTypeActivity"
+            android:parentActivityName=".activity.QuestionListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.QuestionListActivity" />

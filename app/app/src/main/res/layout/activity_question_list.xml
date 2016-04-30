@@ -63,13 +63,6 @@
             fab:fab_size="mini"
             fab:fab_label="Text" />
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_multiplechoice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_add"
-            fab:fab_size="mini"
-            fab:fab_label="Multiple Choice" />
-        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_checkboxes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
