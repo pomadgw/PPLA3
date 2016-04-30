@@ -1,7 +1,6 @@
 package com.surverior.android.activity;
 
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,15 +12,15 @@ import android.widget.Button;
 import com.surverior.android.R;
 
 
-public class CreateSurveyQuestionActivity extends AppCompatActivity {
+public class TitleActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    private FloatingActionButton fab;
+    private Button btnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_survey_question);
+        setContentView(R.layout.activity_title);
 
         //Membuat Toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -29,22 +28,22 @@ public class CreateSurveyQuestionActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Create New Survey");
-        getSupportActionBar().setSubtitle("Set Question");
+        getSupportActionBar().setSubtitle("Set Title and Description");
         getSupportActionBar().setElevation(4);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-
+        btnNext = (Button) findViewById(R.id.btnNext);
+        btnNext.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-//                Intent i = new Intent(CreateSurveyQuestionActivity.class, CreateSurveyCriteriaActivity.class);
-//                startActivity(i);
+                Intent i = new Intent(getApplicationContext(), QuestionActivity.class);
+                startActivity(i);
             }
         });
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_question, menu);
+        getMenuInflater().inflate(R.menu.menu_createsurvey, menu);
         return true;
     }
 

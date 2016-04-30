@@ -12,7 +12,7 @@ import android.widget.Button;
 import com.surverior.android.R;
 
 
-public class CreateSurveyTitleActivity extends AppCompatActivity {
+public class CriteriaActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private Button btnNext;
@@ -20,7 +20,7 @@ public class CreateSurveyTitleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_survey_title);
+        setContentView(R.layout.activity_criteria);
 
         //Membuat Toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -28,17 +28,16 @@ public class CreateSurveyTitleActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Create New Survey");
-        getSupportActionBar().setSubtitle("Set Title and Description");
+        getSupportActionBar().setSubtitle("Set Criteria");
         getSupportActionBar().setElevation(4);
 
         btnNext = (Button) findViewById(R.id.btnNext);
         btnNext.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), CreateSurveyQuestionActivity.class);
+                Intent i = new Intent(getApplicationContext(), TitleActivity.class);
                 startActivity(i);
             }
         });
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

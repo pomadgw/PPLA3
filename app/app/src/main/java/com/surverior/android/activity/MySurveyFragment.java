@@ -45,7 +45,7 @@ public class MySurveyFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(), CreateSurveyCriteriaActivity.class);
+                Intent i = new Intent(getActivity(), CriteriaActivity.class);
                 startActivity(i);
             }
         });
