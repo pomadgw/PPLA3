@@ -5,8 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.surverior.android.R;
 
@@ -14,6 +19,9 @@ import com.surverior.android.R;
 public class NewCheckboxTypeActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    private LinearLayout layout;
+    private Button addBtn;
+    static int totalEditTexts = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +37,25 @@ public class NewCheckboxTypeActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle("New Checkbox Type Question");
         getSupportActionBar().setElevation(4);
 
+        layout = (LinearLayout) findViewById(R.id.checkboxlayout);
+        addBtn = (Button) findViewById(R.id.addBtn);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                totalEditTexts++;
+                if (totalEditTexts > 50)
+                    return;
+
+                EditText editText = new EditText(getApplicationContext());
+                layout.addView(editText);
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) editText.getLayoutParams();
+                layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                editText.setLayoutParams(layoutParams);
+                //if you want to identify the created editTexts, set a tag, like below
+                editText.setTag("EditText" + totalEditTexts);
+                editText.setHint("Options " + totalEditTexts);
+            }
+        });
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -42,9 +69,11 @@ public class NewCheckboxTypeActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
+                totalEditTexts = 0;
                 return true;
             case R.id.action_done:
                 Intent i = new Intent(getApplication(), QuestionListActivity.class);
+                totalEditTexts = 0;
                 startActivity(i);
             default:
                 return super.onOptionsItemSelected(item);
