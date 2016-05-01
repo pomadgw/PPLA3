@@ -16,10 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:src="@drawable/ic_account_box_black_24dp"
-            android:tint="@color/icons"
             android:layout_marginBottom="12dp"
             android:elevation="4dp"
-            android:background="@color/white" />
+            android:background="@color/white"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"/>
 
         <LinearLayout
             android:orientation="vertical"
