@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.surverior.android.R;
+import com.surverior.android.helper.Survey;
 
 
 public class QuestionListActivity extends AppCompatActivity {
@@ -29,6 +30,8 @@ public class QuestionListActivity extends AppCompatActivity {
     private com.github.clans.fab.FloatingActionButton dropFab;
     private com.github.clans.fab.FloatingActionButton scaleFab;
 
+    private static Survey survey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +46,7 @@ public class QuestionListActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle("Your Question List");
         getSupportActionBar().setElevation(4);
 
-        // for debugging
-        /*Bundle extras = getIntent().getExtras();
+        Bundle extras = getIntent().getExtras();
         gender = extras.getString("gender");
         ageFrom = extras.getString("age_from");
         ageTo = extras.getString("age_to");
@@ -53,7 +55,8 @@ public class QuestionListActivity extends AppCompatActivity {
         city = extras.getString("city");
         title = extras.getString("title");
         description = extras.getString("description");
-        Log.d("FilterCriteria", gender);
+        // for debugging
+/*        Log.d("FilterCriteria", gender);
         Log.d("FilterCriteria",ageFrom);
         Log.d("FilterCriteria",ageTo);
         Log.d("FilterCriteria",job);
@@ -61,6 +64,12 @@ public class QuestionListActivity extends AppCompatActivity {
         Log.d("FilterCriteria",city);
         Log.d("FilterCriteria",title);
         Log.d("FilterCriteria",description);*/
+
+        // initiate survey if still null
+        if (survey == null){
+            survey = new Survey(title,description,gender,Integer.parseInt(ageFrom),
+                    Integer.parseInt(ageTo),job,province,city);
+        }
 
         //Inisialisasi FAB untuk tiap question type
         textFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_text);
