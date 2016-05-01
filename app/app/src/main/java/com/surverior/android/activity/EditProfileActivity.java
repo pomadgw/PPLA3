@@ -3,7 +3,12 @@ package com.surverior.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,8 +33,10 @@ import java.util.Map;
 /**
  * Created by Azhar Fauzan Dz on 4/16/2016.
  */
-public class EditProfileActivity extends Activity{
+public class EditProfileActivity extends AppCompatActivity{
     private static final String TAG = EditProfileActivity.class.getSimpleName();
+
+    private Toolbar mToolbar;
 
     private TextView name;
     private EditText inputName;
@@ -43,6 +50,15 @@ public class EditProfileActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        //Membuat Toolbar
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Edit Profile");
+        getSupportActionBar().setSubtitle("Set Fullname");
+        getSupportActionBar().setElevation(4);
+
         name = (TextView) findViewById(R.id.name_view);
         inputName = (EditText) findViewById(R.id.name_input);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
@@ -54,8 +70,21 @@ public class EditProfileActivity extends Activity{
         // session manager
         session = new SessionManager(getApplicationContext());
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_wizard, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            case R.id.action_done:
                 final String newName = inputName.getText().toString().trim();
                 if(newName.equals("")){
                     Toast.makeText(getApplicationContext(),
@@ -98,9 +127,9 @@ public class EditProfileActivity extends Activity{
                     };
                     AppController.getInstance().addToRequestQueue(req, "update_user");
                 }
-
-            }
-        });
-
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
