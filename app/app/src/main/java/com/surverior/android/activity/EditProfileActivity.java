@@ -99,11 +99,9 @@ public class EditProfileActivity extends AppCompatActivity{
                                         JSONObject jObj = new JSONObject(response);
                                         Log.d(TAG, "response: " + response);
                                         session.remove("INCOMPLETE_DATA");
-                                        Toast.makeText(getApplicationContext(), "Name Updated", Toast.LENGTH_LONG).show();
-                                        // Launch view profile activity
-                                        Intent intent = new Intent(
-                                                EditProfileActivity.this,
-                                                ViewProfileActivity.class);
+                                        Toast.makeText(getApplicationContext(), "Name updated", Toast.LENGTH_LONG).show();
+                                        // Launch view main activity
+                                        Intent intent = new Intent(EditProfileActivity.this,MainActivity.class);
                                         startActivity(intent);
                                         finish();
 

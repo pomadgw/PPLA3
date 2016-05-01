@@ -12,12 +12,14 @@
         android:layout_alignParentTop="true"
         android:background="@color/colorPrimary">
 
-        <!--<ImageView-->
-            <!--android:layout_width="70dp"-->
-            <!--android:layout_height="70dp"-->
-            <!--android:src="@drawable/ic_profile"-->
-            <!--android:scaleType="fitCenter"-->
-            <!--android:layout_centerInParent="true" />-->
+        <ImageView
+            android:id="@+id/nav_photo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_profile"
+            android:scaleType="fitCenter"
+            android:layout_centerInParent="true" />
+
 
     </RelativeLayout>
 
