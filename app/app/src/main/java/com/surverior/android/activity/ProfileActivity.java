@@ -117,7 +117,6 @@ public class ProfileActivity extends Activity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton rb = (RadioButton) group.findViewById(checkedId);
                 if (null != rb && checkedId > -1) {
-                    Toast.makeText(ProfileActivity.this, rb.getText(), Toast.LENGTH_SHORT).show();
                     if (rb.getText().equals("Male")) {
                         gender = "m";
                     } else {
