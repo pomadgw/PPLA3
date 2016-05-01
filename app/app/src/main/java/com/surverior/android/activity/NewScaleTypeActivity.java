@@ -9,9 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.surverior.android.R;
+import com.surverior.android.helper.ScaleQuestion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,10 @@ import java.util.List;
 public class NewScaleTypeActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    private EditText inputQuestion;
+    private EditText inputMax;
+    private EditText inputMin;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +42,10 @@ public class NewScaleTypeActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle("New Scale Type Question");
         getSupportActionBar().setElevation(4);
 
-        Spinner spinner = (Spinner) findViewById(R.id.range_spinner);
+        inputQuestion = (EditText) findViewById(R.id.question);
+        inputMax = (EditText) findViewById(R.id.maxLabel);
+        inputMin = (EditText) findViewById(R.id.minLabel);
+        spinner = (Spinner) findViewById(R.id.range_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.range_number, android.R.layout.simple_spinner_item);
@@ -59,8 +69,22 @@ public class NewScaleTypeActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.action_done:
-                Intent i = new Intent(getApplication(), QuestionListActivity.class);
-                startActivity(i);
+                String question = inputQuestion.getText().toString().trim();
+                String max = inputMax.getText().toString().trim();
+                String min = inputMin.getText().toString().trim();
+                String range = spinner.getSelectedItem().toString().trim();
+                if(!question.isEmpty() && !max.isEmpty() && !min.isEmpty() && !range.isEmpty()
+                        && !(max.length()>15) && !(min.length()>15)) {
+                    ScaleQuestion scale = new ScaleQuestion(question,min,max,Integer.parseInt(range));
+                    Intent i = new Intent(getApplication(), QuestionListActivity.class);
+                    i.putExtra("NEW_QUESTION",true);
+                    i.putExtra("question",scale);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "There is invalid input!", Toast.LENGTH_LONG)
+                            .show();
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }

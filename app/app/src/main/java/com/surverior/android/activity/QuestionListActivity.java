@@ -14,8 +14,15 @@ import android.view.View;
 
 import com.surverior.android.R;
 import com.surverior.android.adapter.QuestionAdapter;
+import com.surverior.android.helper.CheckboxQuestion;
+import com.surverior.android.helper.DropdownQuestion;
 import com.surverior.android.helper.Question;
+import com.surverior.android.helper.ScaleQuestion;
 import com.surverior.android.helper.Survey;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +90,9 @@ public class QuestionListActivity extends AppCompatActivity {
         if(extras.getBoolean("NEW_QUESTION")){
             Question question = (Question) extras.getParcelable("question");
             survey.questions.add(question);
+
+            //for debugging
+            qa.logging();
             //qa.add(question);
         }
 
@@ -142,10 +152,80 @@ public class QuestionListActivity extends AppCompatActivity {
                 //NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_done:
+                try {
+                    sendJSON();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void sendJSON() throws JSONException {
+        JSONObject main = new JSONObject();
+        main.put("title",survey.getName());
+        main.put("description",survey.getDescription());
+        main.put("questions",generateQuestionJSONArray());
+        Log.d("JSON",main.toString());
+    }
+
+    private JSONArray generateQuestionJSONArray() throws JSONException {
+        JSONArray result = new JSONArray();
+        for(int i = 0; i < survey.questions.size(); i++){
+            JSONObject temp = new JSONObject();
+            Question q = survey.questions.get(i);
+            String type = q.getType();
+            temp.put("question",q.getQuestionDetail());
+            switch (type){
+                case "Text": {
+                    temp.put("type", "text");
+                    temp.put("args", new JSONObject());
+                    break;
+                }
+                case "Checkbox": {
+                    CheckboxQuestion c = (CheckboxQuestion) q;
+                    temp.put("type", "checkbox");
+                    JSONObject args = new JSONObject();
+                        JSONArray choices = new JSONArray();
+                        ArrayList<String> cChoices = c.getChoices();
+                        for(int j = 0; j < cChoices.size();j++){
+                            choices.put(cChoices.get(j));
+                        }
+                        args.put("choices",choices);
+                    temp.put("args",args);
+                    break;
+                }
+                case "Dropdown": {
+                    DropdownQuestion d = (DropdownQuestion) q;
+                    temp.put("type", "option");
+                    JSONObject args = new JSONObject();
+                        args.put("type","dropdown");
+                        JSONArray options = new JSONArray();
+                        ArrayList<String> dChoices = d.getChoices();
+                        for(int j = 0; j < dChoices.size();j++){
+                                 options.put(dChoices.get(j));
+                                }
+                        args.put("options",options);
+                    temp.put("args",args);
+                    break;
+                }
+                case "Scale": {
+                    ScaleQuestion s = (ScaleQuestion) q;
+                    temp.put("type", "scale");
+                    JSONObject args = new JSONObject();
+                        args.put("min_val",1);
+                        args.put("max_val",s.getRange());
+                        args.put("min_label",s.getMinLabel());
+                        args.put("max_label",s.getMaxLabel());
+                    temp.put("args",args);
+                    break;
+                }
+            }
+            result.put(temp);
+        }
+        return result;
     }
 
     @Override

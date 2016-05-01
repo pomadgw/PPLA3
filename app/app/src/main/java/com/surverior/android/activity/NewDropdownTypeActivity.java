@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -81,16 +82,15 @@ public class NewDropdownTypeActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
-                totalEditTexts = 0;
                 return true;
             case R.id.action_done:
                 String question = inputQuestion.getText().toString().trim();
                 ArrayList<String> choices = extractChoices();
                 if(!question.isEmpty() && totalEditTexts>0 && choices !=null) {
+                    Log.d("totalChoice", "" + choices.size());
                     Intent i = new Intent(getApplication(), QuestionListActivity.class);
                     i.putExtra("NEW_QUESTION",true);
                     i.putExtra("question",new DropdownQuestion(question,choices));
-                    totalEditTexts = 0;
                     startActivity(i);
                 } else {
                     Toast.makeText(getApplicationContext(),
