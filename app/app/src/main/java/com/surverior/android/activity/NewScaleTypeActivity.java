@@ -7,8 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.surverior.android.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class NewScaleTypeActivity extends AppCompatActivity {
@@ -28,6 +34,15 @@ public class NewScaleTypeActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Create New Survey");
         getSupportActionBar().setSubtitle("New Scale Type Question");
         getSupportActionBar().setElevation(4);
+
+        Spinner spinner = (Spinner) findViewById(R.id.range_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.range_number, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
 
     }
     @Override
