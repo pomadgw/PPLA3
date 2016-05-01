@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.VectorDrawable;
 import android.media.Image;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
@@ -98,7 +99,6 @@ public class ProfileFragment extends Fragment {
                 getActivity().startActivity(intent);
                 refresh();
                 setProfile();
-            //    getActivity().finish();
             }
         });
 

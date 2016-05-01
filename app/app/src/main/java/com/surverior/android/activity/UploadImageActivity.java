@@ -139,47 +139,50 @@ public class UploadImageActivity extends AppCompatActivity{
     }
 
     private void uploadImage(){
-        //Showing the progress dialog
-        final ProgressDialog loading = ProgressDialog.show(this, "Uploading...", "Please wait...", false, false);
-        SurveriorRequest stringRequest = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, session,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        //Disimissing the progress dialog
-                        loading.dismiss();
-                        //Showing toast message of the response
-                        Toast.makeText(UploadImageActivity.this, "Uploaded" , Toast.LENGTH_LONG).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        //Dismissing the progress dialog
-                        loading.dismiss();
+        if(bitmap ==null){
+            Toast.makeText(UploadImageActivity.this, "Please choose your photo first" , Toast.LENGTH_LONG).show();
+        }else {
+            //Showing the progress dialog
+            final ProgressDialog loading = ProgressDialog.show(this, "Uploading...", "Please wait...", false, false);
+            SurveriorRequest stringRequest = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, session,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+                            //Disimissing the progress dialog
+                            loading.dismiss();
+                            //Showing toast message of the response
+                            Toast.makeText(UploadImageActivity.this, "Uploaded", Toast.LENGTH_LONG).show();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            //Dismissing the progress dialog
+                            loading.dismiss();
 
-                        //Showing toast
-                        Toast.makeText(UploadImageActivity.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
-                    }
-                }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                //Converting Bitmap to String
-                String image = getStringImage(bitmap);
+                            //Showing toast
+                            Toast.makeText(UploadImageActivity.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    //Converting Bitmap to String
+                    String image = getStringImage(bitmap);
 
-                //Creating parameters
-                Map<String,String> params = new Hashtable<String, String>();
+                    //Creating parameters
+                    Map<String, String> params = new Hashtable<String, String>();
 
-                //Adding parameters
-                params.put("photo", image);
+                    //Adding parameters
+                    params.put("photo", image);
 
-                //returning parameters
-                return params;
-            }
-        };
+                    //returning parameters
+                    return params;
+                }
+            };
 
-        //Adding request to the queue
-        AppController.getInstance().addToRequestQueue(stringRequest);
-
+            //Adding request to the queue
+            AppController.getInstance().addToRequestQueue(stringRequest);
+        }
 
     }
 
