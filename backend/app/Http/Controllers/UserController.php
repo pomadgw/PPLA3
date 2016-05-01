@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Response;
+use DateTime;
+use DateInterval;
 
 /**
  * @Resource("Users", uri="/api/users")
@@ -27,7 +29,7 @@ class UserController extends Controller
     {
         // buat semua method di bawah ini kecuali `register`
         // membutuhkan otentikasi
-        $this->middleware(['get.token'], ['except' => ['register']]);
+        $this->middleware(['get.token'], ['except' => ['register', 'confirm']]);
     }
 
     /**
@@ -113,10 +115,48 @@ class UserController extends Controller
         if (!is_null($request->province))
             $new_user->province = $request->province;
 
+        $date = new DateTime();
+        $date->add(new DateInterval('P1D'));
+        $encoded_expire = UserController::base64url_encode($date->format('Y-m-d H:m:s'));
+        $new_user->confirmation_code = UserController::base64url_encode(str_random(30)) . '.' . $encoded_expire;
+
         // simpan ke database
         $new_user->save();
 
         return response()->json(['error' => false, 'message' => 'Success register to server', "type" => "success", "status_code" => 201, "user" => $new_user], 201);
+    }
+
+    public function confirm($confimationCode) {
+        if (! $confimationCode) {
+            throw new Exception;
+        }
+
+        $curr_user = User::where('confirmation_code', $confimationCode)->first();
+
+        if (! $curr_user) {
+            throw new Exception;
+        }
+
+        // $expiredTimeStr = explode(".", $confirmation_code)[1];
+        // $expiredTime = new DateTime($expiredTimeStr);
+        // $now = new DateTime();
+
+        // if ($now <= $expiredTime && !$curr_user->confirmed) {
+            $curr_user->confirmed = true;
+            $curr_user->confirmation_code = null;
+            $curr_user->save();
+            // to page that confirm that email has been confirmed
+            echo "Email is confirmed";
+        // }
+    }
+
+    public function isConfirmed() {
+        $curr_user = $this->auth->user();
+        $expiredTimeStr = explode(".", $curr_user->confirmation_code)[1];
+        $expiredTime = new DateTime(UserController::base64url_decode($expiredTimeStr));
+        $now = new DateTime();
+
+        return $now <= $expiredTime && $curr_user->confirmed;
     }
 
     /**
@@ -287,5 +327,10 @@ class UserController extends Controller
 
         imagejpeg($thumb, $filename, 80);
     }
-
+    public static function base64url_encode($data) {
+      return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    }
+    public static function base64url_decode($data) {
+      return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+    }
 }
