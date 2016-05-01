@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -11,7 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.surverior.android.R;
+import com.surverior.android.adapter.QuestionAdapter;
+import com.surverior.android.helper.Question;
 import com.surverior.android.helper.Survey;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class QuestionListActivity extends AppCompatActivity {
@@ -36,6 +43,17 @@ public class QuestionListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_list);
+
+        //Inisialisasi RecycleView
+        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
+        recList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+
+        //Inisialisasi QuestionAdapter
+        QuestionAdapter qa = new QuestionAdapter(createList(30));
+        recList.setAdapter(qa);
 
         //Membuat Toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -121,5 +139,17 @@ public class QuestionListActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // Method untuk generate question asal untuk keperluan viewing
+    private List<Question> createList(int size) {
+        List<Question> result = new ArrayList<Question>();
+        for (int i=1; i <= size; i++) {
+            Question q = new Question();
+            q.setQuestionDetail("question" + i);
+            q.setType("type" + i);
+            result.add(q);
+        }
+        return result;
     }
 }
