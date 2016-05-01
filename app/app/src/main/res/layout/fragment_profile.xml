@@ -51,6 +51,13 @@
                     android:layout_gravity="center_vertical"
                     android:textSize="18dp"
                     android:layout_marginLeft="24dp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_pencil_box"
+                    android:id="@+id/changeName"
+                    android:tint="@color/icons"
+                    android:clickable="true"/>
 
             </LinearLayout>
 

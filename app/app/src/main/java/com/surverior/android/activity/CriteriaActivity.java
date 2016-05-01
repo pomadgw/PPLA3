@@ -54,6 +54,7 @@ public class CriteriaActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Create New Survey");
         getSupportActionBar().setSubtitle("Set Criteria");
         getSupportActionBar().setElevation(4);
+
         genderRadio = (RadioGroup) findViewById(R.id.radioGroupGender);
         genderRadio.clearCheck();
         inputAgeFrom = (EditText) findViewById(R.id.ageFrom);
