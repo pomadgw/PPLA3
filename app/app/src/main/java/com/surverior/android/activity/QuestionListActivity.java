@@ -37,23 +37,14 @@ public class QuestionListActivity extends AppCompatActivity {
     private com.github.clans.fab.FloatingActionButton dropFab;
     private com.github.clans.fab.FloatingActionButton scaleFab;
 
+    private Bundle extras;
     private static Survey survey;
+    private static QuestionAdapter qa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_list);
-
-        //Inisialisasi RecycleView
-        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
-        recList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(llm);
-
-        //Inisialisasi QuestionAdapter
-        QuestionAdapter qa = new QuestionAdapter(createList(30));
-        recList.setAdapter(qa);
 
         //Membuat Toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -64,30 +55,45 @@ public class QuestionListActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle("Your Question List");
         getSupportActionBar().setElevation(4);
 
-        Bundle extras = getIntent().getExtras();
-        gender = extras.getString("gender");
-        ageFrom = extras.getString("age_from");
-        ageTo = extras.getString("age_to");
-        job = extras.getString("job");
-        province = extras.getString("province");
-        city = extras.getString("city");
-        title = extras.getString("title");
-        description = extras.getString("description");
-        // for debugging
-/*        Log.d("FilterCriteria", gender);
-        Log.d("FilterCriteria",ageFrom);
-        Log.d("FilterCriteria",ageTo);
-        Log.d("FilterCriteria",job);
-        Log.d("FilterCriteria",province);
-        Log.d("FilterCriteria",city);
-        Log.d("FilterCriteria",title);
-        Log.d("FilterCriteria",description);*/
-
-        // initiate survey if still null
-        if (survey == null){
+        extras = getIntent().getExtras();
+        if (extras.getBoolean("NEW_SURVEY")) {
+            gender = extras.getString("gender");
+            ageFrom = extras.getString("age_from");
+            ageTo = extras.getString("age_to");
+            job = extras.getString("job");
+            province = extras.getString("province");
+            city = extras.getString("city");
+            title = extras.getString("title");
+            description = extras.getString("description");
+            // for debugging
+            Log.d("FilterCriteria", gender);
+            Log.d("FilterCriteria",ageFrom);
+            Log.d("FilterCriteria",ageTo);
+            Log.d("FilterCriteria",job);
+            Log.d("FilterCriteria",province);
+            Log.d("FilterCriteria",city);
+            Log.d("FilterCriteria",title);
+            Log.d("FilterCriteria",description);
+            // initiate survey if still null
             survey = new Survey(title,description,gender,Integer.parseInt(ageFrom),
                     Integer.parseInt(ageTo),job,province,city);
+            qa = new QuestionAdapter(survey.questions);
         }
+
+        if(extras.getBoolean("NEW_QUESTION")){
+            Question question = (Question) extras.getParcelable("question");
+            survey.questions.add(question);
+            //qa.add(question);
+        }
+
+        //Inisialisasi RecycleView
+        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
+        recList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+
+        recList.setAdapter(qa);
 
         //Inisialisasi FAB untuk tiap question type
         textFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_text);
@@ -132,7 +138,8 @@ public class QuestionListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
+                //NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_done:
                 return true;
@@ -141,6 +148,13 @@ public class QuestionListActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        if(!extras.getBoolean("NEW_SURVEY")){
+            survey.questions.remove(survey.questions.size()-1);
+        }
+        QuestionListActivity.super.onBackPressed();
+    }
     // Method untuk generate question asal untuk keperluan viewing
     private List<Question> createList(int size) {
         List<Question> result = new ArrayList<Question>();

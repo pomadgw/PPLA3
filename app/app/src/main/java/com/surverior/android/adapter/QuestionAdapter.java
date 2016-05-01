@@ -54,4 +54,12 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
             type = (TextView)  v.findViewById(R.id.cardlabel_type);
         }
     }
+
+    public void add(Question question){
+        this.questionList.add(question);
+    }
+
+    public void delete(int position){
+        this.questionList.remove(position);
+    }
 }

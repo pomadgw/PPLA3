@@ -1,6 +1,7 @@
 package com.surverior.android.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -12,16 +13,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.surverior.android.R;
+import com.surverior.android.helper.CheckboxQuestion;
+
+import java.util.ArrayList;
 
 
-public class NewCheckboxTypeActivity extends AppCompatActivity {
+public class
+        NewCheckboxTypeActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private LinearLayout layout;
     private Button addBtn;
-    static int totalEditTexts = 0;
+    private EditText inputQuestion;
+    private final int EDIT_TEXT_START_ID = 100;
+    private int totalEditTexts = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +59,15 @@ public class NewCheckboxTypeActivity extends AppCompatActivity {
                 layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
                 editText.setLayoutParams(layoutParams);
                 //if you want to identify the created editTexts, set a tag, like below
+                editText.setId(EDIT_TEXT_START_ID+totalEditTexts);
                 editText.setTag("EditText" + totalEditTexts);
                 editText.setHint("Options " + totalEditTexts);
+                editText.setHintTextColor(Color.GRAY);
+                editText.setTextColor(Color.BLACK);
             }
         });
+
+        inputQuestion = (EditText) findViewById(R.id.question);
 
     }
     @Override
@@ -68,15 +81,42 @@ public class NewCheckboxTypeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                //NavUtils.navigateUpFromSameTask(this);
                 totalEditTexts = 0;
+                onBackPressed();
                 return true;
             case R.id.action_done:
-                Intent i = new Intent(getApplication(), QuestionListActivity.class);
-                totalEditTexts = 0;
-                startActivity(i);
+                String question = inputQuestion.getText().toString().trim();
+                ArrayList<String> choices = extractChoices();
+                if(!question.isEmpty() && totalEditTexts>0 && choices != null) {
+                    Intent i = new Intent(getApplication(), QuestionListActivity.class);
+                    i.putExtra("NEW_QUESTION",true);
+                    i.putExtra("question",new CheckboxQuestion(question,choices));
+                    totalEditTexts = 0;
+                    startActivity(i);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "There is invalid input!", Toast.LENGTH_LONG)
+                            .show();
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private ArrayList<String> extractChoices(){
+        ArrayList<String> result = new ArrayList<>();
+        for(int i = 1; i <= totalEditTexts;i++){
+            EditText input = (EditText) findViewById(i+EDIT_TEXT_START_ID);
+            result.add(input.getText().toString().trim());
+        }
+        if (isChoicesValid(result)) return result; else return null;
+    }
+    private boolean isChoicesValid(ArrayList<String> choices){
+        boolean result = true;
+        for(int i=0; i < choices.size();i++){
+            if(choices.get(i).isEmpty()) return false;
+        }
+        return result;
     }
 }

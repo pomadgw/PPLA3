@@ -7,13 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.surverior.android.R;
+import com.surverior.android.helper.Question;
 
 
 public class NewTextTypeActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    private EditText inputQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,7 @@ public class NewTextTypeActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle("New Text Type Question");
         getSupportActionBar().setElevation(4);
 
+        inputQuestion = (EditText) findViewById(R.id.question);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -41,11 +46,20 @@ public class NewTextTypeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
             case R.id.action_done:
-                Intent i = new Intent(getApplication(), QuestionListActivity.class);
-                startActivity(i);
+                String question = inputQuestion.getText().toString().trim();
+                if(!question.isEmpty()) {
+                    Intent i = new Intent(getApplication(), QuestionListActivity.class);
+                    i.putExtra("question",new Question(question));
+                    i.putExtra("NEW_QUESTION", true);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "There is invalid input!", Toast.LENGTH_LONG)
+                            .show();
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
