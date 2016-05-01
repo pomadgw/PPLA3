@@ -30,7 +30,7 @@ class UserController extends Controller
     {
         // buat semua method di bawah ini kecuali `register`
         // membutuhkan otentikasi
-        $this->middleware(['get.token'], ['except' => ['register', 'confirm']]);
+        $this->middleware(['get.token', 'check.confirm'], ['except' => ['register', 'confirm']]);
     }
 
     /**
@@ -159,11 +159,12 @@ class UserController extends Controller
 
     public function isConfirmed() {
         $curr_user = $this->auth->user();
-        $expiredTimeStr = explode(".", $curr_user->confirmation_code)[1];
-        $expiredTime = new DateTime(UserController::base64url_decode($expiredTimeStr));
-        $now = new DateTime();
+        // $expiredTimeStr = explode(".", $curr_user->confirmation_code)[1];
+        // $expiredTime = new DateTime(UserController::base64url_decode($expiredTimeStr));
+        // $now = new DateTime();
 
-        return $now <= $expiredTime && $curr_user->confirmed;
+        // return $now <= $expiredTime && $curr_user->confirmed;
+        return $curr_user->confirmed == 1;
     }
 
     /**
