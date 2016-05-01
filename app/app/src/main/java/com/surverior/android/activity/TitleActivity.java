@@ -70,13 +70,14 @@ public class TitleActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
             case R.id.action_done:
                 String title = inputTitle.getText().toString().trim();
                 String description = inputDescription.getText().toString().trim();
                 if(!title.isEmpty() && !description.isEmpty()){
                     Bundle extras = getIntent().getExtras();
+                    extras.putBoolean("NEW_SURVEY", true);
                     extras.putString("title",title);
                     extras.putString("description",description);
                     Intent i = new Intent(getApplication(), QuestionListActivity.class);
