@@ -5,20 +5,32 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.surverior.android.R;
+import com.surverior.android.helper.Survey;
 
 
 public class QuestionListActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    private String gender;
+    private String ageFrom;
+    private String ageTo;
+    private String job;
+    private String province;
+    private String city;
+    private String title;
+    private String description;
     private com.github.clans.fab.FloatingActionButton textFab;
     private com.github.clans.fab.FloatingActionButton checkFab;
     private com.github.clans.fab.FloatingActionButton dropFab;
     private com.github.clans.fab.FloatingActionButton scaleFab;
+
+    private static Survey survey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +45,31 @@ public class QuestionListActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Create New Survey");
         getSupportActionBar().setSubtitle("Your Question List");
         getSupportActionBar().setElevation(4);
+
+        Bundle extras = getIntent().getExtras();
+        gender = extras.getString("gender");
+        ageFrom = extras.getString("age_from");
+        ageTo = extras.getString("age_to");
+        job = extras.getString("job");
+        province = extras.getString("province");
+        city = extras.getString("city");
+        title = extras.getString("title");
+        description = extras.getString("description");
+        // for debugging
+/*        Log.d("FilterCriteria", gender);
+        Log.d("FilterCriteria",ageFrom);
+        Log.d("FilterCriteria",ageTo);
+        Log.d("FilterCriteria",job);
+        Log.d("FilterCriteria",province);
+        Log.d("FilterCriteria",city);
+        Log.d("FilterCriteria",title);
+        Log.d("FilterCriteria",description);*/
+
+        // initiate survey if still null
+        if (survey == null){
+            survey = new Survey(title,description,gender,Integer.parseInt(ageFrom),
+                    Integer.parseInt(ageTo),job,province,city);
+        }
 
         //Inisialisasi FAB untuk tiap question type
         textFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_text);
