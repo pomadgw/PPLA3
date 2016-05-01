@@ -16,15 +16,11 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageRequest;
 import com.surverior.android.R;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
-import com.surverior.android.helper.LruBitmapCache;
 import com.surverior.android.helper.SessionManager;
 import com.surverior.android.helper.SurveriorRequest;
 
@@ -47,7 +43,8 @@ public class UploadImageActivity extends Activity {
     private SessionManager session;
     private File file;
     private String id;
-
+    private Bitmap image;
+    private ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +53,7 @@ public class UploadImageActivity extends Activity {
 
         photo = (ImageView) findViewById(R.id.photo);
         pen = (ImageButton) findViewById(R.id.pen);
+        back = (ImageView) findViewById(R.id.back);
         save = (Button) findViewById(R.id.save);
 
         // session manager
@@ -63,7 +61,11 @@ public class UploadImageActivity extends Activity {
 
         //getId
         Intent intent = getIntent();
-        id = intent.getStringExtra(ViewProfileActivity.DATA_ID);
+        id = intent.getStringExtra(ProfileFragment.DATA_ID);
+        image = (Bitmap) intent.getParcelableExtra(ProfileFragment.IMAGE);
+
+        //setImage
+        photo.setImageBitmap(image);
 
         //button Click
         pen.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +82,20 @@ public class UploadImageActivity extends Activity {
                 uploadImage();
             }
         });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UploadImageActivity.this,
+                        MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
+
+
 
 //    public void setImage(){
 //        final String url = AppConfig.URL_PHOTO + "/" + id + "/photo.jpg";
