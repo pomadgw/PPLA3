@@ -123,6 +123,12 @@ class UserController extends Controller
         // simpan ke database
         $new_user->save();
 
+        Mail::send('verification', ['user' => $new_user], function ($m) use ($new_user) {
+            $m->from('surverior@pomadgw.xyz', 'Surverior');
+
+            $m->to($new_user->email, $new_user->name)->subject('Email Verification');
+        });
+
         return response()->json(['error' => false, 'message' => 'Success register to server', "type" => "success", "status_code" => 201, "user" => $new_user], 201);
     }
 
