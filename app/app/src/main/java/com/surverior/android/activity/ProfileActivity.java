@@ -32,6 +32,7 @@ import com.surverior.android.app.AppController;
 import com.surverior.android.helper.SQLiteHandler;
 import com.surverior.android.helper.SessionManager;
 import com.surverior.android.helper.SurveriorRequest;
+import com.surverior.android.helper.Validator;
 import com.surverior.android.model.Kota;
 
 import org.json.JSONException;
@@ -478,7 +479,13 @@ public class ProfileActivity extends Activity {
                         && !city.equals("City") && !province.isEmpty() && !province.equals("Province")
                         && !job.isEmpty() && !job.equals("Job")
                         && !birth.equals("Birthday") && !gender.equals("x")) {
-                    updateProfileUser(name,gender,birth,job,city,province,email);
+                    if(Validator.isValidName(name)){
+                        updateProfileUser(name,gender,birth,job,city,province,email);
+                    }else{
+                        Toast.makeText(getApplicationContext(),
+                                "Name is not valid", Toast.LENGTH_LONG)
+                                .show();
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "There is empty!", Toast.LENGTH_LONG)
