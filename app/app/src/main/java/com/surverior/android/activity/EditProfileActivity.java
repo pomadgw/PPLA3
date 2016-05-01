@@ -100,7 +100,9 @@ public class EditProfileActivity extends AppCompatActivity{
                                         Log.d(TAG, "response: " + response);
                                         session.remove("INCOMPLETE_DATA");
                                         Toast.makeText(getApplicationContext(), "Name updated", Toast.LENGTH_LONG).show();
-                                        // Launch view profile activity
+                                        // Launch view main activity
+                                        Intent intent = new Intent(EditProfileActivity.this,MainActivity.class);
+                                        startActivity(intent);
                                         finish();
 
                                     } catch (JSONException e) {
