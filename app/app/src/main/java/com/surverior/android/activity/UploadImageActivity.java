@@ -63,7 +63,7 @@ public class UploadImageActivity extends AppCompatActivity{
         // session manager
         session = new SessionManager(getApplicationContext());
 
-        //getId
+        //getId from previous Activity
         Intent intent = getIntent();
         id = intent.getStringExtra(ProfileFragment.DATA_ID);
         image = (Bitmap) intent.getParcelableExtra(ProfileFragment.IMAGE);
@@ -101,34 +101,6 @@ public class UploadImageActivity extends AppCompatActivity{
         });
 
     }
-
-//    public void setImage(){
-//        final String url = AppConfig.URL_PHOTO + "/" + id + "/photo.jpg";
-//
-//            ImageRequest request = new ImageRequest(url,
-//                    new Response.Listener<Bitmap>() {
-//                        String urla = url;
-//                        @Override
-//                        public void onResponse(Bitmap bitmap) {
-//                            photo.setImageBitmap(bitmap);
-//                        }
-//                    }, 0, 0, null,
-//                    new Response.ErrorListener() {
-//                        public void onErrorResponse(VolleyError error) {
-//
-//                        }
-//                    });
-//            // Access the RequestQueue.
-//            AppController.getInstance().addToRequestQueue(request);
-//
-////        mRequestQueue = AppController.getInstance().getRequestQueue();
-////        ImageLoader mImageLoader = new ImageLoader(mRequestQueue, new LruBitmapCache(
-////                LruBitmapCache.getCacheSize(getApplicationContext())));
-////
-////        mImageLoader.get(url,ImageLoader.getImageListener(photo,R.drawable.no_image,0));
-//
-//    }
-
 
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
