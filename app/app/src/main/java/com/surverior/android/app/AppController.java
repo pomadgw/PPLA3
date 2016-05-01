@@ -10,6 +10,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.surverior.android.helper.LruBitmapCache;
 
 public class AppController extends Application {
 
@@ -57,6 +58,11 @@ public class AppController extends Application {
 	}
 
 	public ImageLoader getImageLoader() {
-		return mImageLoader;
+		getRequestQueue();
+		if (mImageLoader == null) {
+			mImageLoader = new ImageLoader(this.mRequestQueue,
+					new LruBitmapCache());
+		}
+		return this.mImageLoader;
 	}
 }

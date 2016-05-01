@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +20,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.surverior.android.R;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
@@ -44,6 +48,8 @@ public class ProfileFragment extends Fragment {
     private ImageView image;
     private SessionManager session;
 
+    ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
     public static final String DATA_NAMA="";
     public static final String DATA_ID="";
     public static final String IMAGE="";
@@ -56,8 +62,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        refresh();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,7 +93,9 @@ public class ProfileFragment extends Fragment {
                 intent.putExtra(DATA_ID, id);
                 intent.putExtra(IMAGE,bitmap);
                 getActivity().startActivity(intent);
-                getActivity().finish();
+                refresh();
+                setProfile();
+            //    getActivity().finish();
             }
         });
 
@@ -97,7 +106,9 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
                 intent.putExtra(DATA_NAMA, name.getText());
                 getActivity().startActivity(intent);
-                getActivity().finish();
+              //  getActivity().finish();
+                refresh();
+                setProfile();
             }
         });
 
@@ -117,7 +128,7 @@ public class ProfileFragment extends Fragment {
 
     public void setImage(String idx) {
         String url = AppConfig.URL_PHOTO + "/" + idx + "/photo.jpg";
-
+//
         ImageRequest request = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
 
@@ -134,6 +145,9 @@ public class ProfileFragment extends Fragment {
         // Access the RequestQueue.
         AppController.getInstance().addToRequestQueue(request);
 
+//        if(imageLoader == null )
+//            imageLoader = AppController.getInstance().getImageLoader();
+//        image.setImageUrl(url,imageLoader);
     }
 
     public void setProfile(){
@@ -171,5 +185,17 @@ public class ProfileFragment extends Fragment {
         });
         AppController.getInstance().addToRequestQueue(req, "get_user");
 
+    }
+
+    public Activity getActivit(){
+        return getActivity();
+    }
+
+    public void refresh(){
+        Fragment currentFragment = getFragmentManager().findFragmentByTag("PROFILE");
+        FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
+        fragTransaction.detach(currentFragment);
+        fragTransaction.attach(currentFragment);
+        fragTransaction.commit();
     }
 }

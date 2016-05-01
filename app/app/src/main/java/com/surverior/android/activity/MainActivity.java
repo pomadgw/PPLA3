@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener{
 	private static final String TAG = "SurveriorActivity";
+	private String FRAG_TAG;
 
 //	private TextView txtName;
 //	private TextView txtEmail;
@@ -168,14 +169,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 			case 0:
 				fragment = new TimelineFragment();
 				title = getString(R.string.title_timeline);
+				FRAG_TAG = "TIMELINE";
 				break;
 			case 1:
 				fragment = new MySurveyFragment();
 				title = getString(R.string.title_mysurvey);
+				FRAG_TAG = "SURVEY";
 				break;
 			case 2:
 				fragment = new ProfileFragment();
 				title = getString(R.string.title_profile);
+				FRAG_TAG = "PROFILE";
 				break;
 			default:
 				break;
@@ -184,9 +188,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 		if (fragment != null) {
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-			fragmentTransaction.replace(R.id.container_body, fragment);
+			fragmentTransaction.replace(R.id.container_body, fragment, FRAG_TAG);
 			fragmentTransaction.commit();
-
 
 			// set the toolbar title
 			getSupportActionBar().setTitle(title);

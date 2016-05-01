@@ -7,6 +7,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +37,7 @@ import java.util.Map;
 /**
  * Created by Azhar Fauzan Dz on 4/22/2016.
  */
-public class UploadImageActivity extends Activity {
+public class UploadImageActivity extends AppCompatActivity{
 
     private ImageButton pen;
     private Button save;
@@ -80,6 +84,7 @@ public class UploadImageActivity extends Activity {
             @Override
             public void onClick(View view) {
                 uploadImage();
+
             }
         });
 
@@ -89,7 +94,9 @@ public class UploadImageActivity extends Activity {
                 Intent intent = new Intent(UploadImageActivity.this,
                         MainActivity.class);
                 startActivity(intent);
+
                 finish();
+
             }
         });
 
@@ -203,5 +210,8 @@ public class UploadImageActivity extends Activity {
             }
         }
     }
+
+
+
 
 }
