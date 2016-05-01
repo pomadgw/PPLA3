@@ -326,7 +326,7 @@ public class CriteriaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
             case R.id.action_done:
                 String ageFrom = inputAgeFrom.getText().toString().trim();
