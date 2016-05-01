@@ -17,6 +17,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Response;
 use DateTime;
 use DateInterval;
+use Mail;
 
 /**
  * @Resource("Users", uri="/api/users")
