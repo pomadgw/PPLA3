@@ -59,28 +59,28 @@
             android:id="@+id/menu_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_add"
+            android:src="@drawable/ic_text_type"
             fab:fab_size="mini"
             fab:fab_label="Text" />
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_checkboxes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_add"
+            android:src="@drawable/ic_checkbox_type"
             fab:fab_size="mini"
             fab:fab_label="Checkboxes" />
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_dropdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_add"
+            android:src="@drawable/ic_dropdown_type"
             fab:fab_size="mini"
             fab:fab_label="Dropdown" />
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_scale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_add"
+            android:src="@drawable/ic_scale_type"
             fab:fab_size="mini"
             fab:fab_label="Scale" />
 
