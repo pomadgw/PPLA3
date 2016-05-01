@@ -10,6 +10,11 @@ public class Question implements Parcelable{
     protected String questionDetail;
     protected String type;
 
+    public Question() {
+        this.questionDetail = "";
+        this.type = "";
+    }
+
     public Question(String questionDetail) {
         this.questionDetail = questionDetail;
         this.type = "Text";
@@ -46,5 +51,21 @@ public class Question implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(questionDetail);
         dest.writeString(type);
+    }
+
+    public String getQuestionDetail() {
+        return questionDetail;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setQuestionDetail(String questionDetail) {
+        this.questionDetail = questionDetail;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
