@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,7 @@ public class ProfileFragment extends Fragment {
     private TextView job;
     private TextView address;
 
+    private ImageView changeName;
     private ImageView image;
     private SessionManager session;
 
@@ -77,6 +79,7 @@ public class ProfileFragment extends Fragment {
         job = (TextView) rootView.findViewById(R.id.job_frag);
         address = (TextView) rootView.findViewById(R.id.address_frag);
         image = (ImageView) rootView.findViewById(R.id.photo_frag);
+        changeName = (ImageView) rootView.findViewById(R.id.changeName);
 
         // session manager
         session = new SessionManager(getActivity().getApplicationContext());
@@ -100,7 +103,7 @@ public class ProfileFragment extends Fragment {
         });
 
         //edit name
-        name.setOnClickListener(new View.OnClickListener() {
+        changeName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);

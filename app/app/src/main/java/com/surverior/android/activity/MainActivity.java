@@ -181,6 +181,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 				title = getString(R.string.title_profile);
 				FRAG_TAG = "PROFILE";
 				break;
+			case 3:
+				logoutUser();
+				break;
 			default:
 				break;
 		}
