@@ -95,8 +95,6 @@ public class UploadImageActivity extends Activity {
 
     }
 
-
-
 //    public void setImage(){
 //        final String url = AppConfig.URL_PHOTO + "/" + id + "/photo.jpg";
 //

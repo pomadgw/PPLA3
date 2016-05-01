@@ -43,6 +43,32 @@
                 android:inputType="textMultiLine" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/material_grey_300"/>
+
+        <LinearLayout
+            android:id="@+id/checkboxlayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Options" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Option"
+            android:id="@+id/addBtn"
+            android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 
 </RelativeLayout>
