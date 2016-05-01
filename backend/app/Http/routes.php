@@ -61,7 +61,9 @@ $api->version('v1', function ($api) {
 
     // survey things
 
-    $api->get('surveys', 'App\Http\Controllers\SurveyController@getUserSurveys');
+    $api->get('surveys/list', 'App\Http\Controllers\SurveyController@getAllSurveys');
+
+    $api->get('surveys/user', 'App\Http\Controllers\SurveyController@getUserSurveys');
 
     $api->get('surveys/{id}', 'App\Http\Controllers\SurveyController@getSurvey');
 

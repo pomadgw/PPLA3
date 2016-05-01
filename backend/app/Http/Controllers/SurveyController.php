@@ -71,6 +71,11 @@ class SurveyController extends Controller
         return $ret->toArray();
     }
 
+    public function getAllSurveys()
+    {
+        return Survey::paginate(10);
+    }
+
     public function getUserSurveys() {
         $user = $this->auth->user();
         return $user->surveys;
