@@ -5,6 +5,9 @@ package com.surverior.android.activity;
  */
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.surverior.android.R;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
@@ -42,8 +46,8 @@ public class ProfileFragment extends Fragment {
 
     public static final String DATA_NAMA="";
     public static final String DATA_ID="";
-    private String id;
-
+    public static final String IMAGE="";
+    public String id;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -52,7 +56,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 
@@ -71,17 +74,70 @@ public class ProfileFragment extends Fragment {
         // session manager
         session = new SessionManager(getActivity().getApplicationContext());
 
+        //set profile
+        setProfile();
+
         //change avatar image
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
                 Intent intent = new Intent(getActivity(), UploadImageActivity.class);
                 intent.putExtra(DATA_ID, id);
+                intent.putExtra(IMAGE,bitmap);
                 getActivity().startActivity(intent);
                 getActivity().finish();
             }
         });
 
+        //edit name
+        name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                intent.putExtra(DATA_NAMA, name.getText());
+                getActivity().startActivity(intent);
+                getActivity().finish();
+            }
+        });
+
+        // Inflate the layout for this fragment
+        return rootView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    public void setImage(String idx) {
+        String url = AppConfig.URL_PHOTO + "/" + idx + "/photo.jpg";
+
+        ImageRequest request = new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        image.setImageBitmap(bitmap);
+                    }
+                }, 0, 0, null,
+                new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        // Access the RequestQueue.
+        AppController.getInstance().addToRequestQueue(request);
+
+    }
+
+    public void setProfile(){
+        //set profile
         SurveriorRequest req;
 
         req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_GET_USER_DATA, session,
@@ -102,8 +158,9 @@ public class ProfileFragment extends Fragment {
                             job.setText(jUser.getString("profession"));
                             address.setText(jUser.getString("city")+", "+ jUser.getString("province"));
                             id=jUser.getString("id");
+                            setImage(id);
                         } catch (JSONException e) {
-                           // Log.d(TAG, e.getMessage());
+                            // Log.d(TAG, e.getMessage());
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -112,35 +169,7 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
         AppController.getInstance().addToRequestQueue(req, "get_user");
 
-        //edit name
-        name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                intent.putExtra(DATA_NAMA, name.getText());
-                getActivity().startActivity(intent);
-                getActivity().finish();
-            }
-        });
-
-//        if (!session.isLoggedIn()) {
-//            logoutUser();
-//        }
-
-        // Inflate the layout for this fragment
-        return rootView;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 }

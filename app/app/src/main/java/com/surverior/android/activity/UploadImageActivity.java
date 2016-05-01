@@ -9,21 +9,18 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageRequest;
 import com.surverior.android.R;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
-import com.surverior.android.helper.LruBitmapCache;
 import com.surverior.android.helper.SessionManager;
 import com.surverior.android.helper.SurveriorRequest;
 
@@ -38,16 +35,16 @@ import java.util.Map;
  */
 public class UploadImageActivity extends Activity {
 
-    private RequestQueue mRequestQueue;
     private ImageButton pen;
+    private Button save;
     private ImageView photo;
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
     private SessionManager session;
     private File file;
     private String id;
-    private LruBitmapCache bitmapCache;
-
+    private Bitmap image;
+    private ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +53,19 @@ public class UploadImageActivity extends Activity {
 
         photo = (ImageView) findViewById(R.id.photo);
         pen = (ImageButton) findViewById(R.id.pen);
+        back = (ImageView) findViewById(R.id.back);
+        save = (Button) findViewById(R.id.save);
 
         // session manager
         session = new SessionManager(getApplicationContext());
 
         //getId
         Intent intent = getIntent();
-        id = intent.getStringExtra(ViewProfileActivity.DATA_ID);
-        setImage();
+        id = intent.getStringExtra(ProfileFragment.DATA_ID);
+        image = (Bitmap) intent.getParcelableExtra(ProfileFragment.IMAGE);
+
+        //setImage
+        photo.setImageBitmap(image);
 
         //button Click
         pen.setOnClickListener(new View.OnClickListener() {
@@ -71,53 +73,54 @@ public class UploadImageActivity extends Activity {
             public void onClick(View v) {
                 //choose photo/image
                 showFileChooser();
-                uploadImage();
-                setImage();
-
             }
         });
 
-        //setimage
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadImage();
+            }
+        });
 
-
-
-
-
-
-    }
-
-    public void setImage(){
-        final String url = AppConfig.URL_PHOTO + "/" + id + "/photo.jpg";
-        if(bitmapCache.getBitmap(url) != null){
-            ImageRequest request = new ImageRequest(url,
-                    new Response.Listener<Bitmap>() {
-                        String urla = url;
-                        @Override
-                        public void onResponse(Bitmap bitmap) {
-                            photo.setImageBitmap(bitmap);
-                            bitmapCache.putBitmap(urla, bitmap);
-                        }
-                    }, 0, 0, null,
-                    new Response.ErrorListener() {
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    });
-            // Access the RequestQueue.
-            AppController.getInstance().addToRequestQueue(request);
-        }else{
-            //Bitmap photo = bit
-        }
-
-
-//
-//        mRequestQueue = AppController.getInstance().getRequestQueue();
-//        ImageLoader mImageLoader = new ImageLoader(mRequestQueue, new LruBitmapCache(
-//                LruBitmapCache.getCacheSize(getApplicationContext())));
-//
-//        mImageLoader.get(url,ImageLoader.getImageListener(photo,R.drawable.no_image,0));
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UploadImageActivity.this,
+                        MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
+
+//    public void setImage(){
+//        final String url = AppConfig.URL_PHOTO + "/" + id + "/photo.jpg";
+//
+//            ImageRequest request = new ImageRequest(url,
+//                    new Response.Listener<Bitmap>() {
+//                        String urla = url;
+//                        @Override
+//                        public void onResponse(Bitmap bitmap) {
+//                            photo.setImageBitmap(bitmap);
+//                        }
+//                    }, 0, 0, null,
+//                    new Response.ErrorListener() {
+//                        public void onErrorResponse(VolleyError error) {
+//
+//                        }
+//                    });
+//            // Access the RequestQueue.
+//            AppController.getInstance().addToRequestQueue(request);
+//
+////        mRequestQueue = AppController.getInstance().getRequestQueue();
+////        ImageLoader mImageLoader = new ImageLoader(mRequestQueue, new LruBitmapCache(
+////                LruBitmapCache.getCacheSize(getApplicationContext())));
+////
+////        mImageLoader.get(url,ImageLoader.getImageListener(photo,R.drawable.no_image,0));
+//
+//    }
 
 
     public String getStringImage(Bitmap bmp){
@@ -138,7 +141,7 @@ public class UploadImageActivity extends Activity {
                         //Disimissing the progress dialog
                         loading.dismiss();
                         //Showing toast message of the response
-                        Toast.makeText(UploadImageActivity.this, s , Toast.LENGTH_LONG).show();
+                        Toast.makeText(UploadImageActivity.this, "Uploaded" , Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -169,6 +172,8 @@ public class UploadImageActivity extends Activity {
 
         //Adding request to the queue
         AppController.getInstance().addToRequestQueue(stringRequest);
+
+
     }
 
     private void showFileChooser() {
@@ -192,6 +197,7 @@ public class UploadImageActivity extends Activity {
                 file = new File (filePath.getPath());
                 //Setting the Bitmap to ImageView
                 photo.setImageBitmap(bitmap);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
