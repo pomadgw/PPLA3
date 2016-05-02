@@ -1,5 +1,6 @@
 package com.surverior.android.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -11,13 +12,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.surverior.android.R;
 import com.surverior.android.adapter.QuestionAdapter;
+import com.surverior.android.app.AppConfig;
+import com.surverior.android.app.AppController;
 import com.surverior.android.helper.CheckboxQuestion;
 import com.surverior.android.helper.DropdownQuestion;
 import com.surverior.android.helper.Question;
 import com.surverior.android.helper.ScaleQuestion;
+import com.surverior.android.helper.SessionManager;
+import com.surverior.android.helper.SurveriorJSONRequest;
 import com.surverior.android.helper.Survey;
 
 import org.json.JSONArray;
@@ -29,7 +38,7 @@ import java.util.List;
 
 
 public class QuestionListActivity extends AppCompatActivity {
-
+    private static String TAG = "QuestionListActivity";
     private Toolbar mToolbar;
     private String gender;
     private String ageFrom;
@@ -43,6 +52,8 @@ public class QuestionListActivity extends AppCompatActivity {
     private com.github.clans.fab.FloatingActionButton checkFab;
     private com.github.clans.fab.FloatingActionButton dropFab;
     private com.github.clans.fab.FloatingActionButton scaleFab;
+    private SessionManager session;
+    private ProgressDialog pDialog;
 
     private Bundle extras;
     private static Survey survey;
@@ -52,6 +63,11 @@ public class QuestionListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_list);
+        session = new SessionManager(getApplicationContext());
+
+        // Progress dialog
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
 
         //Membuat Toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -163,11 +179,64 @@ public class QuestionListActivity extends AppCompatActivity {
         }
     }
 
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
     private void sendJSON() throws JSONException {
         JSONObject main = new JSONObject();
         main.put("title",survey.getName());
         main.put("description",survey.getDescription());
+        main.put("coins",100); // TODO: ganti dengan fungsi yang ambil koin dari activity!
         main.put("questions",generateQuestionJSONArray());
+
+        pDialog.setMessage("Sending survey ...");
+        showDialog();
+
+        JsonObjectRequest jsonReq = new SurveriorJSONRequest(AppConfig.URL_SURVEY_ADD, main, session, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(getApplicationContext(), "Data sudah diupdate!", Toast.LENGTH_LONG).show();
+
+                // How?
+                hideDialog();
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String errorStr = "Error: ";
+
+                Log.e(TAG, "Update Error: " + error.getMessage());
+                Log.d(TAG, "ERROR: is null? " + (error.networkResponse == null));
+
+                if (error.networkResponse != null) {
+                    Log.d(TAG, "ERROR: response data " + new String(error.networkResponse.data));
+                    try {
+                        JSONObject jObj = new JSONObject(new String(error.networkResponse.data));
+                        errorStr += jObj.getString("message");
+                    } catch(JSONException e) {
+                        errorStr = "Error parse JSON: " + e.getMessage();
+                    }
+                } else {
+                    errorStr += error.getMessage();
+                }
+
+                Toast.makeText(getApplicationContext(),
+                        errorStr, Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonReq, "JSON_ADD_SURVEY");
         Log.d("JSON",main.toString());
     }
 

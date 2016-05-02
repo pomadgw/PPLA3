@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class Validator {
 
     private static final String EMAIL_REGEX = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-    private static final String USERNAME_REGEX = "^[a-z0-9_-]{3,15}$";
+    private static final String USERNAME_REGEX = "^[a-zA-Z\\s]{2,100}$";
     private static Pattern patternEmail = Pattern.compile(EMAIL_REGEX);
     private static Pattern patternName = Pattern.compile(USERNAME_REGEX);
 
