@@ -16,6 +16,11 @@ public class Survey {
     private String city;
     public ArrayList<Question> questions = new ArrayList<>();
 
+    public Survey(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public Survey(String name, String description, String gender, int ageFrom, int ageTo, String job, String province, String city) {
         this.name = name;
         this.description = description;
