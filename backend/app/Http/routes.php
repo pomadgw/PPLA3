@@ -61,7 +61,9 @@ $api->version('v1', function ($api) {
 
     // survey things
 
-    $api->get('surveys', 'App\Http\Controllers\SurveyController@getUserSurveys');
+    $api->get('surveys/list', 'App\Http\Controllers\SurveyController@getAllSurveys');
+
+    $api->get('surveys/user', 'App\Http\Controllers\SurveyController@getUserSurveys');
 
     $api->get('surveys/{id}', 'App\Http\Controllers\SurveyController@getSurvey');
 
@@ -69,5 +71,10 @@ $api->version('v1', function ($api) {
 
     $api->post('surveys/add', 'App\Http\Controllers\SurveyController@createSurvey');
 
-    $api->post('surveys/{id}/questions/add', 'App\Http\Controllers\SurveyController@createQuestion');
+    $api->post('surveys/{id}/questions/add', 'App\Http\Controllers\SurveyController@createQuestionEndpoint');
+
+    $api->delete('surveys/{surveyId}/questions/{questionId}/delete', 'App\Http\Controllers\SurveyController@deleteQuestion');
+
+
+    $api->delete('surveys/{surveyId}/delete', 'App\Http\Controllers\SurveyController@deleteSurvey');
 });

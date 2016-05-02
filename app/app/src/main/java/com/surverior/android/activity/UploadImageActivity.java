@@ -7,8 +7,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -17,7 +22,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
 import com.surverior.android.R;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
@@ -33,16 +37,18 @@ import java.util.Map;
 /**
  * Created by Azhar Fauzan Dz on 4/22/2016.
  */
-public class UploadImageActivity extends Activity {
+public class UploadImageActivity extends AppCompatActivity{
 
     private ImageButton pen;
+    private Button save;
     private ImageView photo;
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
     private SessionManager session;
     private File file;
     private String id;
-
+    private Bitmap image;
+    private ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +57,19 @@ public class UploadImageActivity extends Activity {
 
         photo = (ImageView) findViewById(R.id.photo);
         pen = (ImageButton) findViewById(R.id.pen);
+        back = (ImageView) findViewById(R.id.back);
+        save = (Button) findViewById(R.id.save);
 
         // session manager
         session = new SessionManager(getApplicationContext());
 
-        //getId
+        //getId from previous Activity
         Intent intent = getIntent();
-        id = intent.getStringExtra(ViewProfileActivity.DATA_ID);
+        id = intent.getStringExtra(ProfileFragment.DATA_ID);
+        image = (Bitmap) intent.getParcelableExtra(ProfileFragment.IMAGE);
 
+        //setImage
+        photo.setImageBitmap(image);
 
         //button Click
         pen.setOnClickListener(new View.OnClickListener() {
@@ -66,38 +77,30 @@ public class UploadImageActivity extends Activity {
             public void onClick(View v) {
                 //choose photo/image
                 showFileChooser();
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 uploadImage();
 
             }
         });
 
-        //setimage
-        if(photo.getDrawable() != null){
-            setImage();
-        }
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UploadImageActivity.this,
+                        MainActivity.class);
+                startActivity(intent);
 
+                finish();
 
+            }
+        });
 
     }
-
-    public void setImage(){
-        String url = AppConfig.URL_PHOTO + "/" + id + "/photo.jpg";
-        ImageRequest request = new ImageRequest(url,
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        photo.setImageBitmap(bitmap);
-                    }
-                }, 0, 0, null,
-                new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-        // Access the RequestQueue.
-        AppController.getInstance().addToRequestQueue(request);
-    }
-
 
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -108,46 +111,51 @@ public class UploadImageActivity extends Activity {
     }
 
     private void uploadImage(){
-        //Showing the progress dialog
-        final ProgressDialog loading = ProgressDialog.show(this, "Uploading...", "Please wait...", false, false);
-        SurveriorRequest stringRequest = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, session,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        //Disimissing the progress dialog
-                        loading.dismiss();
-                        //Showing toast message of the response
-                        Toast.makeText(UploadImageActivity.this, s , Toast.LENGTH_LONG).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        //Dismissing the progress dialog
-                        loading.dismiss();
+        if(bitmap ==null){
+            Toast.makeText(UploadImageActivity.this, "Please choose your photo first" , Toast.LENGTH_LONG).show();
+        }else {
+            //Showing the progress dialog
+            final ProgressDialog loading = ProgressDialog.show(this, "Uploading...", "Please wait...", false, false);
+            SurveriorRequest stringRequest = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, session,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+                            //Disimissing the progress dialog
+                            loading.dismiss();
+                            //Showing toast message of the response
+                            Toast.makeText(UploadImageActivity.this, "Uploaded", Toast.LENGTH_LONG).show();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            //Dismissing the progress dialog
+                            loading.dismiss();
 
-                        //Showing toast
-                        Toast.makeText(UploadImageActivity.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
-                    }
-                }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                //Converting Bitmap to String
-                String image = getStringImage(bitmap);
+                            //Showing toast
+                            Toast.makeText(UploadImageActivity.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    //Converting Bitmap to String
+                    String image = getStringImage(bitmap);
 
-                //Creating parameters
-                Map<String,String> params = new Hashtable<String, String>();
+                    //Creating parameters
+                    Map<String, String> params = new Hashtable<String, String>();
 
-                //Adding parameters
-                params.put("photo", image);
+                    //Adding parameters
+                    params.put("photo", image);
 
-                //returning parameters
-                return params;
-            }
-        };
+                    //returning parameters
+                    return params;
+                }
+            };
 
-        //Adding request to the queue
-        AppController.getInstance().addToRequestQueue(stringRequest);
+            //Adding request to the queue
+            AppController.getInstance().addToRequestQueue(stringRequest);
+        }
+
     }
 
     private void showFileChooser() {
@@ -171,10 +179,14 @@ public class UploadImageActivity extends Activity {
                 file = new File (filePath.getPath());
                 //Setting the Bitmap to ImageView
                 photo.setImageBitmap(bitmap);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+
+
 
 }
