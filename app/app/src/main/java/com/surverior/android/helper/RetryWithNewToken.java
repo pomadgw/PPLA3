@@ -20,7 +20,7 @@ public class RetryWithNewToken extends DefaultRetryPolicy {
     @Override
     public void retry(VolleyError error) throws VolleyError {
         Log.d("SurveriorRequest", "Retry... ");
-        if (error.networkResponse.statusCode == 401)
+        if (error.networkResponse != null && error.networkResponse.statusCode == 401)
         {
             try {
                 JSONObject jObj = new JSONObject(new String(error.networkResponse.data));
