@@ -40,8 +40,92 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:id="@+id/question"/>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/material_grey_300"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Range" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="From 1 to"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/range_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/material_grey_300"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Minimum Label (max 15 chars)" />
+
+            <EditText
+                android:id="@+id/minLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/material_grey_300"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Maximum Label (max 15 chars)" />
+
+            <EditText
+                android:id="@+id/maxLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"/>
+        </LinearLayout>
+
 
     </LinearLayout>
 

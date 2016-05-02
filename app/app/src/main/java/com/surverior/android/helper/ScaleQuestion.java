@@ -10,6 +10,30 @@ public class ScaleQuestion extends Question {
     private String maxLabel;
     private int range;
 
+    public String getMinLabel() {
+        return minLabel;
+    }
+
+    public void setMinLabel(String minLabel) {
+        this.minLabel = minLabel;
+    }
+
+    public String getMaxLabel() {
+        return maxLabel;
+    }
+
+    public void setMaxLabel(String maxLabel) {
+        this.maxLabel = maxLabel;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
+    }
+
     public ScaleQuestion(String questionDetail, String minLabel, String maxLabel, int range) {
         super(questionDetail, "Scale");
         this.minLabel = minLabel;
