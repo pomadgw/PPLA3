@@ -44,4 +44,12 @@ public class DropdownQuestion extends Question implements Parcelable{
         dest.writeString(type);
         dest.writeStringList(choices);
     }
+
+    public ArrayList<String> getChoices() {
+        return choices;
+    }
+
+    public void setChoices(ArrayList<String> choices) {
+        this.choices = choices;
+    }
 }
