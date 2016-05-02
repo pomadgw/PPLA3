@@ -87,22 +87,22 @@ public class RegisterActivity extends Activity {
                 if (!email.isEmpty() && !password.isEmpty() && !repassword.isEmpty()) {
                     if(!Validator.isValidEmail(email)){
                         Toast.makeText(getApplicationContext(),
-                                "Email tidak valid", Toast.LENGTH_LONG)
+                                "Email is not valid", Toast.LENGTH_LONG)
                                 .show();
                     }else if(!Validator.isValidPassword(password)){
                         Toast.makeText(getApplicationContext(),
-                                "Password harus lebih atau sama dengan 8 karakter", Toast.LENGTH_LONG)
+                                "Password should be consist of 8 characters", Toast.LENGTH_LONG)
                                 .show();
                     } else if (!repassword.equals(password)) {
                         Toast.makeText(getApplicationContext(),
-                                "Password dan repassword tidak sama", Toast.LENGTH_LONG)
+                                "Password and confirm password is not same", Toast.LENGTH_LONG)
                                 .show();
                     } else {
                         registerUser(email, password);
                     }
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "Form tidak boleh kosong", Toast.LENGTH_LONG)
+                            "There is empty", Toast.LENGTH_LONG)
                             .show();
                 }
             }
@@ -141,10 +141,6 @@ public class RegisterActivity extends Activity {
 
                 try {
                     JSONObject jObj = new JSONObject(response);
-//                    boolean error = jObj.getBoolean("error");
-//                    if (!error) {
-                        // User successfully stored in MySQL
-                        // Now store the user in sqlite
 
                         JSONObject user = jObj.getJSONObject("user");
                         String uid = user.getString("id");
@@ -153,21 +149,12 @@ public class RegisterActivity extends Activity {
                         // Inserting row in users table
                         db.addUser(email, uid/*, gender, birth_date,profession, city,province, created_at*/);
 
-                        //Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
-
                         // Launch login activity
                         Intent intent = new Intent(
                                 RegisterActivity.this,
                                 ConfirmationActivity.class);
                         startActivity(intent);
                         finish();
-//                    } else {
-//                        // Error occurred in registration. Get the error
-//                        // message
-//                        String errorMsg = jObj.getString("error_msg");
-//                        Toast.makeText(getApplicationContext(),
-//                                errorMsg, Toast.LENGTH_LONG).show();
-//                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d(TAG, "ERROR at JSON:" + e.toString());

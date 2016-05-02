@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.VectorDrawable;
 import android.media.Image;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
@@ -64,7 +65,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        refresh();
     }
 
 
@@ -96,9 +96,6 @@ public class ProfileFragment extends Fragment {
                 intent.putExtra(DATA_ID, id);
                 intent.putExtra(IMAGE,bitmap);
                 getActivity().startActivity(intent);
-                refresh();
-                setProfile();
-            //    getActivity().finish();
             }
         });
 
@@ -109,9 +106,6 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
                 intent.putExtra(DATA_NAMA, name.getText());
                 getActivity().startActivity(intent);
-              //  getActivity().finish();
-                refresh();
-                setProfile();
             }
         });
 
@@ -148,9 +142,6 @@ public class ProfileFragment extends Fragment {
         // Access the RequestQueue.
         AppController.getInstance().addToRequestQueue(request);
 
-//        if(imageLoader == null )
-//            imageLoader = AppController.getInstance().getImageLoader();
-//        image.setImageUrl(url,imageLoader);
     }
 
     public void setProfile(){
@@ -194,11 +185,5 @@ public class ProfileFragment extends Fragment {
         return getActivity();
     }
 
-    public void refresh(){
-        Fragment currentFragment = getFragmentManager().findFragmentByTag("PROFILE");
-        FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
-        fragTransaction.detach(currentFragment);
-        fragTransaction.attach(currentFragment);
-        fragTransaction.commit();
-    }
+
 }

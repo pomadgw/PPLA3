@@ -23,6 +23,7 @@ import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
 import com.surverior.android.helper.SessionManager;
 import com.surverior.android.helper.SurveriorRequest;
+import com.surverior.android.helper.Validator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,9 +87,9 @@ public class EditProfileActivity extends AppCompatActivity{
                 return true;
             case R.id.action_done:
                 final String newName = inputName.getText().toString().trim();
-                if(newName.equals("")){
+                if(!Validator.isValidName(newName)){
                     Toast.makeText(getApplicationContext(),
-                            "Nama tidak valid", Toast.LENGTH_LONG)
+                            "Name is not Valid", Toast.LENGTH_LONG)
                             .show();
                 }else{
                     SurveriorRequest req = new SurveriorRequest(Request.Method.POST, AppConfig.URL_UPDATE, session,

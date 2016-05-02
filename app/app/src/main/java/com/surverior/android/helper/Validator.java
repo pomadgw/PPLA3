@@ -9,15 +9,26 @@ import java.util.regex.Pattern;
  */
 public class Validator {
 
-    private static final String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-    private static Pattern pattern = Pattern.compile(regex);
+    private static final String EMAIL_REGEX = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+    private static final String USERNAME_REGEX = "^[a-z0-9_-]{3,15}$";
+    private static Pattern patternEmail = Pattern.compile(EMAIL_REGEX);
+    private static Pattern patternName = Pattern.compile(USERNAME_REGEX);
 
     public static boolean isValidEmail(String email){
-        Matcher matcher = pattern.matcher(email);
+        Matcher matcher = patternEmail.matcher(email);
         return matcher.matches();
     }
 
     public static boolean isValidPassword(String pass){
         return pass.length() >= 8;
+    }
+
+    public static boolean isValidName (String name){
+
+        if (name.length() < 2)
+            return false;
+
+        Matcher matcher = patternName.matcher(name);
+        return matcher.matches();
     }
 }
