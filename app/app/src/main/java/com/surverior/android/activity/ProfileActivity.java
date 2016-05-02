@@ -479,6 +479,7 @@ public class ProfileActivity extends Activity {
                         && !city.equals("City") && !province.isEmpty() && !province.equals("Province")
                         && !job.isEmpty() && !job.equals("Job")
                         && !birth.equals("Birthday") && !gender.equals("x")) {
+                    // Ini bukan username, tapi nama panjang!
                     if(Validator.isValidName(name)){
                         updateProfileUser(name,gender,birth,job,city,province,email);
                     }else{
