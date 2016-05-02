@@ -26,7 +26,7 @@ class SurveyController extends Controller
     {
         // buat semua method di bawah ini
         // membutuhkan otentikasi
-        $this->middleware(['get.token']);
+        $this->middleware(['get.token', 'check.confirm']);
     }
 
     /**

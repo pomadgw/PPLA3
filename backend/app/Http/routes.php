@@ -75,6 +75,7 @@ $api->version('v1', function ($api) {
 
     $api->delete('surveys/{surveyId}/questions/{questionId}/delete', 'App\Http\Controllers\SurveyController@deleteQuestion');
 
-
     $api->delete('surveys/{surveyId}/delete', 'App\Http\Controllers\SurveyController@deleteSurvey');
 });
+
+Route::get('email-verification/{id}', 'UserController@confirm');
