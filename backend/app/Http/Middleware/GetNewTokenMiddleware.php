@@ -32,7 +32,7 @@ class GetNewTokenMiddleware
 
         try {
             if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['message' => 'User tidak ditemukan'], 404);
+                return response()->json(['message' => 'User tidak ditemukan', 'status_code' => 403], 404);
             }
         } catch (TokenExpiredException $e) {
             $token = GetNewTokenMiddleware::refresh($token);
