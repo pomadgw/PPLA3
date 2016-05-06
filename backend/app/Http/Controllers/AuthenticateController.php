@@ -25,7 +25,7 @@ class AuthenticateController extends Controller
        $this->middleware('api.auth', ['except' => ['authenticate', 'verifyUser', 'getAccessToken', 'getJWTToken']]);
        $this->middleware('get.token', ['only' => 'getJWTToken']);
     }
-    
+
     public function authenticate(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -33,7 +33,7 @@ class AuthenticateController extends Controller
         try {
             // verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {
-                return $this->response->withArray(['error' => true, 'message' => 'Unauthorized', 'status_code' => 401])->setStatusCode(401);
+                return $this->response->withArray(['message' => 'Unauthorized', 'status_code' => 401])->setStatusCode(401);
             }
         } catch (JWTException $e) {
             // something went wrong
@@ -42,8 +42,12 @@ class AuthenticateController extends Controller
 
         $user = \App\User::where('email', $request->input('email'))->first();
 
+        if (! $user->confirmed) {
+            return $this->response->error('Email belum dikonfirmasi', 401);
+        }
+
         // if no errors are encountered we can return a JWT
-        return $this->response->withArray(['token' => $token, 'error' => false, 'user' => $user, 'status_code' => 200]);
+        return $this->response->withArray(['token' => $token, 'user' => $user, 'status_code' => 200]);
     }
 
     // dari https://laracasts.com/discuss/channels/general-discussion/how-to-refreshing-jwt-token
@@ -88,6 +92,6 @@ class AuthenticateController extends Controller
             JWTAuth::setToken($token)->invalidate();
         }
 
-        return $this->response->withArray(['error' => false, 'message' => 'Logout success']);
+        return $this->response->withArray(['message' => 'Logout success']);
     }
 }

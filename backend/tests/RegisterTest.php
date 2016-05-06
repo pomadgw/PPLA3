@@ -16,7 +16,7 @@ class RegisterTest extends TestCase
         $this->json('POST', '/api/users/register', ['email' => 'asami@tomorrowresearch.com',
                                                   'password' => 'timerangers'])
              ->seeJson([
-                 'error' => true, 'message' => 'Email sudah ada.', "type" => "failed"
+                 'message' => 'Email sudah ada.', "type" => "failed"
              ]);
     }
 
@@ -24,7 +24,7 @@ class RegisterTest extends TestCase
     {
        $this->json('POST', '/api/users/register', ['email' => 'yuuri@tomorrowresearch.com'])
             ->seeJson([
-                'error' => true, 'message' => 'Register gagal', "type" => "failed"
+                'message' => 'Register gagal', "type" => "failed"
             ]);
     }
 
@@ -34,7 +34,7 @@ class RegisterTest extends TestCase
         $this->json('POST', '/api/users/register', ['email' => 'yuuri@tomorrowresearch.com',
                                                    'password' => 'timepink'])
             ->seeJson([
-                'error' => false, 'message' => 'Success register to server', "type" => "success", "status_code" => 201
+                'message' => 'Success register to server', "type" => "success", "status_code" => 201
             ]);
     }
 }
