@@ -85,9 +85,8 @@ class UserController extends Controller
         // diisi, akan memunculkan error.
         $validator = Validator::make($request->all(), $params, $messages);
         if ($validator->fails()) {
-            return response()->json([
+            return $this->response->withArray([
                                         'message' => 'Register gagal',
-                                        'type' => 'failed',
                                         'data' => $validator->errors(),
                                         'status_code' => 422
                                     ], 422);
@@ -97,9 +96,8 @@ class UserController extends Controller
         // jika email yang didaftarkan sudah ada di database,
         // kirim error bahwa email sudah ada
         if (User::where('email', $request->email)->exists()) {
-            return response()->json([
+            return $this->response->withArray([
                                         'message' => 'Email sudah ada.',
-                                        'type' => 'failed',
                                         'data' => $validator->errors(),
                                         'status_code' => 409
                                     ], 409);
@@ -140,7 +138,7 @@ class UserController extends Controller
             $m->to($new_user->email, $new_user->name)->subject('Email Verification');
         });
 
-        return response()->json(['message' => 'Success register to server', "type" => "success", "status_code" => 201, "user" => $new_user], 201);
+        return $this->response->withArray(['message' => 'Success register to server', "type" => "success", "status_code" => 201, "user" => $new_user], 201);
     }
 
     public function confirm($confimationCode) {
@@ -212,9 +210,8 @@ class UserController extends Controller
         // diisi, akan memunculkan error.
         $validator = Validator::make($request->all(), $params, $messages);
         if ($validator->fails()) {
-            return response()->json([
+            return $this->response->withArray([
                                         'message' => 'Update data user gagal',
-                                        'type' => 'failed',
                                         'data' => $validator->errors(),
                                         'status_code' => 422
                                     ], 422);
@@ -294,7 +291,7 @@ class UserController extends Controller
 
         $this->auth->user()->save();
 
-        return response()->json(['message' => "Success update info", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Success update info", "status_code" => 200], 200);
     }
 
     // Taken from https://gist.github.com/jasdeepkhalsa/4339969

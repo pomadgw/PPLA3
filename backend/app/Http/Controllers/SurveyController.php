@@ -54,7 +54,7 @@ class SurveyController extends Controller
             SurveyController::createQuestion($newSurvey->id, $question);
         }
 
-        return response()->json(['message' => "Sukses menambah survey", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Sukses menambah survey", "status_code" => 200], 200);
     }
 
     public function getSurvey($id) {
@@ -165,7 +165,7 @@ class SurveyController extends Controller
             }
         }
 
-        return response()->json(['message' => "Sukses menambah pertanyaan", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Sukses menambah pertanyaan", "status_code" => 200], 200);
     }
 
     public function addOptions($id, $options) {
@@ -197,7 +197,7 @@ class SurveyController extends Controller
 
         $survey->delete();
 
-        return response()->json(['message' => "Sukses menghapus survey", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Sukses menghapus survey", "status_code" => 200], 200);
     }
 
     public function deleteQuestion($surveyId, $questionId) {
@@ -222,7 +222,7 @@ class SurveyController extends Controller
 
         $question->delete();
 
-        return response()->json(['message' => "Sukses menghapus pertanyaan", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Sukses menghapus pertanyaan", "status_code" => 200], 200);
     }
 
     public function deleteCheckbox($questionId)
