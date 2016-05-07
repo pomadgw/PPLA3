@@ -1,6 +1,11 @@
 package com.surverior.android.helper;
 
 
+import android.util.Log;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,5 +44,40 @@ public class Validator {
         Matcher matcher = patternPhone.matcher(phone);
         return matcher.matches();
 
+    }
+
+    public static boolean isValidBirth(String birth){
+        String [] split = birth.split("-");
+        int currDate = Integer.parseInt(split[2]);
+        int currMonth = Integer.parseInt(split[1]);
+        int currYear = Integer.parseInt(split[0]);
+        Date date = new Date();
+        DateFormat yearFormat = new SimpleDateFormat("yyyy");
+        DateFormat monthFormat = new SimpleDateFormat("MM");
+        DateFormat dateFormat = new SimpleDateFormat("dd");
+        int thisDate = Integer.parseInt(dateFormat.format(date));
+        int thisMonth = Integer.parseInt(monthFormat.format(date));
+        int thisYear = Integer.parseInt(yearFormat.format(date));
+
+        // Log.e("Tes",dateFormat.format(date));
+
+        //for debugging
+        Log.e("Year",""+thisYear);
+        Log.e("Month",""+thisMonth);
+        Log.e("Date",""+thisDate);
+        Log.e("CurrY",""+currYear);
+        Log.e("CurrM",""+currMonth);
+        Log.e("CurrD",""+currDate);
+
+        if(currYear==thisYear){
+            if (currMonth>thisMonth){
+                return false;
+            }else if (currDate >= thisDate){
+                return false;
+            }
+        }else if(currYear>thisYear){
+            return false;
+        }
+        return true;
     }
 }

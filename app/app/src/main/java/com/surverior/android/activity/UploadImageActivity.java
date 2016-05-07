@@ -97,6 +97,8 @@ public class UploadImageActivity extends AppCompatActivity{
 
                 finish();
 
+              //  onBackPressed();
+
             }
         });
 
