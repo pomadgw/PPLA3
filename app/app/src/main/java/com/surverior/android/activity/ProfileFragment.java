@@ -4,31 +4,24 @@ package com.surverior.android.activity;
  * Created by bambang on 4/15/16.
  */
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.VectorDrawable;
-import android.media.Image;
-import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.NetworkImageView;
 import com.surverior.android.R;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
@@ -42,6 +35,7 @@ import org.json.JSONObject;
 public class ProfileFragment extends Fragment {
 
     private TextView name;
+    private TextView phone;
     private TextView gender;
     private TextView birthdate;
     private TextView job;
@@ -51,9 +45,10 @@ public class ProfileFragment extends Fragment {
     private ImageView image;
     private SessionManager session;
 
-    ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+    ImageLoader imageLoader;
 
     public static final String DATA_NAMA="";
+    public static final String DATA_PHONE="";
     public static final String DATA_ID="";
     public static final String IMAGE="";
     public String id;
@@ -74,6 +69,7 @@ public class ProfileFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
         name = (TextView) rootView.findViewById(R.id.name_frag);
+        phone = (TextView) rootView.findViewById(R.id.phone_frag);
         gender = (TextView) rootView.findViewById(R.id.gender_frag);
         birthdate = (TextView) rootView.findViewById(R.id.birthday_frag);
         job = (TextView) rootView.findViewById(R.id.job_frag);
@@ -109,6 +105,17 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+
+        //edit phone
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EditPhoneActivity.class);
+                intent.putExtra(DATA_PHONE, phone.getText());
+                getActivity().startActivity(intent);
+            }
+        });
+
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -125,7 +132,7 @@ public class ProfileFragment extends Fragment {
 
     public void setImage(String idx) {
         String url = AppConfig.URL_PHOTO + "/" + idx + "/photo.jpg";
-//
+
         ImageRequest request = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
 
@@ -141,21 +148,28 @@ public class ProfileFragment extends Fragment {
                 });
         // Access the RequestQueue.
         AppController.getInstance().addToRequestQueue(request);
+//
+//        imageLoader =  AppController.getInstance().getImageLoader();
+//        imageLoader.get(url, ImageLoader.getImageListener(image,
+//                0, 0));
 
     }
 
     public void setProfile(){
+
+        final ProgressDialog loading = ProgressDialog.show(getContext(),"", "Please wait...", false, false);
         //set profile
         SurveriorRequest req;
 
         req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_GET_USER_DATA, session,
                 new Response.Listener<String>() {
+
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jObj = new JSONObject(response);
                             JSONObject jUser = jObj.getJSONObject("user");
-
+                            loading.dismiss();
                             //Log.d(TAG, "response: " + response);
                             name.setText(jUser.getString("name"));
                             String temp = jUser.getString("gender");
@@ -166,6 +180,11 @@ public class ProfileFragment extends Fragment {
                             job.setText(jUser.getString("profession"));
                             address.setText(jUser.getString("city")+", "+ jUser.getString("province"));
                             id=jUser.getString("id");
+                            if(!jUser.getString("phone_number").equals("null")){
+                                phone.setText(jUser.getString("phone_number"));
+                            }else{
+                                phone.setText("Enter your phone");
+                            }
                             setImage(id);
                         } catch (JSONException e) {
                             // Log.d(TAG, e.getMessage());
@@ -179,11 +198,17 @@ public class ProfileFragment extends Fragment {
         });
         AppController.getInstance().addToRequestQueue(req, "get_user");
 
+
+//        UserHelper user = new UserHelper(getActivity().getApplicationContext());
+//        Log.d("nama",user.toString());
+//        name.setText(user.getName());
+//        gender.setText(user.getGender());
+//        birthdate.setText(user.getBirthdate());
+//        job.setText(user.getJob());
+//        address.setText(user.getCity()+", "+user.getProvince());
+//        setImage(user.getId());
     }
 
-    public Activity getActivit(){
-        return getActivity();
-    }
 
 
 }
