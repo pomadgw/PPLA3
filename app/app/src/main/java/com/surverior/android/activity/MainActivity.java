@@ -90,11 +90,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 					public void onResponse(String response) {
 						try {
 							JSONObject jObj = new JSONObject(response);
-                            JSONObject jUser = jObj.getJSONObject("user");
 
 							Log.d(TAG, "response: " + response);
-//							txtName.setText(jUser.getString("name"));
-//							txtEmail.setText(jUser.getString("email"));
 						} catch (JSONException e) {
 							Log.d(TAG, e.getMessage());
 						}
@@ -107,31 +104,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 		});
 
 		AppController.getInstance().addToRequestQueue(req, "get_user");
-		// Fetching user details from SQLite
-//		HashMap<String, String> user = db.getUserDetails();
 
-//		String name = user.get("name");
-//		String email = user.get("email");
-
-		// Displaying the user details on the screen
-
-		// Logout button click event
-//		btnViewProfile.setOnClickListener(new View.OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				Intent intent = new Intent(MainActivity.this, ViewProfileActivity.class);
-//				startActivity(intent);
-//				finish();
-//			}
-//		});
-//		btnLogout.setOnClickListener(new View.OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				logoutUser();
-//			}
-//		});
 	}
 
 	@Override
