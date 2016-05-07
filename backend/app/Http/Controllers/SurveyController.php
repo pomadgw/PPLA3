@@ -61,7 +61,10 @@ class SurveyController extends Controller
 
     public function getSurvey($id) {
         $ret = Survey::with('questions')->find($id);
-        return $ret->toArray();
+        if ($ret)
+            return $ret->toArray();
+        else
+            return [];
     }
 
     public function getAllSurveys()
