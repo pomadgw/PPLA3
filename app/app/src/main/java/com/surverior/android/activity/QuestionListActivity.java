@@ -2,6 +2,9 @@ package com.surverior.android.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -221,6 +224,8 @@ public class QuestionListActivity extends AppCompatActivity {
                 hideDialog();
                 Intent i = new Intent(getApplication(), MainActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("FROM_QUESTION_LIST","OK");
+
                 startActivity(i);
                 finish();
             }

@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //	private TextView txtEmail;
 	private Button btnViewProfile;
 //	private Button btnLogout;
+	private Bundle extra;
 
 	private SQLiteHandler db;
 	private SessionManager session;
@@ -106,6 +107,49 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 		AppController.getInstance().addToRequestQueue(req, "get_user");
 
 	}
+
+	@Override
+	protected void onResumeFragments() {
+		super.onResumeFragments();
+//		Bundle extra = getIntent().getExtras();
+//		if(extra!=null) {
+//			if (extra.getString("FROM_QUESTION_LIST") != null) {
+//				displayView(1);
+//			}
+//		}
+		Log.e("ONRESUMEFRAG","JALAN");
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.e("ONRESUME","JALAN");
+		extra = getIntent().getExtras();
+		Log.e("EKSTRA",""+extra);
+		if(extra!=null) {
+//			Log.e("FROM_QUESTION",extra.getString("FROM_QUESTION_LIST"));
+			if (extra.getString("FROM_QUESTION_LIST") != null) {
+				getIntent().removeExtra("FROM_QUESTION_LIST");
+				displayView(1);
+			}else if (extra.getString("FROM_IMAGE")!= null){
+				getIntent().removeExtra("FROM_IMAGE");
+				displayView(2);
+			}else if (extra.getString("FROM_NAME") != null){
+				getIntent().removeExtra("FROM_NAME");
+					displayView(2);
+			}else if (extra.get("FROM_PHONE") != null){
+					getIntent().removeExtra("FROM_PHONE");
+					displayView(2);
+			}
+		}
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);//must store the new intent unless getIntent() will return the old one
+	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
