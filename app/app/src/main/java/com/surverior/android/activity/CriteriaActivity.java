@@ -342,10 +342,10 @@ public class CriteriaActivity extends AppCompatActivity {
                 Log.d("Criteria",job);
                 Log.d("Criteria",province);
                 Log.d("Criteria",city);
-                if(!ageFrom.isEmpty() && !ageTo.isEmpty()) {
+                if(!ageFrom.isEmpty() && !ageTo.isEmpty()&&!gender.equals("x")) {
                     x = Integer.parseInt(ageFrom);
                     y = Integer.parseInt(ageTo);
-                    if(!gender.equals("x") && x>0 && y<101
+                    if(x>0 && y<101
                             && x<=y){
                         Intent i = new Intent(getApplication(), TitleActivity.class);
                         i.putExtra("gender",gender);
@@ -357,7 +357,7 @@ public class CriteriaActivity extends AppCompatActivity {
                         startActivity(i);
                     } else {
                         Toast.makeText(getApplicationContext(),
-                                "Please fill the empty fields!", Toast.LENGTH_LONG)
+                                "There are invalid input(s)!", Toast.LENGTH_LONG)
                                 .show();
                     }
                 } else {
