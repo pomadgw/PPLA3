@@ -30,7 +30,8 @@ class UserController extends Controller
     {
         // buat semua method di bawah ini kecuali `register`
         // membutuhkan otentikasi
-        $this->middleware(['get.token', 'check.confirm'], ['except' => ['register', 'confirm']]);
+        $this->middleware('get.token', ['except' => ['register', 'confirm']]);
+        $this->middleware('check.confirm', ['except' => ['register', 'confirm']]);
     }
 
     /**
@@ -60,41 +61,46 @@ class UserController extends Controller
      *
      * @Post("/register")
      * @Versions({"v1"})
+     * @Request("email=asami@example.com&password=bar", contentType="application/x-www-form-urlencoded")
      * })
      */
     public function register(Request $request)
     {
-        $error = [];
-
-        // parameter yang dibutuhkan:
+        // parameter yang dibutuhkan hanya email dan password...:
         $params = ['email' => 'required|email',
-                   'name' => '',
                    'password' => 'required|min:8',
                    'gender' => 'size:1', // opsi: m (laki-laki) / f (perempuan)
                    'birth_date' => 'date_format:Y-m-d',
-                   'profession' => '',
-                   'city' => '',
-                   'province' => ''];
+                   'phone_number' => 'regex:(+62|0)[0-9]{10,11}'];
 
         $messages = [
             'required'=> 'Parameter :attribute harus ada.',
             'size' => 'Ukuran :attribute harus tepat :size.',
             'min' => 'Parameter :attribute harus minimal berukuran :min karakter.',
             'email' => 'Parameter :attribute harus berformat email.',
+            'phone_number.regex' => 'Format :attribute salah. Format yang benar: +62xxxxxxxxxxx atau 0xxxxxxxxxxx'
         ];
 
         // Validasi data. Jika ada data yang tidak valid/tidak
         // diisi, akan memunculkan error.
         $validator = Validator::make($request->all(), $params, $messages);
         if ($validator->fails()) {
-            return response()->json(['error' => true, 'message' => 'Register gagal', "type" => "failed", 'data' => $validator->errors(), "status_code" => 422], 422);
+            return $this->response->withArray([
+                                        'message' => 'Register gagal',
+                                        'data' => $validator->errors(),
+                                        'status_code' => 422
+                                    ], 422);
 
         }
 
         // jika email yang didaftarkan sudah ada di database,
         // kirim error bahwa email sudah ada
         if (User::where('email', $request->email)->exists()) {
-            return response()->json(['error' => true, 'message' => 'Email sudah ada.', "type" => "failed", 'data' => $validator->errors(), "status_code" => 409], 409);
+            return $this->response->withArray([
+                                        'message' => 'Email sudah ada.',
+                                        'data' => $validator->errors(),
+                                        'status_code' => 409
+                                    ], 409);
         }
 
         // jika email belum ada (belum terdaftar) dan datanya
@@ -105,16 +111,18 @@ class UserController extends Controller
         $new_user->name = $request->name;
         $new_user->email = $request->email;
         $new_user->password = Hash::make($request->password);
-        if (!is_null($request->gender))
+        if ($request->has("gender"))
             $new_user->gender = $request->gender;
-        if (!is_null($request->birth_date))
+        if ($request->has("birth_date"))
             $new_user->birth_date = $request->birth_date;
-        if (!is_null($request->profession))
+        if ($request->has("profession"))
             $new_user->profession = $request->profession;
-        if (!is_null($request->city))
+        if ($request->has("city"))
             $new_user->city = $request->city;
-        if (!is_null($request->province))
+        if ($request->has("province"))
             $new_user->province = $request->province;
+        if ($request->has("phone_number"))
+            $new_user->phone_number = $request->phone_number;
 
         $date = new DateTime();
         $date->add(new DateInterval('P1D'));
@@ -130,10 +138,12 @@ class UserController extends Controller
             $m->to($new_user->email, $new_user->name)->subject('Email Verification');
         });
 
-        return response()->json(['error' => false, 'message' => 'Success register to server', "type" => "success", "status_code" => 201, "user" => $new_user], 201);
+        return $this->response->withArray(['message' => 'Success register to server', "type" => "success", "status_code" => 201, "user" => $new_user], 201);
     }
 
     public function confirm($confimationCode) {
+        // TODO: "Exception" di bawah ini diganti dengan pesan
+        //       bahwa kode konfirmasinya tidak ada / tidak valid
         if (! $confimationCode) {
             throw new Exception;
         }
@@ -170,17 +180,43 @@ class UserController extends Controller
     /**
      * Men-update data user
      *
-     * Method ini akan udpate data user berdasarkan parameter $request
+     * Method ini akan update data user berdasarkan parameter $request
      * ke dalam database
      * dan akan mengembalikan sukses jika tidak ada error.
      * Jika terdapat error, akan dikembalikan detail errornya.
      *
-     * @Post("/{:id}/update")
+     * @Post("/current/update")
      * @Versions({"v1"})
+     * @Request("name=Tatsuya+Asami&password=timeranger&gender=m&birth_date=1970-03-12&profession=Direktur&city=Jakarta&province=Jakarta&phone_number=0215552000", contentType="application/x-www-form-urlencoded")
      * })
      */
     public function updateUser(Request $request) {
         $curr_id = $this->auth->user()->id;
+
+        $params = ['password' => 'min:8',
+                   'gender' => 'size:1', // opsi: m (laki-laki) / f (perempuan)
+                   'birth_date' => 'date_format:Y-m-d',
+                   'phone_number' => ['regex:#^(\+62|0)[0-9]{9,11}$#']];
+
+        $messages = [
+            'required'=> 'Parameter :attribute harus ada.',
+            'size' => 'Ukuran :attribute harus tepat :size.',
+            'min' => 'Parameter :attribute harus minimal berukuran :min karakter.',
+            'email' => 'Parameter :attribute harus berformat email.',
+            'phone_number.regex' => 'Format :attribute salah. Format yang benar: +62xxxxxxxxxxx atau 0xxxxxxxxxxx'
+        ];
+
+        // Validasi data. Jika ada data yang tidak valid/tidak
+        // diisi, akan memunculkan error.
+        $validator = Validator::make($request->all(), $params, $messages);
+        if ($validator->fails()) {
+            return $this->response->withArray([
+                                        'message' => 'Update data user gagal',
+                                        'data' => $validator->errors(),
+                                        'status_code' => 422
+                                    ], 422);
+
+        }
 
         $name = $request->name;
         $password = $request->password;
@@ -189,6 +225,7 @@ class UserController extends Controller
         $profession = $request->profession;
         $city = $request->city;
         $province = $request->province;
+        $phone_number = $request->phone_number;
 
         if ($request->has('password')) {
             $password = Hash::make($password);
@@ -214,6 +251,9 @@ class UserController extends Controller
         }
         if ($request->has('province')) {
             $this->auth->user()->province = $province;
+        }
+        if ($request->has('phone_number')) {
+            $this->auth->user()->phone_number = $phone_number;
         }
 
         if ($request->has('photo')) {
@@ -251,7 +291,7 @@ class UserController extends Controller
 
         $this->auth->user()->save();
 
-        return response()->json(['error' => false, 'message' => "Success update info", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Success update info", "status_code" => 200], 200);
     }
 
     // Taken from https://gist.github.com/jasdeepkhalsa/4339969
