@@ -346,7 +346,7 @@ public class CriteriaActivity extends AppCompatActivity {
                     x = Integer.parseInt(ageFrom);
                     y = Integer.parseInt(ageTo);
                     if(x>0 && y<101
-                            && x<=y){
+                            && x<=y && y>5){
                         Intent i = new Intent(getApplication(), TitleActivity.class);
                         i.putExtra("gender",gender);
                         i.putExtra("age_from",ageFrom);
