@@ -90,57 +90,42 @@ class SurveyController extends Controller
             ->select('surveys.id', 'surveys.title', 'surveys.description',
                      'surveys.coins')
             ->crossJoin('users')
-            // ->join('users', function($j) {
-            //     $j->on('users.gender', '=', 'surveys.gender')
-            //       ->orOn('users.gender', 'is', DB::raw('null'));;
-            // }, 'full outer')
             ->where('users.id', $user->id)
-            ->where(function($q) {
+            ->where(function($q) use ($user) {
                 $q->whereNull('surveys.gender')
-                ->orWhere('surveys.gender', '=', '?');
+                ->orWhere('surveys.gender', '=', $user->gender);
             })
-            ->where(function($q) {
+            ->where(function($q) use ($user) {
                 $q->whereNull('surveys.profession')
-                ->orWhere('surveys.profession', '=', '?');
+                ->orWhere('surveys.profession', '=', $user->profession);
             })
-            ->where(function($q) {
+            ->where(function($q) use ($user) {
                 $q->whereNull('surveys.city')
-                ->orWhere('surveys.city', '=', '?');
+                ->orWhere('surveys.city', '=', $user->city);
             })
-            ->where(function($q) {
+            ->where(function($q) use ($user) {
                 $q->whereNull('surveys.province')
-                ->orWhere('surveys.province', '=', '?');
+                ->orWhere('surveys.province', '=', $user->province);
             })
-            ->where(function($qq) {
+            ->where(function($qq) use ($age) {
                 $qq->where(function($q) {
                     $q->whereNull('surveys.age_min')
                     ->whereNull('surveys.age_max');
                 })
-                ->orWhere(function($q) {
-                    $q->where('surveys.age_min', '<=', '?')
-                    ->where('surveys.age_max', '>=', '?');
+                ->orWhere(function($q) use ($age) {
+                    $q->where('surveys.age_min', '<=', $age)
+                    ->where('surveys.age_max', '>=', $age);
                 });
             })
-            ->toSql();
-        $res = DB::select($surveys
-        , [
-            $user->id,
-            $user->gender,
-            $user->profession,
-            $user->city,
-            $user->province,
-            $age,
-            $age
-        ]
-        );
-        return $res;
+            ->paginate(10);
+
+        return $surveys;
     }
 
     public function getUserSurveys() {
         $user = $this->auth->user();
-        return $user->surveys;
+        return $user->surveys()->paginate(10);
     }
-
 
     /**
      * Untuk endpoint ini, dia memerlukan data yang di-post
