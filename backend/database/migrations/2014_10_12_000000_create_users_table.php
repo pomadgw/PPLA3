@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('profession')->nullable();
             $table->string('city')->nullable();
             $table->string('province')->nullable();
+            $table->string('phone_number')->nullable();
             $table->string('photo')->nullable();
             $table->bigInteger('sum_coins')->default(0);
             $table->string('confirmation_code')->nullable();
@@ -31,7 +32,7 @@ class CreateUsersTable extends Migration
 
             // $table->boolean('confirmed')->default(0);
             // $table->string('confirmation_code')->nullable();
-            
+
             // Untuk login ke web (jika ada mekanisme login lweat web, adakah?)
             $table->rememberToken();
             $table->timestamps();

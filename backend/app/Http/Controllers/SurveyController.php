@@ -13,7 +13,9 @@ use App\QuestionCheckbox;
 use App\QuestionScale;
 use App\Options;
 use App\Choice;
+use DB;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use DateTime;
 
 /**
  * @Resource("Survey", uri="/api/surveys")
@@ -54,21 +56,15 @@ class SurveyController extends Controller
             SurveyController::createQuestion($newSurvey->id, $question);
         }
 
-        return response()->json(['error' => false, 'message' => "Sukses menambah survey", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Sukses menambah survey", "status_code" => 200], 200);
     }
 
     public function getSurvey($id) {
         $ret = Survey::with('questions')->find($id);
-        // $questions = $ret->questions;
-        // foreach($questions as $question) {
-        //     if ($question->type == 'option') {;
-        //         $optionq = QuestionOptions::find($question->id);
-        //         $question['args'] = $optionq;
-        //         $question['args']['options'] = $optionq->options;
-        //     }
-        // }
-        // $ret['questions'] = $questions;
-        return $ret->toArray();
+        if ($ret)
+            return $ret->toArray();
+        else
+            return $this->response->error('Survey yang diminta tidak ada', 404);
     }
 
     public function getAllSurveys()
@@ -76,11 +72,63 @@ class SurveyController extends Controller
         return Survey::paginate(10);
     }
 
-    public function getUserSurveys() {
-        $user = $this->auth->user();
-        return $user->surveys;
+    private static function getAge( $dob, $tdate )
+    {
+        $d1 = new DateTime( $dob );
+        $d2 = new DateTime($tdate );
+        $age = $d2->diff( $d1 );
+        return $age->y;
     }
 
+    public function getSurveyBasedOnCriteria()
+    {
+        // SELECT TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age FROM users;
+        $user = $this->auth->user();
+        $birthDate = $user->birth_date;
+        //get age from date or birthdate
+
+        $age = SurveyController::getAge($birthDate, date('Y-m-d'));
+
+        $surveys = DB::table('surveys')
+            ->select('surveys.id', 'surveys.title', 'surveys.description',
+                     'surveys.coins')
+            ->crossJoin('users')
+            ->where('users.id', $user->id)
+            ->where(function($q) use ($user) {
+                $q->whereNull('surveys.gender')
+                ->orWhere('surveys.gender', '=', $user->gender);
+            })
+            ->where(function($q) use ($user) {
+                $q->whereNull('surveys.profession')
+                ->orWhere('surveys.profession', '=', $user->profession);
+            })
+            ->where(function($q) use ($user) {
+                $q->whereNull('surveys.city')
+                ->orWhere('surveys.city', '=', $user->city);
+            })
+            ->where(function($q) use ($user) {
+                $q->whereNull('surveys.province')
+                ->orWhere('surveys.province', '=', $user->province);
+            })
+            ->where(function($qq) use ($age) {
+                $qq->where(function($q) {
+                    $q->whereNull('surveys.age_min')
+                    ->whereNull('surveys.age_max');
+                })
+                ->orWhere(function($q) use ($age) {
+                    $q->where('surveys.age_min', '<=', $age)
+                    ->where('surveys.age_max', '>=', $age);
+                });
+            })
+            ->paginate(10);
+
+        return $surveys;
+    }
+
+    public function getUserSurveys() {
+        $user = $this->auth->user();
+        return $user->surveys()->paginate(10);
+    }
 
     /**
      * Untuk endpoint ini, dia memerlukan data yang di-post
@@ -165,7 +213,7 @@ class SurveyController extends Controller
             }
         }
 
-        return response()->json(['error' => false, 'message' => "Sukses menambah pertanyaan", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Sukses menambah pertanyaan", "status_code" => 200], 200);
     }
 
     public function addOptions($id, $options) {
@@ -197,7 +245,7 @@ class SurveyController extends Controller
 
         $survey->delete();
 
-        return response()->json(['error' => false, 'message' => "Sukses menghapus survey", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Sukses menghapus survey", "status_code" => 200], 200);
     }
 
     public function deleteQuestion($surveyId, $questionId) {
@@ -222,7 +270,7 @@ class SurveyController extends Controller
 
         $question->delete();
 
-        return response()->json(['error' => false, 'message' => "Sukses menghapus pertanyaan", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Sukses menghapus pertanyaan", "status_code" => 200], 200);
     }
 
     public function deleteCheckbox($questionId)

@@ -17,6 +17,12 @@ class CreateSurveysTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->bigInteger('coins')->default(0);
+            $table->enum('gender', ['m', 'f'])->nullable();
+            $table->integer('age_min')->nullable();
+            $table->integer('age_max')->nullable();
+            $table->string('profession')->nullable();
+            $table->string('city')->nullable();
+            $table->string('province')->nullable();
             $table->timestamps();
         });
 

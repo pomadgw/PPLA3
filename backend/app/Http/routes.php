@@ -63,6 +63,8 @@ $api->version('v1', function ($api) {
 
     $api->get('surveys/list', 'App\Http\Controllers\SurveyController@getAllSurveys');
 
+    $api->get('surveys/list/criteria', 'App\Http\Controllers\SurveyController@getSurveyBasedOnCriteria');
+
     $api->get('surveys/user', 'App\Http\Controllers\SurveyController@getUserSurveys');
 
     $api->get('surveys/{id}', 'App\Http\Controllers\SurveyController@getSurvey');
