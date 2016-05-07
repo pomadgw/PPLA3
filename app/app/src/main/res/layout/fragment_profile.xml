@@ -85,6 +85,34 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:src="@drawable/mobile_phone_check_1"
+                    android:tint="@color/icons"
+                    android:layout_marginLeft="32dp" />
+
+                <TextView
+                    android:id="@+id/phone_frag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="18dp"
+                    android:layout_marginLeft="24dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/material_grey_300"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/ic_gender_male"
                     android:tint="@color/icons"
                     android:layout_marginLeft="32dp" />
@@ -125,6 +153,7 @@
                     android:textSize="18dp"
                     android:layout_marginLeft="24dp" />
             </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
