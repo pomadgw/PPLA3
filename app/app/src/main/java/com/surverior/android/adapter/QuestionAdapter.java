@@ -32,6 +32,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
         return questionList.size();
     }
 
+    public void remove(int position) {
+        questionList.remove(position);
+        notifyItemRemoved(position);
+    }
+
     @Override
     public void onBindViewHolder(QuestionViewHolder questionViewHolder, int i) {
         Question q = questionList.get(i);

@@ -48,6 +48,31 @@ class SurveyController extends Controller
         $newSurvey->title = $request->title;
         $newSurvey->description = $request->description;
         $newSurvey->coins = $request->coins;
+
+        if($request->has('gender') && $request->gender != NULL) {
+            $newSurvey->gender = $request->gender;
+        }
+
+        if($request->has('profession') && $request->profession != NULL) {
+            $newSurvey->profession = $request->profession;
+        }
+
+        if($request->has('city') && $request->city != NULL) {
+            $newSurvey->city = $request->city;
+        }
+
+        if($request->has('province') && $request->province != NULL) {
+            $newSurvey->province = $request->province;
+        }
+
+        if($request->has('age_min') && $request->age_min != NULL) {
+            $newSurvey->age_min = $request->age_min;
+        }
+
+        if($request->has('age_max') && $request->age_max != NULL) {
+            $newSurvey->age_max = $request->age_max;
+        }
+
         $newSurvey->user_id = $user_id;
 
         $newSurvey->save();

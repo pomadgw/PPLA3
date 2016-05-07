@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.surverior.android.R;
 
@@ -84,7 +85,9 @@ public class TitleActivity extends AppCompatActivity {
                     i.putExtras(extras);
                     startActivity(i);
                 } else {
-
+                    Toast.makeText(getApplicationContext(),
+                            "Please fill the empty fields!", Toast.LENGTH_LONG)
+                            .show();
                 }
 
             default:

@@ -334,29 +334,38 @@ public class CriteriaActivity extends AppCompatActivity {
                 String city = inputCity.getSelectedItem().toString().trim();
                 String province = inputProvince.getSelectedItem().toString().trim();
                 String job = inputJob.getSelectedItem().toString().trim();
-                int x = Integer.parseInt(ageFrom);
-                int y = Integer.parseInt(ageTo);
+                int x;
+                int y;
                 Log.d("Criteria", gender);
                 Log.d("Criteria",ageFrom);
                 Log.d("Criteria",ageTo);
                 Log.d("Criteria",job);
                 Log.d("Criteria",province);
                 Log.d("Criteria",city);
-                if(!ageFrom.isEmpty() && !ageTo.isEmpty() && !gender.equals("x") && x>0 && y<101
-                        && x<=y){
-                    Intent i = new Intent(getApplication(), TitleActivity.class);
-                    i.putExtra("gender",gender);
-                    i.putExtra("age_from",ageFrom);
-                    i.putExtra("age_to",ageTo);
-                    i.putExtra("city",city);
-                    i.putExtra("province",province);
-                    i.putExtra("job",job);
-                    startActivity(i);
+                if(!ageFrom.isEmpty() && !ageTo.isEmpty()&&!gender.equals("x")) {
+                    x = Integer.parseInt(ageFrom);
+                    y = Integer.parseInt(ageTo);
+                    if(x>0 && y<101
+                            && x<=y && y>5){
+                        Intent i = new Intent(getApplication(), TitleActivity.class);
+                        i.putExtra("gender",gender);
+                        i.putExtra("age_from",ageFrom);
+                        i.putExtra("age_to",ageTo);
+                        i.putExtra("city",city);
+                        i.putExtra("province",province);
+                        i.putExtra("job",job);
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "There are invalid input(s)!", Toast.LENGTH_LONG)
+                                .show();
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "There is invalid input!", Toast.LENGTH_LONG)
+                            "Please fill the empty fields!", Toast.LENGTH_LONG)
                             .show();
                 }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
