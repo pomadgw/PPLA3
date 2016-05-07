@@ -64,7 +64,7 @@ class SurveyController extends Controller
         if ($ret)
             return $ret->toArray();
         else
-            return [];
+            return $this->response->error('Survey yang diminta tidak ada', 404);
     }
 
     public function getAllSurveys()
