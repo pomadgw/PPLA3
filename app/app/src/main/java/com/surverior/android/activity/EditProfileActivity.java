@@ -99,6 +99,7 @@ public class EditProfileActivity extends AppCompatActivity{
                                         Toast.makeText(getApplicationContext(), "Name updated", Toast.LENGTH_LONG).show();
                                         // Launch view main activity
                                         Intent intent = new Intent(EditProfileActivity.this,MainActivity.class);
+                                        intent.putExtra("FROM_NAME", "OK");
                                         startActivity(intent);
                                         finish();
 

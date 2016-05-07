@@ -42,6 +42,7 @@ public class ProfileFragment extends Fragment {
     private TextView address;
 
     private ImageView changeName;
+    private ImageView changePhone;
     private ImageView image;
     private SessionManager session;
 
@@ -70,12 +71,14 @@ public class ProfileFragment extends Fragment {
 
         name = (TextView) rootView.findViewById(R.id.name_frag);
         phone = (TextView) rootView.findViewById(R.id.phone_frag);
+
         gender = (TextView) rootView.findViewById(R.id.gender_frag);
         birthdate = (TextView) rootView.findViewById(R.id.birthday_frag);
         job = (TextView) rootView.findViewById(R.id.job_frag);
         address = (TextView) rootView.findViewById(R.id.address_frag);
         image = (ImageView) rootView.findViewById(R.id.photo_frag);
         changeName = (ImageView) rootView.findViewById(R.id.changeName);
+        changePhone = (ImageView) rootView.findViewById(R.id.changePhone);
 
         // session manager
         session = new SessionManager(getActivity().getApplicationContext());
@@ -107,7 +110,7 @@ public class ProfileFragment extends Fragment {
 
 
         //edit phone
-        phone.setOnClickListener(new View.OnClickListener() {
+        changePhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), EditPhoneActivity.class);
@@ -185,7 +188,9 @@ public class ProfileFragment extends Fragment {
                             }else{
                                 phone.setText("Enter your phone");
                             }
-                            setImage(id);
+                            if(!jUser.getString("photo").equals("null")){
+                                setImage(id);
+                            }
                         } catch (JSONException e) {
                             // Log.d(TAG, e.getMessage());
                         }

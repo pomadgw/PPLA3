@@ -59,7 +59,7 @@ public class EditPhoneActivity extends AppCompatActivity{
         inputPhone = (EditText) findViewById(R.id.phone_input);
 
         Intent intent = getIntent();
-        String dataPhone = intent.getStringExtra(ViewProfileActivity.DATA_NAMA);
+        String dataPhone = intent.getStringExtra(ProfileFragment.DATA_NAMA);
         inputPhone.setText(dataPhone);
 
         // session manager
@@ -97,6 +97,7 @@ public class EditPhoneActivity extends AppCompatActivity{
                                         Toast.makeText(getApplicationContext(), "Phone updated", Toast.LENGTH_LONG).show();
                                         // Launch view main activity
                                         Intent intent = new Intent(EditPhoneActivity.this,MainActivity.class);
+                                        intent.putExtra("FROM_PHONE", "OK");
                                         startActivity(intent);
                                         finish();
 

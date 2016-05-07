@@ -93,6 +93,7 @@ public class UploadImageActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Intent intent = new Intent(UploadImageActivity.this,
                         MainActivity.class);
+                intent.putExtra("FROM_IMAGE","OK");
                 startActivity(intent);
 
                 finish();

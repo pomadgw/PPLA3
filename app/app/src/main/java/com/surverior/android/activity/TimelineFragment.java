@@ -105,7 +105,6 @@ public class TimelineFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-
         AppController sesuatu = new AppController();
         sesuatu.getInstance().addToRequestQueue(req, "get_list_surveys");
         requestCount++;
