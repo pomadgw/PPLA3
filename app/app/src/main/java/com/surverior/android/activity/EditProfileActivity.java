@@ -61,7 +61,7 @@ public class EditProfileActivity extends AppCompatActivity{
         inputName = (EditText) findViewById(R.id.name_input);
 
         Intent intent = getIntent();
-        String dataName = intent.getStringExtra(ViewProfileActivity.DATA_NAMA);
+        String dataName = intent.getStringExtra(ProfileFragment.DATA_NAMA);
         inputName.setText(dataName);
 
         // session manager
@@ -79,7 +79,7 @@ public class EditProfileActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
             case R.id.action_done:
                 final String newName = inputName.getText().toString().trim();
