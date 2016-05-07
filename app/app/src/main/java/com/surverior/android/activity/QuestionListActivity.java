@@ -167,10 +167,16 @@ public class QuestionListActivity extends AppCompatActivity {
                 //NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_done:
-                try {
-                    sendJSON();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if(survey.questions.size()>0) {
+                    try {
+                        sendJSON();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Create at least 1 question before submit!", Toast.LENGTH_LONG)
+                            .show();
                 }
                 return true;
             default:
@@ -206,6 +212,10 @@ public class QuestionListActivity extends AppCompatActivity {
 
                 // How?
                 hideDialog();
+                Intent i = new Intent(getApplication(), MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                finish();
             }
         }, new Response.ErrorListener() {
 
