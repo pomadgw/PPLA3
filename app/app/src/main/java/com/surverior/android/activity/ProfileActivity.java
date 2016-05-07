@@ -479,9 +479,16 @@ public class ProfileActivity extends Activity {
                         && !city.equals("City") && !province.isEmpty() && !province.equals("Province")
                         && !job.isEmpty() && !job.equals("Job")
                         && !birth.equals("Birthday") && !gender.equals("x")) {
-                    // Ini bukan username, tapi nama panjang!
+                    // Is Valid Name
                     if(Validator.isValidName(name)){
-                        updateProfileUser(name,gender,birth,job,city,province,email);
+                        if(Validator.isValidBirth(birth)){
+                            updateProfileUser(name,gender,birth,job,city,province,email);
+                        }else{
+                            Toast.makeText(getApplicationContext(),
+                                    "Birth date is not valid", Toast.LENGTH_LONG)
+                                    .show();
+                        }
+
                     }else{
                         Toast.makeText(getApplicationContext(),
                                 "Name is not valid", Toast.LENGTH_LONG)

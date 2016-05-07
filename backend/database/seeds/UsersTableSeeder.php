@@ -23,13 +23,13 @@ class UsersTableSeeder extends Seeder
              'confirmed' => true],
              [
                  'name' => 'Tatsuya Asami',
-                 'email' => 'asami@tomorrowresearch.com',
+                 'email' => 'asami@tomorrowresearch.example.com',
                  'password' => Hash::make('timerangers'),
                  'gender' => 'm',
                  'birth_date' => '1980-01-22',
                  'profession' => 'Wirausaha',
-                 'province' => 'Toukyou',
-                 'city' => 'Toukyou',
+                 'province' => 'Jakarta',
+                 'city' => 'Jakarta',
                  'confirmed' => true
              ]
     );
