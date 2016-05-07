@@ -58,6 +58,8 @@ public class MySurveyFragment extends Fragment {
         session = new SessionManager(getActivity().getApplicationContext());
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
+        pDialog.setMessage("Please wait...");
+        pDialog.show();
 
         req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_SURVEY_GET_SURVEY, session,
                 new Response.Listener<String>() {
