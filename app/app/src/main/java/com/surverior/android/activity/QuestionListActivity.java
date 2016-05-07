@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import com.surverior.android.app.AppController;
 import com.surverior.android.helper.CheckboxQuestion;
 import com.surverior.android.helper.DropdownQuestion;
 import com.surverior.android.helper.Question;
+import com.surverior.android.helper.QuestionTouchHelper;
 import com.surverior.android.helper.ScaleQuestion;
 import com.surverior.android.helper.SessionManager;
 import com.surverior.android.helper.SurveriorJSONRequest;
@@ -113,12 +115,17 @@ public class QuestionListActivity extends AppCompatActivity {
         }
 
         //Inisialisasi RecycleView
-        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
-        recList.setHasFixedSize(true);
+        RecyclerView recView = (RecyclerView) findViewById(R.id.cardList);
+        recView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(llm);
-        recList.setAdapter(qa);
+        recView.setLayoutManager(llm);
+        recView.setAdapter(qa);
+
+        //Inisialisasi ItemTouchHelper
+        ItemTouchHelper.Callback callback = new QuestionTouchHelper(qa);
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(recView);
 
         //Inisialisasi FAB untuk tiap question type
         textFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_text);
