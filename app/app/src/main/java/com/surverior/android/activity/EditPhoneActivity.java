@@ -37,9 +37,7 @@ public class EditPhoneActivity extends AppCompatActivity{
 
     private Toolbar mToolbar;
 
-    private TextView name;
     private EditText inputPhone;
-    private Button btnSubmit;
 
     private SessionManager session;
 
@@ -55,12 +53,10 @@ public class EditPhoneActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Edit Profile");
-        getSupportActionBar().setSubtitle("Set Fullname");
+        getSupportActionBar().setSubtitle("Set Phone Number");
         getSupportActionBar().setElevation(4);
 
-        name = (TextView) findViewById(R.id.phone_view);
         inputPhone = (EditText) findViewById(R.id.phone_input);
-        btnSubmit = (Button) findViewById(R.id.btnSubmit);
 
         Intent intent = getIntent();
         String dataPhone = intent.getStringExtra(ViewProfileActivity.DATA_NAMA);

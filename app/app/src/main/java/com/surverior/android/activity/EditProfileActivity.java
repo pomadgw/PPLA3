@@ -39,9 +39,7 @@ public class EditProfileActivity extends AppCompatActivity{
 
     private Toolbar mToolbar;
 
-    private TextView name;
     private EditText inputName;
-    private Button btnSubmit;
 
     private SessionManager session;
 
@@ -60,9 +58,7 @@ public class EditProfileActivity extends AppCompatActivity{
         getSupportActionBar().setSubtitle("Set Fullname");
         getSupportActionBar().setElevation(4);
 
-        name = (TextView) findViewById(R.id.name_view);
         inputName = (EditText) findViewById(R.id.name_input);
-        btnSubmit = (Button) findViewById(R.id.btnSubmit);
 
         Intent intent = getIntent();
         String dataName = intent.getStringExtra(ViewProfileActivity.DATA_NAMA);
