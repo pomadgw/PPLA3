@@ -208,6 +208,25 @@ public class QuestionListActivity extends AppCompatActivity {
         JSONObject main = new JSONObject();
         main.put("title",survey.getName());
         main.put("description",survey.getDescription());
+        main.put("age_min",survey.getAgeFrom());
+        main.put("age_max",survey.getAgeTo());
+        String gender = survey.getGender();
+        if(!gender.equals("a")){
+            if(gender.equals("m")){
+                main.put("gender","Male");
+            } else {
+                main.put("gender","Female");
+            }
+        }
+        main.put("profession",survey.getJob());
+        String city = survey.getCity();
+        if(!city.equalsIgnoreCase("all")){
+            main.put("city",city);
+        }
+        String province = survey.getProvince();
+        if(!province.equalsIgnoreCase("all")){
+            main.put("province",province);
+        }
         main.put("coins",100); // TODO: ganti dengan fungsi yang ambil koin dari activity!
         main.put("questions",generateQuestionJSONArray());
 
