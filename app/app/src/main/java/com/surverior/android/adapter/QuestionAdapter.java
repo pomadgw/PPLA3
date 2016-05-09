@@ -14,6 +14,7 @@ import com.surverior.android.helper.Question;
 import com.surverior.android.helper.ScaleQuestion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +36,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
     public void remove(int position) {
         questionList.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void swap(int firstPosition, int secondPosition){
+        Collections.swap(questionList, firstPosition, secondPosition);
+        notifyItemMoved(firstPosition, secondPosition);
     }
 
     @Override
