@@ -54,7 +54,9 @@ public class NewTextTypeActivity extends AppCompatActivity {
                     Intent i = new Intent(getApplication(), QuestionListActivity.class);
                     i.putExtra("question",new Question(question));
                     i.putExtra("NEW_QUESTION", true);
+                    i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(i);
+                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "There is invalid input!", Toast.LENGTH_LONG)
