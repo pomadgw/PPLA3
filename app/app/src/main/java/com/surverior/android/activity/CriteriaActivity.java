@@ -1,7 +1,10 @@
 package com.surverior.android.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,14 +35,20 @@ import java.util.List;
 
 public class CriteriaActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
-    private RadioGroup genderRadio;
-    private EditText inputAgeFrom;
-    private EditText inputAgeTo;
-    private Spinner inputCity;
-    private Spinner inputJob;
-    private Spinner inputProvince;
-    private String gender = "x";
+    private static Toolbar mToolbar;
+    private static RadioGroup genderRadio;
+    private static EditText inputAgeFrom;
+    private static EditText inputAgeTo;
+    private static Spinner inputCity;
+    private static Spinner inputJob;
+    private static Spinner inputProvince;
+    private static String gender = "x";
+
+    private static String ageFrom;
+    private static String ageTo;
+    private static String city;
+    private static String province;
+    private static String job;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -329,11 +338,11 @@ public class CriteriaActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.action_done:
-                String ageFrom = inputAgeFrom.getText().toString().trim();
-                String ageTo = inputAgeTo.getText().toString().trim();
-                String city = inputCity.getSelectedItem().toString().trim();
-                String province = inputProvince.getSelectedItem().toString().trim();
-                String job = inputJob.getSelectedItem().toString().trim();
+                ageFrom = inputAgeFrom.getText().toString().trim();
+                ageTo = inputAgeTo.getText().toString().trim();
+                city = inputCity.getSelectedItem().toString().trim();
+                province = inputProvince.getSelectedItem().toString().trim();
+                job = inputJob.getSelectedItem().toString().trim();
                 int x;
                 int y;
                 Log.d("Criteria", gender);
@@ -348,6 +357,7 @@ public class CriteriaActivity extends AppCompatActivity {
                     if(x>0 && y<101
                             && x<=y && y>5){
                         Intent i = new Intent(getApplication(), TitleActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         i.putExtra("gender",gender);
                         i.putExtra("age_from",ageFrom);
                         i.putExtra("age_to",ageTo);
@@ -371,4 +381,68 @@ public class CriteriaActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onBackPressed(){
+        Log.d("TitleActivity","BackPressed!");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Going back further will delete your current pre-made survey. Are you sure?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent i = new Intent(getApplication(), MainActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        i.putExtra("FROM_TITLE", "OK");
+                        startActivity(i);
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    /*@Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        Log.d("Criteria", "New Intent!");
+        genderRadio = (RadioGroup) findViewById(R.id.radioGroupGender);
+        genderRadio.clearCheck();
+        inputAgeFrom = (EditText) findViewById(R.id.ageFrom);
+        inputAgeTo = (EditText) findViewById(R.id.ageTo);
+        inputJob = (Spinner) findViewById(R.id.job_spinner);
+        inputCity = (Spinner) findViewById(R.id.city_spinner);
+        inputProvince = (Spinner) findViewById(R.id.province_spinner);
+        if(gender.equals("m")){
+            genderRadio.check(R.id.radioMale);
+        } else if(gender.equals("f")){
+            genderRadio.check(R.id.radioFemale);
+        } else {
+            genderRadio.check(R.id.radioAll);
+        }
+        inputAgeFrom.setText(ageFrom);
+        inputAgeTo.setText(ageTo);
+        for(int i = 0; i<inputJob.getAdapter().getCount();i++){
+            if(inputJob.getAdapter().getItem(i).toString().trim().equals(job)){
+                inputJob.setSelection(i);
+                break;
+            }
+        }
+        for(int i = 0; i<inputProvince.getAdapter().getCount();i++){
+            if(inputProvince.getAdapter().getItem(i).toString().trim().equals(province)){
+                inputProvince.setSelection(i);
+                break;
+            }
+        }
+        for(int i = 0; i<inputCity.getAdapter().getCount();i++){
+            if(inputCity.getAdapter().getItem(i).toString().trim().equals(city)){
+                inputCity.setSelection(i);
+                break;
+            }
+        }
+    }*/
 }

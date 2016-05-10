@@ -20,7 +20,8 @@ public class AppConfig {
 
 	public static String URL_SURVEY_ADD = URL_ROOT + "/api/surveys/add";
 
-	public static String URL_SURVEY_GET_LIST = URL_ROOT + "/api/surveys/list";
+	//public static String URL_SURVEY_GET_LIST = URL_ROOT + "/api/surveys/list";
+	public static String URL_SURVEY_GET_LIST = URL_ROOT + "/api/surveys/list/criteria"; //TODO: fix link for timeline
 
 	public static String URL_SURVEY_GET_SURVEY = URL_ROOT + "/api/surveys/user";
 

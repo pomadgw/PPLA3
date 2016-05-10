@@ -53,6 +53,7 @@ public class QuestionListActivity extends AppCompatActivity {
     private String city;
     private String title;
     private String description;
+    private com.github.clans.fab.FloatingActionMenu fab;
     private com.github.clans.fab.FloatingActionButton textFab;
     private com.github.clans.fab.FloatingActionButton checkFab;
     private com.github.clans.fab.FloatingActionButton dropFab;
@@ -61,8 +62,8 @@ public class QuestionListActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
 
     private Bundle extras;
-    private static Survey survey;
-    private static QuestionAdapter qa;
+    private Survey survey;
+    private QuestionAdapter qa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,39 +84,7 @@ public class QuestionListActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle("Your Question List");
         getSupportActionBar().setElevation(4);
 
-        extras = getIntent().getExtras();
-        if (extras.getBoolean("NEW_SURVEY")) {
-            gender = extras.getString("gender");
-            ageFrom = extras.getString("age_from");
-            ageTo = extras.getString("age_to");
-            job = extras.getString("job");
-            province = extras.getString("province");
-            city = extras.getString("city");
-            title = extras.getString("title");
-            description = extras.getString("description");
-            // for debugging
-            Log.d("FilterCriteria", gender);
-            Log.d("FilterCriteria",ageFrom);
-            Log.d("FilterCriteria",ageTo);
-            Log.d("FilterCriteria",job);
-            Log.d("FilterCriteria",province);
-            Log.d("FilterCriteria",city);
-            Log.d("FilterCriteria",title);
-            Log.d("FilterCriteria",description);
-            // initiate survey if still null
-            survey = new Survey(title,description,gender,Integer.parseInt(ageFrom),
-                    Integer.parseInt(ageTo),job,province,city);
-            qa = new QuestionAdapter(survey.questions);
-        }
-
-        if(extras.getBoolean("NEW_QUESTION")){
-            Question question = (Question) extras.getParcelable("question");
-            survey.questions.add(question);
-
-            //for debugging
-            qa.logging();
-            //qa.add(question);
-        }
+        updateSurvey();
 
         //Inisialisasi RecycleView
         RecyclerView recView = (RecyclerView) findViewById(R.id.cardList);
@@ -131,6 +100,7 @@ public class QuestionListActivity extends AppCompatActivity {
         helper.attachToRecyclerView(recView);
 
         //Inisialisasi FAB untuk tiap question type
+        fab = (com.github.clans.fab.FloatingActionMenu) findViewById(R.id.menu);
         textFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_text);
         checkFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_checkboxes);
         dropFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_dropdown);
@@ -162,6 +132,49 @@ public class QuestionListActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void updateSurvey() {
+        if (fab==null) fab = (com.github.clans.fab.FloatingActionMenu) findViewById(R.id.menu);
+        fab.close(true);
+        extras = getIntent().getExtras();
+        if (extras.getBoolean("NEW_SURVEY")) {
+            gender = extras.getString("gender");
+            ageFrom = extras.getString("age_from");
+            ageTo = extras.getString("age_to");
+            job = extras.getString("job");
+            province = extras.getString("province");
+            city = extras.getString("city");
+            title = extras.getString("title");
+            description = extras.getString("description");
+            // for debugging
+            Log.d("FilterCriteria", gender);
+            Log.d("FilterCriteria",ageFrom);
+            Log.d("FilterCriteria",ageTo);
+            Log.d("FilterCriteria",job);
+            Log.d("FilterCriteria",province);
+            Log.d("FilterCriteria",city);
+            Log.d("FilterCriteria",title);
+            Log.d("FilterCriteria",description);
+            // initiate survey if still null
+            if(survey==null) {
+                survey = new Survey(title, description, gender, Integer.parseInt(ageFrom),
+                        Integer.parseInt(ageTo), job, province, city);
+            } else {
+                survey.updateAttribute(title, description, gender, Integer.parseInt(ageFrom),
+                        Integer.parseInt(ageTo), job, province, city);
+            }
+            qa = new QuestionAdapter(survey.questions);
+        }
+        if(extras.getBoolean("NEW_QUESTION")){
+            Question question = (Question) extras.getParcelable("question");
+            survey.questions.add(question);
+
+            //for debugging
+            qa.logging();
+            //qa.add(question);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -208,6 +221,25 @@ public class QuestionListActivity extends AppCompatActivity {
         JSONObject main = new JSONObject();
         main.put("title",survey.getName());
         main.put("description",survey.getDescription());
+        main.put("age_min",survey.getAgeFrom());
+        main.put("age_max",survey.getAgeTo());
+        String gender = survey.getGender();
+        if(!gender.equals("a")){
+            if(gender.equals("m")){
+                main.put("gender","Male");
+            } else {
+                main.put("gender","Female");
+            }
+        }
+        main.put("profession",survey.getJob());
+        String city = survey.getCity();
+        if(!city.equalsIgnoreCase("all")){
+            main.put("city",city);
+        }
+        String province = survey.getProvince();
+        if(!province.equalsIgnoreCase("all")){
+            main.put("province",province);
+        }
         main.put("coins",100); // TODO: ganti dengan fungsi yang ambil koin dari activity!
         main.put("questions",generateQuestionJSONArray());
 
@@ -320,10 +352,19 @@ public class QuestionListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        if(!extras.getBoolean("NEW_SURVEY")){
-            survey.questions.remove(survey.questions.size()-1);
-        }
-        QuestionListActivity.super.onBackPressed();
+        Intent i = new Intent(getApplication(), TitleActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        Bundle extra = new Bundle();
+        extra.putString("gender",survey.getGender());
+        extra.putString("age_from",survey.getAgeFrom()+"");
+        extra.putString("age_to",survey.getAgeTo()+"");
+        extra.putString("job",survey.getJob());
+        extra.putString("province",survey.getProvince());
+        extra.putString("city",survey.getCity());
+        extra.putString("Title",survey.getName());
+        extra.putString("description",survey.getDescription());
+        i.putExtras(extra);
+        startActivity(i);
     }
     // Method untuk generate question asal untuk keperluan viewing
     private List<Question> createList(int size) {
@@ -335,5 +376,12 @@ public class QuestionListActivity extends AppCompatActivity {
             result.add(q);
         }
         return result;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);//must store the new intent unless getIntent() will return the old one
+        updateSurvey();
     }
 }

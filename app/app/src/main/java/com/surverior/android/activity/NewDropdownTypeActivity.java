@@ -91,7 +91,9 @@ public class NewDropdownTypeActivity extends AppCompatActivity {
                     Intent i = new Intent(getApplication(), QuestionListActivity.class);
                     i.putExtra("NEW_QUESTION",true);
                     i.putExtra("question",new DropdownQuestion(question,choices));
+                    i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(i);
+                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "There is invalid input!", Toast.LENGTH_LONG)

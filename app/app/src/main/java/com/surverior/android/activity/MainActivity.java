@@ -140,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 			}else if (extra.get("FROM_PHONE") != null){
 					getIntent().removeExtra("FROM_PHONE");
 					displayView(2);
+			}else if (extra.getString("FROM_CRITERIA")!= null){
+				getIntent().removeExtra("FROM_CRITERIA");
+				displayView(1);
 			}
 		}
 	}
