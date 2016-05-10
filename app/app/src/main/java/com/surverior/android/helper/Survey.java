@@ -95,4 +95,15 @@ public class Survey {
     public void setCity(String city) {
         this.city = city;
     }
+
+    public void updateAttribute(String name, String description, String gender, int ageFrom, int ageTo, String job, String province, String city){
+        this.name = name;
+        this.description = description;
+        this.gender = gender;
+        this.ageFrom = ageFrom;
+        this.ageTo = ageTo;
+        this.job = job;
+        this.province = province;
+        this.city = city;
+    }
 }
