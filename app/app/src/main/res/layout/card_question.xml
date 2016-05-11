@@ -6,46 +6,45 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="4dp"
-    android:layout_margin="5dp">
+    android:layout_margin="8dp">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        android:gravity="center_vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="#666">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_reorder_black_24dp"
+                android:tint="#FFFFFF"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="4dp"/>
+
+            <TextView
+                android:id="@+id/cardlabel_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:padding="4dp"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/cardlabel_question"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="aaaaaaaaaaaaaaaaaa"
-            android:textSize="16sp"
-            android:paddingTop="12dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
-
-        <TextView
-            android:text="bbbbbbbbbbbbbbbbb"
-            android:id="@+id/cardlabel_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="8dp" />
-
-        <TextView
-
-            android:id="@+id/cardlabel_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DELETE"
-            android:textSize="14sp"
-            android:padding="16dp"
-            android:textColor="@color/colorAccent"/>
+            android:maxLines="3"
+            android:padding="8dp"
+            android:textSize="16sp" />
     </LinearLayout>
-
-
-
 </android.support.v7.widget.CardView>
