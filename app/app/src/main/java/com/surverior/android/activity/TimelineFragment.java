@@ -7,7 +7,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.pm.PackageInstaller;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TimelineFragment extends Fragment {
+public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private SessionManager session;
     private ProgressDialog pDialog;
@@ -43,6 +45,7 @@ public class TimelineFragment extends Fragment {
     private int requestCount;
     private SurveriorRequest req;
     private RecyclerView recList;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public TimelineFragment() {
         // Required empty public constructor
@@ -60,6 +63,52 @@ public class TimelineFragment extends Fragment {
 
         pDialog.setMessage("Getting surveys...");
         pDialog.show();
+        getSurvey();
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_timeline, container, false);
+
+        //Inisialisasi RecycleView
+        recList = (RecyclerView) rootView.findViewById(R.id.timelineList);
+        recList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout) ;
+
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        mSwipeRefreshLayout.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mSwipeRefreshLayout.setRefreshing(true);
+                                        getSurvey();
+//                                        fetchMovies();
+                                    }
+                                }
+        );
+
+//        AppController sesuatu = new AppController();
+//        sesuatu.getInstance().addToRequestQueue(req, "get_list_surveys");
+        requestCount++;
+        //while(requestCount!=0){}
+        Log.d("TotalSurvey", "" + surveys.size());
+
+        //stop
+        mSwipeRefreshLayout.setRefreshing(false);
+
+
+        // Inflate the layout for this fragment
+        return rootView;
+
+    }
+
+    public void getSurvey(){
         req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_SURVEY_GET_LIST, session,
                 new Response.Listener<String>() {
                     @Override
@@ -80,40 +129,24 @@ public class TimelineFragment extends Fragment {
                         }
                         pDialog.hide();
                         Log.d("TotalSurvey", "" + surveys.size());
+                        //stop refresh
+                        Log.d("masuk lagi","masuk");
+                        mSwipeRefreshLayout.setRefreshing(false);
                         requestCount--;
                         SurveyAdapter sa = new SurveyAdapter(surveys);
                         recList.setAdapter(sa);
+
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 pDialog.hide();
+                mSwipeRefreshLayout.setRefreshing(false);
             }
 
         });
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_timeline, container, false);
-
-        //Inisialisasi RecycleView
-        recList = (RecyclerView) rootView.findViewById(R.id.timelineList);
-        recList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(llm);
-
-        AppController sesuatu = new AppController();
-        sesuatu.getInstance().addToRequestQueue(req, "get_list_surveys");
-        requestCount++;
-        //while(requestCount!=0){}
-        Log.d("TotalSurvey", "" + surveys.size());
-
-        // Inflate the layout for this fragment
-        return rootView;
-
+        AppController.getInstance().addToRequestQueue(req);
     }
 
     @Override
@@ -126,13 +159,9 @@ public class TimelineFragment extends Fragment {
         super.onDetach();
     }
 
-    private List createList(int size) {
-
-        List result = new ArrayList();
-        for (int i=1; i <= size; i++) {
-            Survey s = new Survey("name "+ i, "description " + i);
-            result.add(s);
-        }
-        return result;
+    @Override
+    public void onRefresh() {
+        Log.d("Masuk","TEs");
+        getSurvey();
     }
 }
