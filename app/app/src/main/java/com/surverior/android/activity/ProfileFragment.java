@@ -151,11 +151,6 @@ public class ProfileFragment extends Fragment {
                 });
         // Access the RequestQueue.
         AppController.getInstance().addToRequestQueue(request);
-//
-//        imageLoader =  AppController.getInstance().getImageLoader();
-//        imageLoader.get(url, ImageLoader.getImageListener(image,
-//                0, 0));
-
     }
 
     public void setProfile(){

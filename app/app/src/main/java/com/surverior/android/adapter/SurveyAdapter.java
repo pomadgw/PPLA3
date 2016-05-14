@@ -33,6 +33,8 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
         return surveyList.size();
     }
 
+    public void removeAdapter(){surveyList.clear();}
+
     @Override
     public void onBindViewHolder(SurveyViewHolder surveyViewHolder, int i) {
         Survey q = surveyList.get(i);

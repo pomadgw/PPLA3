@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -35,14 +36,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MySurveyFragment extends Fragment {
+public class MySurveyFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private SessionManager session;
-    private ProgressDialog pDialog;
 
     private ArrayList<Survey> surveys;
     private SurveriorRequest req;
     private RecyclerView recList;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private FloatingActionButton fab;
 
@@ -56,36 +58,6 @@ public class MySurveyFragment extends Fragment {
 
         surveys = new ArrayList<>();
         session = new SessionManager(getActivity().getApplicationContext());
-        pDialog = new ProgressDialog(getActivity());
-        pDialog.setCancelable(false);
-
-        req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_SURVEY_GET_SURVEY, session,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jObj = new JSONObject(response);
-                            JSONArray jData = jObj.getJSONArray("data");
-                            for(int i = 0; i < jData.length(); i++){
-                                JSONObject surveyJSON = jData.getJSONObject(i);
-                                surveys.add(new Survey(surveyJSON.getString("title"),
-                                        surveyJSON.getString("description")));
-                            }
-
-                        } catch (JSONException e) {
-                            Log.d("JSONSurvey", e.getMessage());
-                        }
-                        pDialog.hide();
-                        SurveyAdapter sa = new SurveyAdapter(surveys);
-                        recList.setAdapter(sa);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                pDialog.hide();
-            }
-
-        });
 
 
     }
@@ -102,8 +74,21 @@ public class MySurveyFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-        AppController sesuatu = new AppController();
-        sesuatu.getInstance().addToRequestQueue(req, "get_list_surveys");
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout2) ;
+
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        mSwipeRefreshLayout.post(new Runnable() {
+                                     @Override
+                                     public void run() {
+                                         mSwipeRefreshLayout.setRefreshing(true);
+                                         getSurvey();
+                                     }
+                                 }
+        );
+
+        //stop refresh
+        mSwipeRefreshLayout.setRefreshing(false);
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +102,41 @@ public class MySurveyFragment extends Fragment {
         return rootView;
     }
 
+    public void getSurvey(){
+        if(!surveys.isEmpty()){
+            surveys.clear();
+            Log.d("Masuk","reclist ga kosong");
+        }
+        req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_SURVEY_GET_SURVEY, session,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            JSONArray jData = jObj.getJSONArray("data");
+                            for(int i = 0; i < jData.length(); i++){
+                                JSONObject surveyJSON = jData.getJSONObject(i);
+                                surveys.add(new Survey(surveyJSON.getString("title"),
+                                        surveyJSON.getString("description")));
+                            }
+                        } catch (JSONException e) {
+                            Log.d("JSONSurvey", e.getMessage());
+                        }
+                        SurveyAdapter sa = new SurveyAdapter(surveys);
+                        recList.setAdapter(sa);
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+        });
+
+        AppController.getInstance().addToRequestQueue(req);
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -127,16 +147,9 @@ public class MySurveyFragment extends Fragment {
         super.onDetach();
     }
 
-    private List createList(int size) {
-
-        List result = new ArrayList();
-        for (int i=1; i <= size; i++) {
-            Survey s = new Survey("name "+ i, "description " + i);
-            result.add(s);
-        }
-        return result;
+    @Override
+    public void onRefresh() {
+        Log.d("Masuk","TEs");
+        getSurvey();
     }
-
-
-
 }
