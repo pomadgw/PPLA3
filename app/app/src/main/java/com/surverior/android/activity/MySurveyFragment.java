@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.surverior.android.R;
+import com.surverior.android.adapter.MySurveyAdapter;
 import com.surverior.android.adapter.SurveyAdapter;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
@@ -122,7 +123,7 @@ public class MySurveyFragment extends Fragment implements SwipeRefreshLayout.OnR
                         } catch (JSONException e) {
                             Log.d("JSONSurvey", e.getMessage());
                         }
-                        SurveyAdapter sa = new SurveyAdapter(surveys);
+                        MySurveyAdapter sa = new MySurveyAdapter(surveys);
 
                         recList.setAdapter(sa);
                         mSwipeRefreshLayout.setRefreshing(false);

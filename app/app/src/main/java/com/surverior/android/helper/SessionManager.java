@@ -23,6 +23,10 @@ public class SessionManager {
 	
 	private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String KEY_TOKEN = "token";
+	private static final String KEY_NAME = "name";
+	private static final String KEY_EMAIL = "email";
+	private static final String KEY_GENDER = "gender";
+	private static final String KEY_ID = "id";
 
 	public SessionManager(Context context) {
 		this._context = context;
@@ -51,9 +55,38 @@ public class SessionManager {
 		Log.d(TAG, "User login session modified!");
 	}
 
+	public void setUser(String name, String email, String gender, String id){
+        Log.d("SETUSER","TRUE");
+		editor.putString(KEY_NAME, name);
+		editor.putString(KEY_EMAIL, email);
+		editor.putString(KEY_GENDER, gender);
+		editor.putString(KEY_ID, id);
+        editor.commit();
+	}
+
+    public void removeSession(){
+        // Clearing all data from Shared Preferences
+        editor.clear();
+        editor.commit();
+    }
+
     public String getToken() {
         String token = pref.getString(KEY_TOKEN, "");
         return token;
+    }
+
+    public String get(String key){
+        Log.d("GET",key);
+        if(key.equals("name"))
+            return pref.getString(KEY_NAME,"");
+        else if (key.equals("email"))
+            return pref.getString(KEY_EMAIL,"");
+        else if (key.equals("id"))
+            return pref.getString(KEY_ID,"");
+        else if (key.equals("gender"))
+            return pref.getString(KEY_GENDER,"");
+        else
+            return "FALSE";
     }
 
 	public void remove(String key) {
@@ -73,4 +106,6 @@ public class SessionManager {
 	public boolean isLoggedIn(){
 		return pref.getBoolean(KEY_IS_LOGGED_IN, false);
 	}
+
+
 }

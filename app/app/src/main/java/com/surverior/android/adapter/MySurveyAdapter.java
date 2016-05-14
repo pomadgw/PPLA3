@@ -1,6 +1,8 @@
 package com.surverior.android.adapter;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ public class MySurveyAdapter extends RecyclerView.Adapter<MySurveyAdapter.Survey
         Survey q = surveyList.get(i);
         surveyViewHolder.name.setText(q.getName());
         surveyViewHolder.description.setText(q.getDescription());
+        surveyViewHolder.download.setImageResource(R.drawable.ic_get_app_black_24dp);
     }
 
     @Override

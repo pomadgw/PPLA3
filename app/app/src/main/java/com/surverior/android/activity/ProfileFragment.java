@@ -198,15 +198,6 @@ public class ProfileFragment extends Fragment {
         });
         AppController.getInstance().addToRequestQueue(req, "get_user");
 
-
-//        UserHelper user = new UserHelper(getActivity().getApplicationContext());
-//        Log.d("nama",user.toString());
-//        name.setText(user.getName());
-//        gender.setText(user.getGender());
-//        birthdate.setText(user.getBirthdate());
-//        job.setText(user.getJob());
-//        address.setText(user.getCity()+", "+user.getProvince());
-//        setImage(user.getId());
     }
 
 
