@@ -1,13 +1,17 @@
 package com.surverior.android.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.surverior.android.R;
@@ -31,6 +35,15 @@ public class FillSurveyActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Fill Survey");
 //      getSupportActionBar().setSubtitle();
         getSupportActionBar().setElevation(4);
+
+
+        //Set layout for generating questions
+        //Still probably on development
+        LinearLayout ll = (LinearLayout) findViewById(R.id.fill_layout);
+        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.layout_text_type, ll);
+
+
 
     }
     @Override

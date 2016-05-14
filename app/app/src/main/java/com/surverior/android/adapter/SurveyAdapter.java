@@ -38,6 +38,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
         Survey q = surveyList.get(i);
         surveyViewHolder.name.setText(q.getName());
         surveyViewHolder.description.setText(q.getDescription());
+        //surveyViewHolder.id = surveyList.get(i).getAgeFrom();
     }
 
     @Override
@@ -53,12 +54,22 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
     public static class SurveyViewHolder extends RecyclerView.ViewHolder {
         protected TextView name;
         protected TextView description;
+        protected int id;
 
         public SurveyViewHolder(View v) {
             super(v);
             name =  (TextView) v.findViewById(R.id.cardlabel_name);
-            description = (TextView)  v.findViewById(R.id.cardlabel_description);
+            description = (TextView) v.findViewById(R.id.cardlabel_description);
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    //Toast.makeText(v.getContext(), DataProvider.JAVA_BOOKS[pos], Toast.LENGTH_SHORT).show();
+                }
+            });
         }
+
     }
 
     // For debugging
