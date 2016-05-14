@@ -14,14 +14,9 @@
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_face_black_24dp"
             android:title="Profile" />
-    </group>
-
-    <menu>
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_menu_manage"
             android:title="Logout" />
-    </menu>
-
-
+    </group>
 </menu>
