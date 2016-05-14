@@ -71,6 +71,8 @@ $api->version('v1', function ($api) {
 
     $api->post('surveys/{id}/edit', 'App\Http\Controllers\SurveyController@editSurvey');
 
+    $api->post('surveys/{id}/fill', 'App\Http\Controllers\SurveyController@answer');
+
     $api->post('surveys/add', 'App\Http\Controllers\SurveyController@createSurvey');
 
     $api->post('surveys/{id}/questions/add', 'App\Http\Controllers\SurveyController@createQuestionEndpoint');
