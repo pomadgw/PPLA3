@@ -39,10 +39,8 @@ import java.util.List;
 public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private SessionManager session;
-    private ProgressDialog pDialog;
 
     private ArrayList<Survey> surveys;
-    private int requestCount;
     private SurveriorRequest req;
     private RecyclerView recList;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -57,13 +55,7 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         surveys = new ArrayList<>();
         session = new SessionManager(getActivity().getApplicationContext());
-        pDialog = new ProgressDialog(getActivity());
-        pDialog.setCancelable(false);
-        requestCount = 0;
 
-        pDialog.setMessage("Getting surveys...");
-        pDialog.show();
-        getSurvey();
 
     }
 
@@ -88,18 +80,14 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
                                     public void run() {
                                         mSwipeRefreshLayout.setRefreshing(true);
                                         getSurvey();
-//                                        fetchMovies();
                                     }
                                 }
         );
 
-//        AppController sesuatu = new AppController();
-//        sesuatu.getInstance().addToRequestQueue(req, "get_list_surveys");
-        requestCount++;
         //while(requestCount!=0){}
         Log.d("TotalSurvey", "" + surveys.size());
 
-        //stop
+        //stop refresh
         mSwipeRefreshLayout.setRefreshing(false);
 
 
@@ -109,6 +97,12 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     public void getSurvey(){
+        if(!surveys.isEmpty()){
+                surveys.clear();
+                Log.d("Masuk","reclist ga kosong");
+
+        }
+
         req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_SURVEY_GET_LIST, session,
                 new Response.Listener<String>() {
                     @Override
@@ -127,12 +121,10 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
                         } catch (JSONException e) {
                             Log.d("JSONSurvey", e.getMessage());
                         }
-                        pDialog.hide();
+              //          pDialog.hide();
                         Log.d("TotalSurvey", "" + surveys.size());
                         //stop refresh
-                        Log.d("masuk lagi","masuk");
                         mSwipeRefreshLayout.setRefreshing(false);
-                        requestCount--;
                         SurveyAdapter sa = new SurveyAdapter(surveys);
                         recList.setAdapter(sa);
 
@@ -140,7 +132,7 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pDialog.hide();
+    //            pDialog.hide();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
 
