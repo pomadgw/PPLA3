@@ -37,7 +37,18 @@
             android:paddingTop="8dp"
             android:layout_marginBottom="4dp" />
 
+
     </LinearLayout>
+
+    <ImageView
+        android:layout_marginRight="20px"
+        android:layout_width="80px"
+        android:layout_height="100px"
+        android:id="@+id/download_survey"
+        android:layout_gravity="right"
+        android:clickable="true"
+        android:tint="@color/icons"
+        />
 
 
 
