@@ -123,6 +123,7 @@ public class MySurveyFragment extends Fragment implements SwipeRefreshLayout.OnR
                             Log.d("JSONSurvey", e.getMessage());
                         }
                         SurveyAdapter sa = new SurveyAdapter(surveys);
+
                         recList.setAdapter(sa);
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
