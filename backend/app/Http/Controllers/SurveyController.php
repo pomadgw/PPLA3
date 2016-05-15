@@ -330,15 +330,30 @@ class SurveyController extends Controller
         }
 
         foreach($request->answers as $answer_data) {
-            $question_id = $answer_data['id'];
-            $answer = $answer_data['answer'];
+            if (gettype($answer_data['answer']) == 'array') {
+                // this is a checkbox answer
+                foreach($answer_data['answer'] as $a) {
+                    $question_id = $answer_data['id'];
+                    $answer = $a;
 
-            $answerObj = new Answer;
-            $answerObj->user_id = $user_id;
-            $answerObj->question_id = $question_id;
-            $answerObj->answer = $answer;
+                    $answerObj = new Answer;
+                    $answerObj->user_id = $user_id;
+                    $answerObj->question_id = $question_id;
+                    $answerObj->answer = $answer;
 
-            $answerObj->save();
+                    $answerObj->save();
+                }
+            } else {
+                $question_id = $answer_data['id'];
+                $answer = $answer_data['answer'];
+
+                $answerObj = new Answer;
+                $answerObj->user_id = $user_id;
+                $answerObj->question_id = $question_id;
+                $answerObj->answer = $answer;
+
+                $answerObj->save();
+            }
         }
 
         return $this->response->withArray(['message' => "Success filling survey", "status_code" => 200], 200);
