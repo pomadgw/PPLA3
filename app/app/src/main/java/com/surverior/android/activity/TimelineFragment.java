@@ -55,8 +55,6 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         surveys = new ArrayList<>();
         session = new SessionManager(getActivity().getApplicationContext());
-
-
     }
 
     @Override
@@ -72,9 +70,7 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
         recList.setLayoutManager(llm);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout) ;
-
         mSwipeRefreshLayout.setOnRefreshListener(this);
-
         mSwipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -89,7 +85,6 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         //stop refresh
         mSwipeRefreshLayout.setRefreshing(false);
-
 
         // Inflate the layout for this fragment
         return rootView;
@@ -121,7 +116,6 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
                         } catch (JSONException e) {
                             Log.d("JSONSurvey", e.getMessage());
                         }
-              //          pDialog.hide();
                         Log.d("TotalSurvey", "" + surveys.size());
                         //stop refresh
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -132,7 +126,6 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-    //            pDialog.hide();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
 
@@ -153,7 +146,6 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        Log.d("Masuk","TEs");
         getSurvey();
     }
 }
