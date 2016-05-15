@@ -1,5 +1,6 @@
 package com.surverior.android.activity;
 
+import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,15 +13,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.surverior.android.R;
+import com.surverior.android.helper.CheckboxQuestion;
+import com.surverior.android.helper.DropdownQuestion;
+import com.surverior.android.helper.Question;
+import com.surverior.android.helper.ScaleQuestion;
+import com.surverior.android.helper.Survey;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by bambang on 5/12/16.
  */
 public class FillSurveyActivity extends AppCompatActivity {
     private Toolbar mToolbar;
+    private Survey survey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +49,39 @@ public class FillSurveyActivity extends AppCompatActivity {
 //      getSupportActionBar().setSubtitle();
         getSupportActionBar().setElevation(4);
 
+        //Getting the desired survey
+        //Cuma boong-boongan doang
+        survey = new Survey("hehe","hehe");
+        ArrayList<Question> qs = survey.getQuestions();
 
-        //Set layout for generating questions
+        //Set layout for generating qs
         //Still probably on development
         LinearLayout ll = (LinearLayout) findViewById(R.id.fill_layout);
         LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.layout_text_type, ll);
+        for (int i = 0; i < qs.size(); i++) {
+            Question currentQ = qs.get(i);
+            String type = currentQ.getType();
+            switch (type){
+                case "Text": {
+                    View v = inflater.inflate(R.layout.layout_text_type, ll);
+                    TextView text = (TextView) v.findViewById(R.id.question);
+                    text.setText(currentQ.getQuestionDetail());
+                    break;
+                }
+                case "Checkbox": {
+
+                    break;
+                }
+                case "Dropdown": {
+
+                    break;
+                }
+                case "Scale": {
+
+                    break;
+                }
+            }
+        }
 
 
 

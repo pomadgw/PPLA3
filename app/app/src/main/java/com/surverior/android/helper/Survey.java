@@ -96,6 +96,10 @@ public class Survey {
         this.city = city;
     }
 
+    public ArrayList<Question> getQuestions() {
+        return questions;
+    }
+
     public void updateAttribute(String name, String description, String gender, int ageFrom, int ageTo, String job, String province, String city){
         this.name = name;
         this.description = description;
