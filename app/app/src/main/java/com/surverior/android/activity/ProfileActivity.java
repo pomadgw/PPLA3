@@ -42,11 +42,13 @@ import com.surverior.android.model.Kota;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -56,25 +58,18 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = ProfileActivity.class.getSimpleName();
     private ProgressDialog pDialog;
     private SessionManager session;
-    private Button btnSubmit;
     private EditText inputFullName;
     private Spinner inputCity;
     private Spinner inputJob;
     private Spinner inputProvince;
     private EditText inputDate;
-    private ImageButton ib;
-    private Calendar cal;
-    private int day;
-    private int month;
-    private int year;
+    private int mDay, mMonth, mYear;
     private RadioGroup radioGroup;
     public String gender = "x";
 
     private static Toolbar mToolbar;
 
     private SQLiteHandler db;
-
-    static final int DATE_ID = 999;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,43 +85,37 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setElevation(4);
 
         inputFullName = (EditText) findViewById(R.id.name);
+        inputDate = (EditText) findViewById(R.id.birthdate);
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroupGender);
+        radioGroup.clearCheck();
         inputJob = (Spinner) findViewById(R.id.job);
         inputCity = (Spinner) findViewById(R.id.city);
         inputProvince = (Spinner) findViewById(R.id.province);
 
         //input calendar
-        inputDate = (EditText) findViewById(R.id.birthdate);
         inputDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cal = Calendar.getInstance();
-                day = cal.get(Calendar.DAY_OF_MONTH);
-                month = cal.get(Calendar.MONTH);
-                year = cal.get(Calendar.YEAR);
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ProfileActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                inputDate.setText(year + "-" + (monthOfYear + 1) + "-" + year);
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.setTitle("Select date");
+                datePickerDialog.show();
             }
         });
 
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroupGender);
-        radioGroup.clearCheck();
 
-
-        // set text date input default
-        inputDate.setText(new StringBuilder().append("Birthday"));
-
-        inputDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(DATE_ID);
-            }
-        });
-
-        //calendar image listener
-        ib.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(DATE_ID);
-            }
-        });
 
         //gender radio button listener
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
