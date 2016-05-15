@@ -224,14 +224,17 @@ public class QuestionListActivity extends AppCompatActivity {
         main.put("age_min",survey.getAgeFrom());
         main.put("age_max",survey.getAgeTo());
         String gender = survey.getGender();
-        if(!gender.equals("a")){
-            if(gender.equals("m")){
-                main.put("gender","Male");
-            } else {
-                main.put("gender","Female");
-            }
+
+        if(gender.equals("a")){
+            main.put("gender", null);
+        } else {
+            main.put("gender", gender);
         }
-        main.put("profession",survey.getJob());
+
+        String job = survey.getJob();
+        if (!job.equalsIgnoreCase("all")) {
+            main.put("profession", survey.getJob());
+        }
         String city = survey.getCity();
         if(!city.equalsIgnoreCase("all")){
             main.put("city",city);
@@ -242,8 +245,11 @@ public class QuestionListActivity extends AppCompatActivity {
         }
         main.put("coins",100); // TODO: ganti dengan fungsi yang ambil koin dari activity!
         main.put("questions",generateQuestionJSONArray());
+        Log.d(TAG, "Here is what I found!:");
+        Log.d(TAG, main.toString());
 
         pDialog.setMessage("Sending survey ...");
+
         showDialog();
 
         JsonObjectRequest jsonReq = new SurveriorJSONRequest(AppConfig.URL_SURVEY_ADD, main, session, new Response.Listener<JSONObject>() {
@@ -290,7 +296,6 @@ public class QuestionListActivity extends AppCompatActivity {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonReq, "JSON_ADD_SURVEY");
-        Log.d("JSON",main.toString());
     }
 
     private JSONArray generateQuestionJSONArray() throws JSONException {
