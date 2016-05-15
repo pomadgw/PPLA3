@@ -3,10 +3,15 @@ package com.surverior.android.helper;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
+
+import java.util.List;
+
 /**
  * Created by Bardan Putra Prananto on 5/1/2016.
  */
-public class Question implements Parcelable{
+public class Question implements Parcelable,ParentObject{
+    protected List<Object> mChild;
     protected String questionDetail;
     protected String type;
 
@@ -68,4 +73,15 @@ public class Question implements Parcelable{
     public void setType(String type) {
         this.type = type;
     }
+
+    @Override
+    public List<Object> getChildObjectList() {
+        return mChild;
+    }
+
+    @Override
+    public void setChildObjectList(List<Object> list) {
+        mChild = list;
+    }
+
 }

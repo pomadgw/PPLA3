@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bignerdranch.expandablerecyclerview.ViewHolder.ChildViewHolder;
+import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 import com.surverior.android.R;
 import com.surverior.android.helper.CheckboxQuestion;
 import com.surverior.android.helper.DropdownQuestion;
@@ -60,7 +62,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
     }
 
 
-    public static class QuestionViewHolder extends RecyclerView.ViewHolder {
+    public static class QuestionViewHolder extends ParentViewHolder {
         protected TextView question;
         protected TextView type;
 
@@ -68,6 +70,16 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
             super(v);
             question =  (TextView) v.findViewById(R.id.cardlabel_question);
             type = (TextView)  v.findViewById(R.id.cardlabel_type);
+        }
+    }
+
+    public static class QuestionChildViewHolder extends ChildViewHolder {
+        protected TextView option;
+
+        public QuestionChildViewHolder(View v) {
+            super(v);
+            option =  (TextView) v.findViewById(R.id.child_question);
+
         }
     }
 
