@@ -93,6 +93,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         surveyViewHolder.id=q.getID();
         surveyViewHolder.name.setText(q.getName());
         surveyViewHolder.description.setText(q.getDescription());
+        //surveyViewHolder.id = surveyList.get(i).getAgeFrom();
     }
 
     @Override
@@ -159,8 +160,16 @@ public class SurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public SurveyViewHolder(View v){
             super(v);
             name =  (TextView) v.findViewById(R.id.cardlabel_name);
-            description = (TextView)  v.findViewById(R.id.cardlabel_description);
-            v.setOnClickListener(this);
+
+            description = (TextView) v.findViewById(R.id.cardlabel_description);
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    //Toast.makeText(v.getContext(), DataProvider.JAVA_BOOKS[pos], Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         @Override
@@ -190,6 +199,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         private Survey getQuestion(int id) {
             return null;
         }
+
     }
 
     static class ProgressViewHolder extends RecyclerView.ViewHolder {

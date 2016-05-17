@@ -23,7 +23,7 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
             android:clickable="true"
-            android:src="@drawable/ic_action_add" />
+            android:src="@android:drawable/ic_menu_edit" />
 
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
