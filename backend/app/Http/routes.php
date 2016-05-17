@@ -73,6 +73,8 @@ $api->version('v1', function ($api) {
 
     $api->post('surveys/{id}/fill', 'App\Http\Controllers\SurveyController@answer');
 
+    $api->get('surveys/{id}/answers/{format}', 'App\Http\Controllers\SurveyController@getCSVAnswers');
+
     $api->post('surveys/add', 'App\Http\Controllers\SurveyController@createSurvey');
 
     $api->post('surveys/{id}/questions/add', 'App\Http\Controllers\SurveyController@createQuestionEndpoint');
@@ -83,3 +85,4 @@ $api->version('v1', function ($api) {
 });
 
 Route::get('email-verification/{id}', 'UserController@confirm');
+Route::get('api/surveys/{id}/answers/csv', 'App\Http\Controllers\SurveyController@getCSVAnswers');
