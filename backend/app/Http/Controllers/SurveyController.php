@@ -120,8 +120,9 @@ class SurveyController extends Controller
         $surveys = DB::table('surveys')
             ->select('surveys.id', 'surveys.title', 'surveys.description',
                      'surveys.coins')
-            ->crossJoin('users')
-            ->where('users.id', $user->id)
+            // ->crossJoin('users')
+            // ->where('users.id', $user->id)
+            ->where('surveys.user_id', '<>', $user->id)
             ->where(function($q) use ($user) {
                 $q->whereNull('surveys.gender')
                 ->orWhere('surveys.gender', '=', $user->gender);
