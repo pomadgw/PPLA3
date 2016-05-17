@@ -13,8 +13,11 @@ use App\QuestionCheckbox;
 use App\QuestionScale;
 use App\Options;
 use App\Choice;
+use App\Answer;
 use DB;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use DateTime;
 
 /**
@@ -306,5 +309,53 @@ class SurveyController extends Controller
     public function deleteOptions($questionId)
     {
         Choice::where('question_id', $questionId)->delete();
+    }
+
+    public function answer($surveyId, Request $request) {
+        $user_id = $this->auth->user()->id;
+
+        if (! Survey::find($surveyId)) {
+            throw new NotFoundHttpException("Survey in question doesn't exists");
+        }
+
+        if ($request->survey_id != $surveyId) {
+            return $this->response->withArray(['message' => "Cannot add answer to different survey!", "status_code" => 401], 401);
+        }
+
+        // Check the presence of question
+        foreach($request->answers as $answer_data) {
+            if (! Question::find($answer_data['id'])) {
+                throw new NotFoundHttpException("Question doesn't exists: id " . $answer_data['id']);
+            }
+        }
+
+        foreach($request->answers as $answer_data) {
+            if (gettype($answer_data['answer']) == 'array') {
+                // this is a checkbox answer
+                foreach($answer_data['answer'] as $a) {
+                    $question_id = $answer_data['id'];
+                    $answer = $a;
+
+                    $answerObj = new Answer;
+                    $answerObj->user_id = $user_id;
+                    $answerObj->question_id = $question_id;
+                    $answerObj->answer = $answer;
+
+                    $answerObj->save();
+                }
+            } else {
+                $question_id = $answer_data['id'];
+                $answer = $answer_data['answer'];
+
+                $answerObj = new Answer;
+                $answerObj->user_id = $user_id;
+                $answerObj->question_id = $question_id;
+                $answerObj->answer = $answer;
+
+                $answerObj->save();
+            }
+        }
+
+        return $this->response->withArray(['message' => "Success filling survey", "status_code" => 200], 200);
     }
 }

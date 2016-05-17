@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Created by Bardan Putra Prananto on 5/1/2016.
  */
 public class Survey {
+    private int id;
     private String name;
     private String description;
     private String gender;
@@ -15,6 +16,12 @@ public class Survey {
     private String province;
     private String city;
     public ArrayList<Question> questions = new ArrayList<>();
+
+    public Survey(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
 
     public Survey(String name, String description) {
         this.name = name;
@@ -109,5 +116,9 @@ public class Survey {
         this.job = job;
         this.province = province;
         this.city = city;
+    }
+
+    public int getID() {
+        return id;
     }
 }
