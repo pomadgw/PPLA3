@@ -325,8 +325,13 @@ class SurveyController extends Controller
 
         // Check the presence of question
         foreach($request->answers as $answer_data) {
-            if (! Question::find($answer_data['id'])) {
+            $qid = $answer_data['id'];
+            if (! Question::find($qid)) {
                 throw new NotFoundHttpException("Question doesn't exists: id " . $answer_data['id']);
+            }
+
+            if (Answer::where('user_id', $user_id)->where('question_id', $qid)->count() > 0) {
+                return $this->response->withArray(['message' => "Cannot fill survey you have already filled!", "status_code" => 403], 403);
             }
         }
 
