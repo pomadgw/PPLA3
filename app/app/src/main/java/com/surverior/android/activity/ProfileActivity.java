@@ -7,11 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -42,80 +38,79 @@ import com.surverior.android.model.Kota;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
  * Created by Azhar Fauzan Dz on 3/28/2016.
  */
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends Activity {
     private static final String TAG = ProfileActivity.class.getSimpleName();
     private ProgressDialog pDialog;
     private SessionManager session;
+    private Button btnSubmit;
     private EditText inputFullName;
     private Spinner inputCity;
     private Spinner inputJob;
     private Spinner inputProvince;
     private EditText inputDate;
-    private int mDay, mMonth, mYear;
+    private ImageButton ib;
+    private Calendar cal;
+    private int day;
+    private int month;
+    private int year;
     private RadioGroup radioGroup;
     public String gender = "x";
-
-    private static Toolbar mToolbar;
+    private String email;
 
     private SQLiteHandler db;
+
+    static final int DATE_ID = 999;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        //Membuat Toolbar
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Complete Your Data");
-        getSupportActionBar().setElevation(4);
-
         inputFullName = (EditText) findViewById(R.id.name);
-        inputDate = (EditText) findViewById(R.id.birthdate);
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroupGender);
-        radioGroup.clearCheck();
         inputJob = (Spinner) findViewById(R.id.job);
         inputCity = (Spinner) findViewById(R.id.city);
         inputProvince = (Spinner) findViewById(R.id.province);
+        btnSubmit = (Button) findViewById(R.id.btnSubmit);
 
         //input calendar
+        ib = (ImageButton) findViewById(R.id.imageButton1);
+        cal = Calendar.getInstance();
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        month = cal.get(Calendar.MONTH);
+        year = cal.get(Calendar.YEAR);
+        inputDate = (EditText) findViewById(R.id.birthdate);
+
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroupGender);
+        radioGroup.clearCheck();
+
+
+        // set text date input default
+        inputDate.setText(new StringBuilder().append("Birthday"));
+
         inputDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(ProfileActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                inputDate.setText(year + "-" + (monthOfYear + 1) + "-" + year);
-                            }
-                        }, mYear, mMonth, mDay);
-                datePickerDialog.setTitle("Select date");
-                datePickerDialog.show();
+                showDialog(DATE_ID);
             }
         });
 
-
+        //calendar image listener
+        ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(DATE_ID);
+            }
+        });
 
         //gender radio button listener
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -463,22 +458,10 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_wizard, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            case R.id.action_done:
+        // update Button Click event
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 String name = inputFullName.getText().toString().trim();
                 String city = inputCity.getSelectedItem().toString().trim();
                 String province = inputProvince.getSelectedItem().toString().trim();
@@ -516,10 +499,10 @@ public class ProfileActivity extends AppCompatActivity {
                             "There is empty!", Toast.LENGTH_LONG)
                             .show();
                 }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+            }
+        });
+
+
     }
 
     /**
@@ -527,8 +510,8 @@ public class ProfileActivity extends AppCompatActivity {
      * email, password) to update url
      */
     private void updateProfileUser(final String name, final String gender,
-                              final String birthdate, final String job,
-                              final String city, final String province, final String email) {
+                                   final String birthdate, final String job,
+                                   final String city, final String province, final String email) {
         // Tag used to cancel the request
         String tag_string_req = "req_update";
 
@@ -610,6 +593,34 @@ public class ProfileActivity extends AppCompatActivity {
             pDialog.dismiss();
     }
 
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DATE_ID:
 
+                // open datepicker dialog.
+                // set date picker for current date
+                // add pickerListener listner to date picker
+                return new DatePickerDialog(this, pickerListener, year, month, day);
+        }
+        return null;
+    }
 
+    private DatePickerDialog.OnDateSetListener pickerListener = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        @Override
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+
+            year = selectedYear;
+            month = selectedMonth;
+            day = selectedDay;
+
+            // Show selected date
+            inputDate.setText(new StringBuilder().append(year).append("-").append(month + 1)
+                    .append("-").append(day));
+
+        }
+    };
 }

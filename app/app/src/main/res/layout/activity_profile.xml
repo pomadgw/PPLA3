@@ -1,189 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.TitleActivity">
-
-    <LinearLayout
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_height="fill_parent"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
         android:orientation="vertical"
-        android:id="@+id/linearLayout">
-
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/linearLayout"
         android:padding="10dp">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp">
+            android:textAlignment="center"
+            android:text="Complete Your Data"
+            android:layout_marginBottom="50dp"
+            android:textColor="#ffffff"
+            android:textSize="30sp"
+            android:layout_marginTop="50dp"
+            android:gravity="center_horizontal"
+            android:fontFamily="sans-serif-medium"
+            android:textStyle="bold"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Full Name" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_rectangle"
+            android:padding="20dp" >
+
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/name"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:id="@+id/name" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/material_grey_300"/>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp">
+                android:layout_marginBottom="10dp"
+                android:hint="@string/hint_fullname"
+                android:inputType="textCapWords"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:textColorHint="#000000" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Gender" />
+                android:text="Gender"
+                android:textColor="#000000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:paddingLeft="10dp" />
 
             <RadioGroup
                 android:id="@+id/radioGroupGender"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="4dp">
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp">
+
                 <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Male"
                     android:id="@+id/radioButton1"
-                    android:layout_marginRight="4dp" />
-                <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Female"
+                    android:checked="true"
+                    android:textColor="#000000"
+                    android:text="Male" />
+
+                <RadioButton
                     android:id="@+id/radioButton2"
-                    android:layout_marginRight="4dp"
-                    android:layout_gravity="right" />
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:text="Female" />
             </RadioGroup>
-        </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/material_grey_300"/>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Birthday" />
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:id="@+id/birthdate"
-                android:clickable="false" />
-        </LinearLayout>
+                android:orientation="horizontal" >
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/material_grey_300"/>
+                <EditText
+                    android:id="@+id/birthdate"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/hint_birthdate"
+                    android:layout_gravity="left"
+                    android:padding="10dp"
+                    android:textColor="@color/input_register"
+                    android:editable="false"
+                    android:textColorHint="@color/input_register_hint" />
+                <ImageButton
+                    android:id="@+id/imageButton1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:contentDescription="@string/selectdate"
+                    android:cropToPadding="true"
+                    android:src="@drawable/calendar_icon3"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/material_grey_300"/>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Job" />
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/job"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/material_grey_300"/>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Province" />
+                android:hint="@string/hint_job"
+                android:layout_marginBottom="10dp"
+                android:singleLine="true"
+                android:spinnerMode="dialog"
+                android:prompt="@string/hint_job"
+                android:text="@string/hint_job"
+                android:textColor="@color/input_register"
+                android:layout_marginTop="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp" />
 
             <Spinner
                 android:id="@+id/province"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/material_grey_300"/>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="City" />
+                android:hint="@string/hint_province"
+                android:singleLine="true"
+                android:spinnerMode="dialog"
+                android:prompt="@string/hint_province"
+                android:text="@string/hint_province"
+                android:textColor="@color/input_register"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp" />
 
             <Spinner
                 android:id="@+id/city"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_province"
+                android:singleLine="true"
+                android:spinnerMode="dialog"
+                android:prompt="@string/hint_city"
+                android:text="@string/hint_city"
+                android:textColor="@color/input_register"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp" />
 
+            <!-- Login Button -->
+
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_register"
+                android:text="Proceed"
+                android:textColor="#ffffff"
+                android:longClickable="false" />
+            <!-- Link to Login Screen -->
         </LinearLayout>
 
     </LinearLayout>
-
-</RelativeLayout>
+</ScrollView>
