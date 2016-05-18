@@ -22,9 +22,9 @@ class CreateAnswersTable extends Migration
         Schema::table('answers', function ($table) {
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
-            $table->integer('survey_id')->unsigned();
-            $table->foreign('survey_id')->references('id')->on('surveys')->onDelete('cascade');
+
+            $table->integer('question_id')->unsigned();
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
         });
     }
 
@@ -37,7 +37,7 @@ class CreateAnswersTable extends Migration
     {
         Schema::table('answers', function ($table) {
             $table->dropForeign(['user_id']);
-            $table->dropForeign(['survey_id']);
+            $table->dropForeign(['question_id']);
         });
         Schema::drop('answers');
     }

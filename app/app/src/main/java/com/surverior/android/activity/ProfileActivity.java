@@ -510,8 +510,8 @@ public class ProfileActivity extends Activity {
      * email, password) to update url
      */
     private void updateProfileUser(final String name, final String gender,
-                              final String birthdate, final String job,
-                              final String city, final String province, final String email) {
+                                   final String birthdate, final String job,
+                                   final String city, final String province, final String email) {
         // Tag used to cancel the request
         String tag_string_req = "req_update";
 

@@ -33,6 +33,10 @@ class Question extends Model
         return $this->belongsTo('App\Survey', 'survey_id');
     }
 
+    public function answers() {
+        return $this->hasMany('App\Answer', 'question_id');
+    }
+
     public function getArgsAttribute() {
         $type = $this->type;
         if ($type == 'text' || $type == 'paragraph') {

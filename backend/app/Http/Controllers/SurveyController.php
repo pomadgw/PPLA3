@@ -13,9 +13,15 @@ use App\QuestionCheckbox;
 use App\QuestionScale;
 use App\Options;
 use App\Choice;
+use App\Answer;
+use App\User;
 use DB;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use DateTime;
+use JWTAuth;
+use Excel;
 
 /**
  * @Resource("Survey", uri="/api/surveys")
@@ -117,8 +123,9 @@ class SurveyController extends Controller
         $surveys = DB::table('surveys')
             ->select('surveys.id', 'surveys.title', 'surveys.description',
                      'surveys.coins')
-            ->crossJoin('users')
-            ->where('users.id', $user->id)
+            // ->crossJoin('users')
+            // ->where('users.id', $user->id)
+            ->where('surveys.user_id', '<>', $user->id)
             ->where(function($q) use ($user) {
                 $q->whereNull('surveys.gender')
                 ->orWhere('surveys.gender', '=', $user->gender);
@@ -306,5 +313,174 @@ class SurveyController extends Controller
     public function deleteOptions($questionId)
     {
         Choice::where('question_id', $questionId)->delete();
+    }
+
+    public function answer($surveyId, Request $request) {
+        $user_id = $this->auth->user()->id;
+
+        if (! Survey::find($surveyId)) {
+            throw new NotFoundHttpException("Survey in question doesn't exists");
+        }
+
+        if ($request->survey_id != $surveyId) {
+            return $this->response->withArray(['message' => "Cannot add answer to different survey!", "status_code" => 401], 401);
+        }
+
+        // Check the presence of question
+        foreach($request->answers as $answer_data) {
+            $qid = $answer_data['id'];
+            if (! Question::find($qid)) {
+                throw new NotFoundHttpException("Question doesn't exists: id " . $answer_data['id']);
+            }
+
+            if (Answer::where('user_id', $user_id)->where('question_id', $qid)->count() > 0) {
+                return $this->response->withArray(['message' => "Cannot fill survey you have already filled!", "status_code" => 403], 403);
+            }
+        }
+
+        foreach($request->answers as $answer_data) {
+            if (gettype($answer_data['answer']) == 'array') {
+                // this is a checkbox answer
+                foreach($answer_data['answer'] as $a) {
+                    $question_id = $answer_data['id'];
+                    $answer = $a;
+
+                    $answerObj = new Answer;
+                    $answerObj->user_id = $user_id;
+                    $answerObj->question_id = $question_id;
+                    $answerObj->answer = $answer;
+
+                    $answerObj->save();
+                }
+            } else {
+                $question_id = $answer_data['id'];
+                $answer = $answer_data['answer'];
+
+                $answerObj = new Answer;
+                $answerObj->user_id = $user_id;
+                $answerObj->question_id = $question_id;
+                $answerObj->answer = $answer;
+
+                $answerObj->save();
+            }
+        }
+
+        return $this->response->withArray(['message' => "Success filling survey", "status_code" => 200], 200);
+    }
+
+    private function prepareForView($survey) {
+        $csvholder = [
+            -8 => [], // name
+            -7 => [], // email
+            -6 => [], // gender
+            -5 => [], // birth_date
+            -4 => [], // profession
+            -3 => [], // city
+            -2 => [], // province
+            -1 => [], // phone number
+        ];
+
+        $users_answered = [];
+        $gender = [
+            'm' => 'Male',
+            'f' => 'Female'
+        ];
+        $question_label = [
+            -8 => "Name", // name
+            -7 => "Email", // email
+            -6 => "Gender", // gender
+            -5 => "Birth date", // birth_date
+            -4 => "Profession", // profession
+            -3 => "City", // city
+            -2 => "Province", // province
+            -1 => "Phone number", // phone number
+        ];
+
+        foreach($survey->questions as $question) {
+            $csvholder[$question->id] = [];
+            $question_label[$question->id] = $question->question;
+            foreach($question->answers as $answer) {
+                $users_answered[] = $answer->user_id;
+            }
+        }
+
+        $users_answered = array_unique($users_answered);
+
+        foreach($users_answered as $id) {
+            $user = User::find($id);
+            $csvholder[-8][$id] = $user->name;
+            $csvholder[-7][$id] = $user->email;
+            $csvholder[-6][$id] = $gender[$user->gender];
+            $csvholder[-5][$id] = $user->birth_date;
+            $csvholder[-4][$id] = $user->profession;
+            $csvholder[-3][$id] = $user->city;
+            $csvholder[-2][$id] = $user->province;
+            $csvholder[-1][$id] = $user->phone_number;
+        }
+
+        foreach($survey->questions as $question) {
+            foreach($question->answers as $answer) {
+                if ($question->type == 'checkbox') {
+                    if (!array_key_exists($answer->user_id, $csvholder[$question->id])) {
+                        $csvholder[$question->id][$answer->user_id] = [];
+                    }
+                    $csvholder[$question->id][$answer->user_id][] = $answer['answer'];
+                }
+                else{
+                    $csvholder[$question->id][$answer->user_id] = $answer['answer'];
+                }
+
+            }
+        }
+
+        $realcsv = [];
+
+        foreach($question_label as $q_id => $q) {
+            $tmp = [$q];
+            foreach($users_answered as $user_id) {
+                if (is_array($csvholder[$q_id][$user_id])) {
+                    $tmp[] = implode(';', $csvholder[$q_id][$user_id]);
+                } else {
+                    $tmp[] = $csvholder[$q_id][$user_id];
+                }
+            }
+            $realcsv[] = $tmp;
+        }
+
+        $realcsv = array_map(null, ...$realcsv);
+
+        return $realcsv;
+    }
+
+    public function getCSVAnswers($surveyId, $format) {
+        $user = $this->auth->user();
+
+        if (! Survey::find($surveyId)) {
+            throw new NotFoundHttpException("Survey in question doesn't exists");
+        }
+
+        $survey = Survey::find($surveyId)->first();
+
+        if ($survey->user_id != $user->id) {
+            return $this->response->withArray(['message' => "Cannot access other survey!", "status_code" => 403], 403);
+        }
+
+        $realcsv = SurveyController::prepareForView($survey);
+
+        Excel::create($survey->title, function($excel) use ($realcsv, $user, $survey) {
+            $excel->setTitle($survey->title);
+
+            $excel->setCreator($user->name);
+            $excel->setCompany($user->name);
+            $excel->setSubject($survey->description);
+
+            $excel->setDescription($survey->description);
+
+            $excel->sheet('Result', function($sheet) use ($realcsv) {
+                $sheet->loadView('answers', ['data' => $realcsv]);
+
+            });
+
+        })->export($format);
     }
 }
