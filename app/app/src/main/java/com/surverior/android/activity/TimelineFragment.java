@@ -67,9 +67,9 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
 
         surveys = new ArrayList<>();
         session = new SessionManager(getActivity().getApplicationContext());
+
         sa = new SurveyAdapter(this);
         timelineHandler = new Handler();
-
     }
 
     @Override
@@ -85,9 +85,7 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
         recList.setLayoutManager(llm);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout) ;
-
         mSwipeRefreshLayout.setOnRefreshListener(this);
-
         mSwipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -102,8 +100,6 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
 
         //stop refresh
         mSwipeRefreshLayout.setRefreshing(false);
-
-
 
         // Inflate the layout for this fragment
         return rootView;
@@ -142,7 +138,7 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
                         } catch (JSONException e) {
                             Log.d("JSONSurvey", e.getMessage());
                         }
-                        //          pDialog.hide();
+
                         Log.d("TotalSurvey", "" + surveys.size());
                         //stop refresh
                         if (refresh) {
@@ -162,7 +158,7 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //            pDialog.hide();
+
                 mSwipeRefreshLayout.setRefreshing(false);
             }
 
@@ -183,7 +179,7 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
 
     @Override
     public void onRefresh() {
-        Log.d("Masuk","TEs");
+        getSurvey();
         timelineHandler.removeCallbacksAndMessages(null);
         afterRefreshed=true;
         getSurvey(true);

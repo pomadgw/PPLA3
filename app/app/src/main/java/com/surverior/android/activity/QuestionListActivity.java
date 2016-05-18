@@ -371,17 +371,7 @@ public class QuestionListActivity extends AppCompatActivity {
         i.putExtras(extra);
         startActivity(i);
     }
-    // Method untuk generate question asal untuk keperluan viewing
-    private List<Question> createList(int size) {
-        List<Question> result = new ArrayList<Question>();
-        for (int i=1; i <= size; i++) {
-            Question q = new Question();
-            q.setQuestionDetail("question" + i);
-            q.setType("type" + i);
-            result.add(q);
-        }
-        return result;
-    }
+
 
     @Override
     protected void onNewIntent(Intent intent) {

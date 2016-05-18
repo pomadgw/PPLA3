@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bignerdranch.expandablerecyclerview.ViewHolder.ChildViewHolder;
+import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 import com.surverior.android.R;
 import com.surverior.android.helper.CheckboxQuestion;
 import com.surverior.android.helper.DropdownQuestion;
@@ -48,6 +50,38 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
         Question q = questionList.get(i);
         questionViewHolder.question.setText(q.getQuestionDetail());
         questionViewHolder.type.setText(q.getType());
+        switch (q.getType()){
+            case "Text":
+            {
+                questionViewHolder.option.append("no option"+"\n");
+                break;
+            }
+            case "Checkbox":
+            {
+                CheckboxQuestion checkboxQuestion = (CheckboxQuestion) q;
+                for (String j : checkboxQuestion.getChoices()){
+                    questionViewHolder.option.append(j+"\n");
+                }
+                break;
+            }
+            case "Dropdown":
+            {
+                DropdownQuestion dropdownQuestion = (DropdownQuestion) q;
+                for (String j: dropdownQuestion.getChoices()){
+                    questionViewHolder.option.append(j+"\n");
+                }
+                break;
+            }
+            case "Scale":
+            {
+                ScaleQuestion scaleQuestion = (ScaleQuestion) q;
+                questionViewHolder.option.append("Min: "+scaleQuestion.getMinLabel()+"\n");
+                questionViewHolder.option.append("Max: "+scaleQuestion.getMaxLabel()+"\n");
+                questionViewHolder.option.append("Range: 1 - "+scaleQuestion.getRange()+"\n");
+                break;
+            }
+        }
+
     }
 
     @Override
@@ -60,14 +94,26 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
     }
 
 
-    public static class QuestionViewHolder extends RecyclerView.ViewHolder {
+    public static class QuestionViewHolder extends ParentViewHolder {
         protected TextView question;
         protected TextView type;
+        protected TextView option;
 
         public QuestionViewHolder(View v) {
             super(v);
             question =  (TextView) v.findViewById(R.id.cardlabel_question);
             type = (TextView)  v.findViewById(R.id.cardlabel_type);
+            option = (TextView) v.findViewById(R.id.cardlabel_option);
+        }
+    }
+
+    public static class QuestionChildViewHolder extends ChildViewHolder {
+        protected TextView option;
+
+        public QuestionChildViewHolder(View v) {
+            super(v);
+            option =  (TextView) v.findViewById(R.id.child_question);
+
         }
     }
 

@@ -89,6 +89,13 @@ public class SessionManager {
             return "FALSE";
     }
 
+	public void updateName(String name){
+		editor.remove(KEY_NAME);
+		editor.putString(KEY_NAME,name);
+		editor.commit();
+	}
+
+
 	public void remove(String key) {
 		editor.remove(key);
 		editor.commit();

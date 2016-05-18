@@ -105,6 +105,7 @@ public class MySurveyFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public void getSurvey(){
         if(!surveys.isEmpty()){
+            recList.getAdapter().notifyDataSetChanged();
             surveys.clear();
             Log.d("Masuk","reclist ga kosong");
         }
@@ -123,8 +124,8 @@ public class MySurveyFragment extends Fragment implements SwipeRefreshLayout.OnR
                         } catch (JSONException e) {
                             Log.d("JSONSurvey", e.getMessage());
                         }
-                        MySurveyAdapter sa = new MySurveyAdapter(surveys);
 
+                        MySurveyAdapter sa = new MySurveyAdapter(surveys);
                         recList.setAdapter(sa);
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
