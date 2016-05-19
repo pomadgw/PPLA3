@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.pm.PackageInstaller;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -36,7 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMoreListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private SessionManager session;
 
@@ -44,6 +46,16 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
     private SurveriorRequest req;
     private RecyclerView recList;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private SurveyAdapter sa;
+    private LinearLayoutManager llm;
+
+    private final int SURVEYS_PER_PAGE = 10;
+    private String appendURL=AppConfig.URL_SURVEY_GET_LIST;
+    private int total=0;
+    private int currentPage;
+    private boolean afterRefreshed;
+
+    private Handler timelineHandler;
 
     public TimelineFragment() {
         // Required empty public constructor
@@ -55,6 +67,9 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         surveys = new ArrayList<>();
         session = new SessionManager(getActivity().getApplicationContext());
+
+        sa = new SurveyAdapter(this);
+        timelineHandler = new Handler();
     }
 
     @Override
@@ -65,7 +80,7 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
         //Inisialisasi RecycleView
         recList = (RecyclerView) rootView.findViewById(R.id.timelineList);
         recList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
@@ -75,7 +90,7 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
                                     @Override
                                     public void run() {
                                         mSwipeRefreshLayout.setRefreshing(true);
-                                        getSurvey();
+                                        getSurvey(true);
                                     }
                                 }
         );
@@ -91,41 +106,59 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     }
 
-    public void getSurvey(){
-        if(!surveys.isEmpty()){
-                surveys.clear();
-                Log.d("Masuk","reclist ga kosong");
-
+    public void getSurvey(final boolean refresh){
+        surveys.clear();
+        if(refresh){
+            sa.clear();
+            sa.notifyDataSetChanged();
+            Log.d("GetSurvey", "REFRESH!");
+            appendURL=AppConfig.URL_SURVEY_GET_LIST;
         }
-
-        req = new SurveriorRequest(Request.Method.GET, AppConfig.URL_SURVEY_GET_LIST, session,
+        Log.d("Timeline",appendURL);
+        req = new SurveriorRequest(Request.Method.GET, appendURL, session,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jObj = new JSONObject(response);
                             JSONArray jData = jObj.getJSONArray("data");
-                            for(int i = 0; i < jData.length(); i++){
+                            for (int i = 0; i < jData.length(); i++) {
                                 JSONObject surveyJSON = jData.getJSONObject(i);
-                                Log.d("title"+i,surveyJSON.getString("title"));
-                                Log.d("desc"+i,surveyJSON.getString("description"));
-                                surveys.add(new Survey(surveyJSON.getString("title"),
+                                Log.d("title" + i, surveyJSON.getString("title"));
+                                Log.d("desc" + i, surveyJSON.getString("description"));
+                                surveys.add(new Survey(surveyJSON.getInt("id"),
+                                        surveyJSON.getString("title"),
                                         surveyJSON.getString("description")));
                             }
+                            String nextPageURL = jObj.getString("next_page_url");
+                            if (nextPageURL != null) appendURL = nextPageURL;
+                            total = jObj.getInt("total");
+                            currentPage = jObj.getInt("current_page");
 
                         } catch (JSONException e) {
                             Log.d("JSONSurvey", e.getMessage());
                         }
+
                         Log.d("TotalSurvey", "" + surveys.size());
                         //stop refresh
+                        if (refresh) {
+                            sa.addAll(surveys);
+                            sa.setLinearLayoutManager(llm);
+                            sa.setRecyclerView(recList);
+                            recList.setAdapter(sa);
+                        } else if(!mSwipeRefreshLayout.isRefreshing()&& !afterRefreshed){
+                            sa.setProgressMore(false);
+                            sa.addItemMore(surveys);
+                        }
+                        sa.setTotalEntries(total);
+                        sa.setMoreLoading(false);
                         mSwipeRefreshLayout.setRefreshing(false);
-                        SurveyAdapter sa = new SurveyAdapter(surveys);
-                        recList.setAdapter(sa);
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
                 mSwipeRefreshLayout.setRefreshing(false);
             }
 
@@ -147,5 +180,25 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onRefresh() {
         getSurvey();
+        timelineHandler.removeCallbacksAndMessages(null);
+        afterRefreshed=true;
+        getSurvey(true);
+    }
+
+    @Override
+    public void onLoadMore() {
+        Log.d("MainActivity_", "onLoadMore");
+        if(!mSwipeRefreshLayout.isRefreshing()) {
+            afterRefreshed=false;
+            sa.setProgressMore(true);
+            timelineHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    surveys.clear();
+                    //sa.setProgressMore(false);
+                    getSurvey(false);
+                }
+            }, 2000);
+        }
     }
 }

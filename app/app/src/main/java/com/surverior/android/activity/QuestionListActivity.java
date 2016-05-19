@@ -166,7 +166,7 @@ public class QuestionListActivity extends AppCompatActivity {
             qa = new QuestionAdapter(survey.questions);
         }
         if(extras.getBoolean("NEW_QUESTION")){
-            Question question = (Question) extras.getParcelable("question");
+            Question question = extras.getParcelable("question");
             survey.questions.add(question);
 
             //for debugging

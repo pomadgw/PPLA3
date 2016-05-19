@@ -75,10 +75,9 @@ public class NewScaleTypeActivity extends AppCompatActivity {
                 String range = spinner.getSelectedItem().toString().trim();
                 if(!question.isEmpty() && !max.isEmpty() && !min.isEmpty() && !range.isEmpty()
                         && !(max.length()>25) && !(min.length()>25)) {
-                    ScaleQuestion scale = new ScaleQuestion(question,min,max,Integer.parseInt(range));
                     Intent i = new Intent(getApplication(), QuestionListActivity.class);
                     i.putExtra("NEW_QUESTION",true);
-                    i.putExtra("question",scale);
+                    i.putExtra("question",new ScaleQuestion(question,min,max,Integer.parseInt(range)));
                     i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(i);
                     finish();

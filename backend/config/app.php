@@ -159,6 +159,7 @@ return [
         LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class,
         LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
         Dingo\Api\Provider\LaravelServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
         App\Providers\OAuthServiceProvider::class,
 
@@ -210,7 +211,8 @@ return [
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory'=> Tymon\JWTAuth\Facades\JWTFactory::class,
         'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
-        
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
     ],
 
 ];
