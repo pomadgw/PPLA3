@@ -16,6 +16,11 @@ public class DropdownQuestion extends Question implements Parcelable{
         this.choices = choices;
     }
 
+    public DropdownQuestion(String questionDetail, int id, ArrayList<String> choices) {
+        super(questionDetail, "Checkbox", id);
+        this.choices = choices;
+    }
+
     protected DropdownQuestion(Parcel in) {
         super(in);
         choices = in.createStringArrayList();
