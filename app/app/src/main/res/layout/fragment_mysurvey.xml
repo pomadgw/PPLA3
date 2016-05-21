@@ -25,6 +25,7 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:src="@drawable/ic_menu_edit" />
+        android:src="@drawable/pencil"
+        android:tint="#ffffff" />
 
     </android.support.design.widget.CoordinatorLayout>
