@@ -179,7 +179,7 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
 
     @Override
     public void onRefresh() {
-        getSurvey();
+        getSurvey(true);
         timelineHandler.removeCallbacksAndMessages(null);
         afterRefreshed=true;
         getSurvey(true);
