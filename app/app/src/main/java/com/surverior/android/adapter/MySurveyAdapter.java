@@ -6,8 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.surverior.android.R;
 import com.surverior.android.helper.Survey;
@@ -48,7 +50,7 @@ public class MySurveyAdapter extends RecyclerView.Adapter<MySurveyAdapter.Survey
     }
 
 
-    public static class SurveyViewHolder extends RecyclerView.ViewHolder {
+    public static class SurveyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         protected TextView name;
         protected TextView description;
         protected ImageView download;
@@ -58,6 +60,13 @@ public class MySurveyAdapter extends RecyclerView.Adapter<MySurveyAdapter.Survey
             name =  (TextView) v.findViewById(R.id.cardlabel_name);
             description = (TextView)  v.findViewById(R.id.cardlabel_description);
             download = (ImageView) v.findViewById(R.id.download_survey);
+            Log.d("DIBUAT","OK");
+            download.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(final View view) {
+            Toast.makeText(view.getContext(),"Download Survey " + name.getText(),Toast.LENGTH_LONG).show();
         }
     }
 

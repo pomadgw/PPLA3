@@ -60,7 +60,6 @@ public class MySurveyFragment extends Fragment implements SwipeRefreshLayout.OnR
         surveys = new ArrayList<>();
         session = new SessionManager(getActivity().getApplicationContext());
 
-
     }
 
     @Override
