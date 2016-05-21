@@ -11,11 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Title"
-        android:id="@+id/question"/>
+        android:id="@+id/dropdown_question"/>
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/answer" />
+        android:id="@+id/dropdown_answer" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

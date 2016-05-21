@@ -12,8 +12,16 @@ import java.util.List;
  */
 public class Question implements Parcelable,ParentObject{
     protected List<Object> mChild;
+
+    public Question(String questionDetail, String type, int id) {
+        this.questionDetail = questionDetail;
+        this.type = type;
+        this.id = id;
+    }
+
     protected String questionDetail;
     protected String type;
+    protected int id;
 
     public Question() {
         this.questionDetail = "";
