@@ -163,13 +163,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             description = (TextView) v.findViewById(R.id.cardlabel_description);
 
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos = getAdapterPosition();
-                    //Toast.makeText(v.getContext(), DataProvider.JAVA_BOOKS[pos], Toast.LENGTH_SHORT).show();
-                }
-            });
+            v.setOnClickListener(this);
         }
 
         @Override

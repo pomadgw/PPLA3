@@ -41,6 +41,13 @@ public class ScaleQuestion extends Question {
         this.range = range;
     }
 
+    public ScaleQuestion(String questionDetail, int id, String minLabel, String maxLabel, int range) {
+        super(questionDetail, "Scale", id);
+        this.minLabel = minLabel;
+        this.maxLabel = maxLabel;
+        this.range = range;
+    }
+
     public ScaleQuestion(Parcel in) {
         super(in);
         this.minLabel = in.readString();

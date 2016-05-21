@@ -15,6 +15,11 @@ public class CheckboxQuestion extends Question{
         this.choices = choices;
     }
 
+    public CheckboxQuestion(String questionDetail, int id, ArrayList<String> choices) {
+        super(questionDetail, "Checkbox", id);
+        this.choices = choices;
+    }
+
     protected CheckboxQuestion(Parcel in) {
         super(in);
         choices = in.createStringArrayList();
