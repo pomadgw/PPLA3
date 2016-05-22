@@ -256,9 +256,9 @@ public class FillSurveyActivity extends AppCompatActivity {
             question.put(q);
         }
 
-        main.put("question", question);
+        main.put("answers", question);
         Log.d("JSONResponse", main.toString());
-        JsonObjectRequest jsonReq = new SurveriorJSONRequest(AppConfig.URL_ROOT+"/api/survey/"+id+"/fill", main, session, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonReq = new SurveriorJSONRequest(AppConfig.URL_ROOT+"/api/surveys/"+id+"/fill", main, session, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -268,7 +268,7 @@ public class FillSurveyActivity extends AppCompatActivity {
                 pDialog.hide();
                 Intent i = new Intent(getApplication(), MainActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra("FROM_QUESTION_LIST","OK");
+                i.putExtra("FROM_CRITERIA","OK");
 
                 startActivity(i);
                 finish();

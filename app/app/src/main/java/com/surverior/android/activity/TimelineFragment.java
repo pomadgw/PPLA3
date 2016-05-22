@@ -54,6 +54,7 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
     private int total=0;
     private int currentPage;
     private boolean afterRefreshed;
+    private boolean isMoreLoading;
 
     private Handler timelineHandler;
 
@@ -110,9 +111,9 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
         surveys.clear();
         if(refresh){
             sa.clear();
-            sa.notifyDataSetChanged();
             Log.d("GetSurvey", "REFRESH!");
             appendURL=AppConfig.URL_SURVEY_GET_LIST;
+            sa.setTotalEntries(0);
         }
         Log.d("Timeline",appendURL);
         req = new SurveriorRequest(Request.Method.GET, appendURL, session,
@@ -122,6 +123,10 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
                         try {
                             JSONObject jObj = new JSONObject(response);
                             JSONArray jData = jObj.getJSONArray("data");
+                            if(refresh){
+                                surveys.clear();
+                                sa.setTotalEntries(0);
+                            }
                             for (int i = 0; i < jData.length(); i++) {
                                 JSONObject surveyJSON = jData.getJSONObject(i);
                                 Log.d("title" + i, surveyJSON.getString("title"));
@@ -142,13 +147,18 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
                         Log.d("TotalSurvey", "" + surveys.size());
                         //stop refresh
                         if (refresh) {
+                            sa.clear();
+                            //sa.notifyDataSetChanged();
                             sa.addAll(surveys);
+                            sa.notifyDataSetChanged();
                             sa.setLinearLayoutManager(llm);
                             sa.setRecyclerView(recList);
                             recList.setAdapter(sa);
                         } else if(!mSwipeRefreshLayout.isRefreshing()&& !afterRefreshed){
                             sa.setProgressMore(false);
                             sa.addItemMore(surveys);
+                            sa.notifyDataSetChanged();
+                            isMoreLoading=false;
                         }
                         sa.setTotalEntries(total);
                         sa.setMoreLoading(false);
@@ -179,7 +189,6 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
 
     @Override
     public void onRefresh() {
-        getSurvey(true);
         timelineHandler.removeCallbacksAndMessages(null);
         afterRefreshed=true;
         getSurvey(true);
@@ -190,11 +199,11 @@ public class TimelineFragment extends Fragment implements SurveyAdapter.OnLoadMo
         Log.d("MainActivity_", "onLoadMore");
         if(!mSwipeRefreshLayout.isRefreshing()) {
             afterRefreshed=false;
+            isMoreLoading=true;
             sa.setProgressMore(true);
             timelineHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    surveys.clear();
                     //sa.setProgressMore(false);
                     getSurvey(false);
                 }
