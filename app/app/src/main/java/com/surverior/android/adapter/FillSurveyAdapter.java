@@ -2,6 +2,7 @@ package com.surverior.android.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,12 +47,16 @@ public class FillSurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public int getItemViewType(int position) {
         String type = questionList.get(position).getType();
         if (type.equals("Text")) {
+            Log.d("getItemViewType","Masuk tipe text");
             return VIEW_TEXT;
         } else if (type.equals("Dropdown")) {
+            Log.d("getItemViewType","Masuk tipe dropdown");
             return VIEW_DROPDOWN;
         } else if (type.equals("Checkbox")) {
+            Log.d("getItemViewType","Masuk tipe checkbox");
             return VIEW_CHECKBOX;
         } else {
+            Log.d("getItemViewType","Masuk tipe scale");
             return VIEW_SCALE;
         }
     }
