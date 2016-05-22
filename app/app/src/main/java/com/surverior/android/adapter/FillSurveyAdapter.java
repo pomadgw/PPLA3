@@ -31,6 +31,8 @@ public class FillSurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final int VIEW_DROPDOWN = 1;
     private final int VIEW_CHECKBOX = 2;
     private final int VIEW_SCALE = 3;
+    private final int FIRST_INPUT_ID = 100;
+    private int id = 0;
 
     private List<Question> questionList;
 
@@ -77,7 +79,8 @@ public class FillSurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(TextViewHolder tvh, int i) {
         Question q = questionList.get(i);
         tvh.question.setText(q.getQuestionDetail());
-        //tvh.answer.setId();
+        id++;
+        tvh.answer.setId(FIRST_INPUT_ID+id);
     }
 
     public void onBindViewHolder(DropdownViewHolder dvh, int i) {
@@ -87,7 +90,8 @@ public class FillSurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ArrayList<String> choices = q.getChoices();
         dvh.spinnerArrayAdapter.addAll(choices);
         dvh.answer.setAdapter(dvh.spinnerArrayAdapter);
-        //dvh.answer.setId();
+        id++;
+        dvh.answer.setId(FIRST_INPUT_ID+id);
     }
 
     public void onBindViewHolder(CheckboxViewHolder cvh, int i) {
@@ -102,7 +106,8 @@ public class FillSurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
             c.setLayoutParams(layoutParams);
             c.setText(choices.get(j));
-            //c.setId(hehehe);
+            id++;
+            c.setId(FIRST_INPUT_ID+id);
         }
     }
 
@@ -123,7 +128,8 @@ public class FillSurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         svh.spinnerArrayAdapter.addAll(scales);
         svh.answer.setAdapter(svh.spinnerArrayAdapter);
-        //svh.answer.setId();
+        id++;
+        svh.answer.setId(FIRST_INPUT_ID+id);
     }
 
     @Override

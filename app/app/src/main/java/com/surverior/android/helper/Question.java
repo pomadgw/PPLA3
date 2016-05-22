@@ -92,4 +92,7 @@ public class Question implements Parcelable,ParentObject{
         mChild = list;
     }
 
+    public int getID() {
+        return id;
+    }
 }
