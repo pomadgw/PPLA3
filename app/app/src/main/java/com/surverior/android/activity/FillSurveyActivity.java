@@ -223,20 +223,26 @@ public class FillSurveyActivity extends AppCompatActivity {
             switch (type){
                 case "Text":{
                     EditText et = (EditText) findViewById(inputID);
-                    String temp = et.getText().toString().trim();
-                    q.put("answer",temp);
+                    if (et != null){
+                        String temp = et.getText().toString().trim();
+                        q.put("answer", temp);
+                    }
                 }
                 break;
                 case "Dropdown":{
                     Spinner sp = (Spinner) findViewById(inputID);
-                    String temp = sp.getSelectedItem().toString().trim();
-                    q.put("answer",temp);
+                    if (sp != null){
+                        String temp = sp.getSelectedItem().toString().trim();
+                        q.put("answer",temp);
+                    }
                 }
                     break;
                 case "Scale":{
                     Spinner sp = (Spinner) findViewById(inputID);
-                    int temp = sp.getSelectedItemPosition()+1;
-                    q.put("answer",temp+"");
+                    if (sp != null){
+                        int temp = sp.getSelectedItemPosition()+1;
+                        q.put("answer",temp+"");
+                    }
                 }
                     break;
                 case "Checkbox":{
@@ -315,8 +321,10 @@ public class FillSurveyActivity extends AppCompatActivity {
             switch (type){
                 case "Text":{
                     EditText et = (EditText) findViewById(id);
-                    String temp = et.getText().toString().trim();
-                    if(temp.isEmpty()) return false;
+                    if (et != null) {
+                        String temp = et.getText().toString().trim();
+                        if (temp.isEmpty()) return false;
+                    }
                 }
                     break;
                 case "Option":
