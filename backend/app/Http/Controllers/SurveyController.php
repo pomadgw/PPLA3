@@ -151,6 +151,12 @@ class SurveyController extends Controller
                     $q->where('surveys.age_min', '<=', $age)
                     ->where('surveys.age_max', '>=', $age);
                 });
+            })->whereNotExists(function($q) use ($user) {
+                $q->select(DB::raw('*'))
+                  ->from('answers')
+                  ->join('questions', 'answers.question_id', '=', 'questions.id')
+                  ->where('answers.user_id', $user->id)
+                  ->whereRaw('surveys.id = questions.survey_id');
             })
             ->paginate(10);
 
