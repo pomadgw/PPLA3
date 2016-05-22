@@ -7,6 +7,8 @@ import android.content.pm.PackageInstaller;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +27,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.surverior.android.R;
+import com.surverior.android.adapter.FillSurveyAdapter;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
 import com.surverior.android.helper.CheckboxQuestion;
@@ -52,6 +55,7 @@ public class FillSurveyActivity extends AppCompatActivity {
     private Bundle extras;
     private int id;
     private JSONObject jObj;
+    private FillSurveyAdapter fsa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,8 @@ public class FillSurveyActivity extends AppCompatActivity {
 
         //Getting the desired survey
         getSurveyJSON();
+
+        //Inisialisasi RecycleView
     }
 
     private void getSurveyJSON(){
@@ -112,7 +118,7 @@ public class FillSurveyActivity extends AppCompatActivity {
                                         for(int j = 0;j<jsonOption.length();j++){
                                             choices.add(jsonOption.getString(j));
                                         }
-                                        survey.questions.add(new CheckboxQuestion(temp.getString("question"),temp.getInt("id"),choices));
+                                        survey.questions.add(new DropdownQuestion(temp.getString("question"),temp.getInt("id"),choices));
                                         break;
                                 }
                             }
@@ -120,99 +126,106 @@ public class FillSurveyActivity extends AppCompatActivity {
                             // punya objek survey yg datanya dari getsurveyjson
                             //Cuma boong-boongan doang
                             //survey = new Survey("hehe","hehe");
-                            ArrayList<Question> qs = survey.getQuestions();
+                            fsa = new FillSurveyAdapter(survey.questions);
+                            RecyclerView recView = (RecyclerView) findViewById(R.id.fill_layout);
+                            recView.setHasFixedSize(true);
+                            LinearLayoutManager llm = new LinearLayoutManager(getApplication());
+                            llm.setOrientation(LinearLayoutManager.VERTICAL);
+                            recView.setLayoutManager(llm);
+                            recView.setAdapter(fsa);
+
 
                             //Set layout for generating qs
                             //Still probably on development
                             //TODO: Bambang fix generate view
-                            LinearLayout ll = (LinearLayout) findViewById(R.id.fill_layout);
-                            LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                            //generate view
-                            for (int i = 0; i < qs.size(); i++) {
-                                Question currentQ = qs.get(i);
-                                String type = currentQ.getType();
-                                switch (type){
-                                    case "Text": {
-                                        Log.d("Text","Generating View Text");
-                                        View v = inflater.inflate(R.layout.layout_text_type, ll);
-                                        TextView text = (TextView) v.findViewById(R.id.text_question);
-                                        EditText et = (EditText) v.findViewById(R.id.text_answer);
-                                        text.setText(currentQ.getQuestionDetail());
-                                        //et.setId(hehehe);
-                                        ll.addView(v);
-                                        Log.d("Text", "DONE!");
-                                        break;
-                                    }
-                                    case "Checkbox": {
-                                        Log.d("Checkbox","Generating View Checkbox");
-                                        CheckboxQuestion cq = (CheckboxQuestion) currentQ;
-                                        ArrayList<String> choices = cq.getChoices();
-
-                                        View v = inflater.inflate(R.layout.layout_text_type, ll);
-                                        TextView text = (TextView) v.findViewById(R.id.checkbox_question);
-                                        LinearLayout checkboxLayout = (LinearLayout) v.findViewById(R.id.checkbox_answer);
-
-                                        text.setText(currentQ.getQuestionDetail());
-                                        for (int j = 0; j < choices.size(); j++) {
-                                            CheckBox c = new CheckBox(getApplicationContext());
-                                            checkboxLayout.addView(c);
-                                            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) c.getLayoutParams();
-                                            layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                                            c.setLayoutParams(layoutParams);
-                                            c.setText(choices.get(j));
-                                            //c.setId(hehehe);
-                                        }
-
-                                        ll.addView(v);
-                                        Log.d("Checkbox", "DONE!");
-                                        break;
-                                    }
-                                    case "Dropdown": {
-                                        Log.d("Dropdown", "Generating View Dropdown");
-                                        DropdownQuestion dq = (DropdownQuestion) currentQ;
-                                        ArrayList<String> choices = dq.getChoices();
-
-                                        View v = inflater.inflate(R.layout.layout_text_type, ll);
-                                        TextView text = (TextView) v.findViewById(R.id.dropdown_question);
-                                        Spinner s = (Spinner) v.findViewById(R.id.dropdown_answer);
-                                        //s.setId(hehehe);
-
-                                        text.setText(currentQ.getQuestionDetail());
-                                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_spinner_item, choices); //selected item will look like a spinner set from XML
-                                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                        s.setAdapter(spinnerArrayAdapter);
-                                        ll.addView(v);
-                                        Log.d("Dropdown", "DONE!");
-                                        break;
-                                    }
-                                    case "Scale": {
-                                        Log.d("Scale", "Generating View Scale");
-                                        ScaleQuestion sq = (ScaleQuestion) currentQ;
-                                        ArrayList<String> scales = new ArrayList<>();
-                                        for (int j = 1; j <= sq.getRange(); j++) {
-                                            if (j == 0) {
-                                                scales.add(j + " - " + sq.getMinLabel());
-                                            }else if (j == sq.getRange()) {
-                                                scales.add(j + " - " + sq.getMaxLabel());
-                                            }else{
-                                                scales.add(""+j);
-                                            }
-                                        }
-                                        View v = inflater.inflate(R.layout.layout_text_type, ll);
-                                        TextView text = (TextView) v.findViewById(R.id.scale_question);
-                                        Spinner s = (Spinner) v.findViewById(R.id.scale_answer);
-                                        //s.setId(hehehe);
-
-                                        text.setText(currentQ.getQuestionDetail());
-                                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_spinner_item, scales); //selected item will look like a spinner set from XML
-                                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                        s.setAdapter(spinnerArrayAdapter);
-                                        ll.addView(v);
-                                        Log.d("Scale", "DONE!");
-                                        break;
-                                    }
-                                }
-                            }
+//                            LinearLayout ll = (LinearLayout) findViewById(R.id.fill_layout);
+//                            LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                            //generate view
+//                            for (int i = 0; i < qs.size(); i++) {
+//                                Question currentQ = qs.get(i);
+//                                String type = currentQ.getType();
+//                                switch (type){
+//                                    case "Text": {
+//                                        Log.d("Text","Generating View Text");
+//                                        View v = inflater.inflate(R.layout.layout_text_type, ll);
+//                                        TextView text = (TextView) v.findViewById(R.id.text_question);
+//                                        EditText et = (EditText) v.findViewById(R.id.text_answer);
+//                                        text.setText(currentQ.getQuestionDetail());
+//                                        //et.setId(hehehe);
+//                                        ll.addView(v);
+//                                        Log.d("Text", "DONE!");
+//                                        break;
+//                                    }
+//                                    case "Checkbox": {
+//                                        Log.d("Checkbox","Generating View Checkbox");
+//                                        CheckboxQuestion cq = (CheckboxQuestion) currentQ;
+//                                        ArrayList<String> choices = cq.getChoices();
+//
+//                                        View v = inflater.inflate(R.layout.layout_text_type, ll);
+//                                        TextView text = (TextView) v.findViewById(R.id.checkbox_question);
+//                                        LinearLayout checkboxLayout = (LinearLayout) v.findViewById(R.id.checkbox_answer);
+//
+//                                        text.setText(currentQ.getQuestionDetail());
+//                                        for (int j = 0; j < choices.size(); j++) {
+//                                            CheckBox c = new CheckBox(getApplicationContext());
+//                                            checkboxLayout.addView(c);
+//                                            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) c.getLayoutParams();
+//                                            layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+//                                            c.setLayoutParams(layoutParams);
+//                                            c.setText(choices.get(j));
+//                                            //c.setId(hehehe);
+//                                        }
+//
+//                                        ll.addView(v);
+//                                        Log.d("Checkbox", "DONE!");
+//                                        break;
+//                                    }
+//                                    case "Dropdown": {
+//                                        Log.d("Dropdown", "Generating View Dropdown");
+//                                        DropdownQuestion dq = (DropdownQuestion) currentQ;
+//                                        ArrayList<String> choices = dq.getChoices();
+//
+//                                        View v = inflater.inflate(R.layout.layout_text_type, ll);
+//                                        TextView text = (TextView) v.findViewById(R.id.dropdown_question);
+//                                        Spinner s = (Spinner) v.findViewById(R.id.dropdown_answer);
+//                                        //s.setId(hehehe);
+//
+//                                        text.setText(currentQ.getQuestionDetail());
+//                                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_spinner_item, choices); //selected item will look like a spinner set from XML
+//                                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                                        s.setAdapter(spinnerArrayAdapter);
+//                                        ll.addView(v);
+//                                        Log.d("Dropdown", "DONE!");
+//                                        break;
+//                                    }
+//                                    case "Scale": {
+//                                        Log.d("Scale", "Generating View Scale");
+//                                        ScaleQuestion sq = (ScaleQuestion) currentQ;
+//                                        ArrayList<String> scales = new ArrayList<>();
+//                                        for (int j = 1; j <= sq.getRange(); j++) {
+//                                            if (j == 0) {
+//                                                scales.add(j + " - " + sq.getMinLabel());
+//                                            }else if (j == sq.getRange()) {
+//                                                scales.add(j + " - " + sq.getMaxLabel());
+//                                            }else{
+//                                                scales.add(""+j);
+//                                            }
+//                                        }
+//                                        View v = inflater.inflate(R.layout.layout_text_type, ll);
+//                                        TextView text = (TextView) v.findViewById(R.id.scale_question);
+//                                        Spinner s = (Spinner) v.findViewById(R.id.scale_answer);
+//                                        //s.setId(hehehe);
+//
+//                                        text.setText(currentQ.getQuestionDetail());
+//                                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_spinner_item, scales); //selected item will look like a spinner set from XML
+//                                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                                        s.setAdapter(spinnerArrayAdapter);
+//                                        ll.addView(v);
+//                                        Log.d("Scale", "DONE!");
+//                                        break;
+//                                    }
+//                                }
+//                            }
                         } catch (JSONException e) {
                             Log.d("JSONSurvey", e.getMessage());
                         }
