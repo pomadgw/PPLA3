@@ -113,6 +113,7 @@ public class NewDropdownTypeActivity extends AppCompatActivity {
     }
     private boolean isChoicesValid(ArrayList<String> choices){
         boolean result = true;
+        if (choices.size()<2) return false;
         for(int i=0; i < choices.size();i++){
             if(choices.get(i).isEmpty()) return false;
         }
