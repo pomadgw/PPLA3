@@ -117,7 +117,8 @@ public class MySurveyFragment extends Fragment implements SwipeRefreshLayout.OnR
                             JSONArray jData = jObj.getJSONArray("data");
                             for(int i = 0; i < jData.length(); i++){
                                 JSONObject surveyJSON = jData.getJSONObject(i);
-                                surveys.add(new Survey(surveyJSON.getString("title"),
+                                surveys.add(new Survey(surveyJSON.getInt("id"),
+                                        surveyJSON.getString("title"),
                                         surveyJSON.getString("description")));
                             }
                         } catch (JSONException e) {

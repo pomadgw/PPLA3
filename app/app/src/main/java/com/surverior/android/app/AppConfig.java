@@ -27,5 +27,7 @@ public class AppConfig {
 
 	public static String URL_SURVEY_GET_QUESTION = URL_ROOT + "/api/surveys/";
 
+	public static String URL_DOWNLOAD_SURVEY = URL_ROOT + "/api/surveys/";
+
 	public static String JWT_SECRET = "yGZw4lv9pDXWcptjEXU9ozHctQe7X5Rv";
 }
