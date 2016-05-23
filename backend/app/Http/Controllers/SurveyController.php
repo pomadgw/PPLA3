@@ -465,7 +465,7 @@ class SurveyController extends Controller
             throw new NotFoundHttpException("Survey in question doesn't exists");
         }
 
-        $survey = Survey::find($surveyId)->first();
+        $survey = Survey::find($surveyId);
 
         if ($survey->user_id != $user->id) {
             return $this->response->withArray(['message' => "Your cannot access other user's surveys!", "status_code" => 403], 403);
