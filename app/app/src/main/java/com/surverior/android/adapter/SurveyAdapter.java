@@ -35,7 +35,6 @@ public class SurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private final int VIEW_PROG = 0;
     private List<Survey> surveyList;
     private int totalEntries;
-    private static Toast t;
 
     private OnLoadMoreListener onLoadMoreListener;
     private LinearLayoutManager mLinearLayoutManager;

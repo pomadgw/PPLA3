@@ -31,7 +31,6 @@ import com.surverior.android.helper.SurveriorRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class ProfileFragment extends Fragment {
 
     private TextView name;
@@ -62,7 +61,6 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -133,28 +131,7 @@ public class ProfileFragment extends Fragment {
         super.onDetach();
     }
 
-    public void setImage(String idx) {
-        String url = AppConfig.URL_PHOTO + "/" + idx + "/photo.jpg";
-
-        ImageRequest request = new ImageRequest(url,
-                new Response.Listener<Bitmap>() {
-
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        image.setImageBitmap(bitmap);
-                    }
-                }, 0, 0, null,
-                new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-        // Access the RequestQueue.
-        AppController.getInstance().addToRequestQueue(request);
-    }
-
     public void setProfile(){
-
         final ProgressDialog loading = ProgressDialog.show(getContext(),"", "Please wait...", false, false);
         //set profile
         SurveriorRequest req;
@@ -200,6 +177,24 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    public void setImage(String idx) {
+        String url = AppConfig.URL_PHOTO + "/" + idx + "/photo.jpg";
 
+        ImageRequest request = new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        image.setImageBitmap(bitmap);
+                    }
+                }, 0, 0, null,
+                new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        // Access the RequestQueue.
+        AppController.getInstance().addToRequestQueue(request);
+    }
 
 }
