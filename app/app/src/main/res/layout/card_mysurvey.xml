@@ -41,15 +41,13 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_marginRight="20px"
-        android:layout_marginTop="20px"
-        android:layout_width="80px"
-        android:layout_height="100px"
         android:id="@+id/download_survey"
-        android:layout_gravity="right"
+        android:layout_gravity="center|right"
         android:clickable="true"
         android:src="@drawable/ic_get_app_black_24dp"
         android:tint="@color/icons"
-        />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"/>
 
 </android.support.v7.widget.CardView>
