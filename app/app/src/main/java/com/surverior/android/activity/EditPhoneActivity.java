@@ -60,7 +60,10 @@ public class EditPhoneActivity extends AppCompatActivity{
 
         Intent intent = getIntent();
         String dataPhone = intent.getStringExtra(ProfileFragment.DATA_NAMA);
-        inputPhone.setText(dataPhone);
+        if (dataPhone.equals("Enter your phone"))
+            inputPhone.setHint(dataPhone);
+        else
+            inputPhone.setText(dataPhone);
 
         // session manager
         session = new SessionManager(getApplicationContext());

@@ -1,7 +1,10 @@
 package com.surverior.android.adapter;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.NotificationCompat;
@@ -103,16 +106,18 @@ public class MySurveyAdapter extends RecyclerView.Adapter<MySurveyAdapter.Survey
             mBuilder.setContentText("Download in progress");
             mBuilder.setSmallIcon(R.drawable.ic_get_app_black_24dp);
             String url = AppConfig.URL_DOWNLOAD_SURVEY;
-            new DownloadTask(name.getText().toString()).execute(url+id+"/answers/xls?token="+token);
+            new DownloadTask(name.getText().toString(),c.getApplicationContext()).execute(url+id+"/answers/xls?token="+token);
 
         }
     }
 
         private  class DownloadTask extends AsyncTask<String, Integer, String> {
             private Context mContext;
+            private PendingIntent pIntent;
             private String name;
-            public DownloadTask(String name){
+            public DownloadTask(String name, Context context){
                 this.name = name;
+                this.mContext = context;
             }
             @Override
             protected String doInBackground(String... sUrl) {
@@ -133,6 +138,12 @@ public class MySurveyAdapter extends RecyclerView.Adapter<MySurveyAdapter.Survey
                     }
                     File file = new File(sdcard, "Download/"+namaFile+".xls");
                     FileOutputStream fileOutput = new FileOutputStream(file);
+
+                    Intent intent = new Intent();
+                    intent.setAction(android.content.Intent.ACTION_VIEW);
+                    intent.setData(Uri.fromFile(file));
+
+                    pIntent = PendingIntent.getActivity(this.mContext,0,intent,0);
 
                     byte[] buffer = new byte[1024];
                     int bufferLength = 0;
@@ -161,7 +172,6 @@ public class MySurveyAdapter extends RecyclerView.Adapter<MySurveyAdapter.Survey
                 @Override
                 protected void onPreExecute() {
                     super.onPreExecute();
-
                     mBuilder.setProgress(100, 0, false);
                     mNotifyManager.notify(1, mBuilder.build());
                 }
@@ -173,7 +183,7 @@ public class MySurveyAdapter extends RecyclerView.Adapter<MySurveyAdapter.Survey
                     mBuilder.setContentText("Download complete");
                     // Removes the progress bar
                     mBuilder.setProgress(0, 0, false);
-                    mNotifyManager.notify(1, mBuilder.build());
+                    mNotifyManager.notify(1,  mBuilder.setContentIntent(pIntent).build());
 
                 }
         }
