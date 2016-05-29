@@ -168,8 +168,8 @@ public class QuestionListActivity extends AppCompatActivity {
         if(extras.getBoolean("NEW_QUESTION")){
             Question question = extras.getParcelable("question");
             survey.questions.add(question);
-            qa.notifyItemChanged(survey.questions.size());
-
+            //qa.notifyItemChanged(survey.questions.size());
+            qa.notifyDataSetChanged();
             //for debugging
             qa.logging();
             //qa.add(question);
