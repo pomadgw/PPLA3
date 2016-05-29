@@ -50,6 +50,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
         Question q = questionList.get(i);
         questionViewHolder.question.setText(q.getQuestionDetail());
         questionViewHolder.type.setText(q.getType());
+        questionViewHolder.option.setText("");
         switch (q.getType()){
             case "Text":
             {
