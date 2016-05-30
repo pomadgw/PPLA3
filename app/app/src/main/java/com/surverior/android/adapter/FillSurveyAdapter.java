@@ -80,6 +80,7 @@ public class FillSurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         Question q = questionList.get(i);
         tvh.question.setText(q.getQuestionDetail());
         id++;
+        Log.d("TextType",FIRST_INPUT_ID+id+"");
         tvh.answer.setId(FIRST_INPUT_ID+id);
     }
 
@@ -91,6 +92,7 @@ public class FillSurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         dvh.spinnerArrayAdapter.addAll(choices);
         dvh.answer.setAdapter(dvh.spinnerArrayAdapter);
         id++;
+        Log.d("DropdownType",FIRST_INPUT_ID+id+"");
         dvh.answer.setId(FIRST_INPUT_ID+id);
     }
 
@@ -107,6 +109,7 @@ public class FillSurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             c.setLayoutParams(layoutParams);
             c.setText(choices.get(j));
             id++;
+            Log.d("CheckBoxType",FIRST_INPUT_ID+id+"");
             c.setId(FIRST_INPUT_ID+id);
         }
     }
@@ -129,6 +132,7 @@ public class FillSurveyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         svh.spinnerArrayAdapter.addAll(scales);
         svh.answer.setAdapter(svh.spinnerArrayAdapter);
         id++;
+        Log.d("ScaleType",FIRST_INPUT_ID+id+"");
         svh.answer.setId(FIRST_INPUT_ID+id);
     }
 
