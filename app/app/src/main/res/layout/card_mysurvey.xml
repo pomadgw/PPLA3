@@ -21,33 +21,45 @@
             android:layout_height="wrap_content"
             android:text="aaaaaaaaaaaaaaaaaa"
             android:textSize="16sp"
-            android:paddingTop="12dp"
+            android:paddingTop="6dp"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
+            android:paddingRight="16dp"
+            android:paddingBottom="4dp"
+            android:textStyle="bold"/>
 
         <TextView
             android:text="bbbbbbbbbbbbbbbbb"
             android:id="@+id/cardlabel_description"
-            android:fontFamily="sans-serif-thin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:paddingTop="8dp"
-            android:layout_marginBottom="4dp" />
+            android:paddingTop="4dp"
+            android:paddingBottom="6dp" />
+
+        <TextView
+            android:text="DOWNLOAD RESULT"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/download_survey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="6dp"
+            android:layout_marginBottom="4dp"
+            android:paddingBottom="12dp" />
 
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/download_survey"
-        android:layout_gravity="center|right"
-        android:clickable="true"
-        android:src="@drawable/ic_get_app_black_24dp"
-        android:tint="@color/icons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="4dp"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/download_survey"-->
+        <!--android:layout_gravity="center|right"-->
+        <!--android:clickable="true"-->
+        <!--android:src="@drawable/ic_get_app_black_24dp"-->
+        <!--android:tint="@color/icons"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginRight="4dp"/>-->
 
 </android.support.v7.widget.CardView>
