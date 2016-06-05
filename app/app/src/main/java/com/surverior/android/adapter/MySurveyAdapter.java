@@ -53,7 +53,7 @@ public class MySurveyAdapter extends RecyclerView.Adapter<MySurveyAdapter.Survey
         Survey q = surveyList.get(i);
         surveyViewHolder.name.setText(q.getName());
         surveyViewHolder.description.setText(q.getDescription());
-        surveyViewHolder.download.setImageResource(R.drawable.ic_get_app_black_24dp);
+//        surveyViewHolder.download.setImageResource(R.drawable.ic_get_app_black_24dp);
         surveyViewHolder.id = q.getID();
 
     }
@@ -71,14 +71,14 @@ public class MySurveyAdapter extends RecyclerView.Adapter<MySurveyAdapter.Survey
     public class SurveyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         protected TextView name;
         protected TextView description;
-        protected ImageView download;
+        protected TextView download;
         protected int id;
 
         public SurveyViewHolder(View v) {
             super(v);
             name =  (TextView) v.findViewById(R.id.cardlabel_name);
             description = (TextView)  v.findViewById(R.id.cardlabel_description);
-            download = (ImageView) v.findViewById(R.id.download_survey);
+            download = (TextView) v.findViewById(R.id.download_survey);
             download.setOnClickListener(this);
             //take token
             SessionManager session = new SessionManager(v.getContext());
