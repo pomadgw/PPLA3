@@ -316,10 +316,12 @@ public class FillSurveyActivity extends AppCompatActivity {
         int id = FIRST_INPUT_ID;
         for(int i = 0; i < size; i++){
             id++;
+            Log.d("isAllFilled","Checking id " + id);
             Question question = survey.questions.get(i);
             String type = question.getType();
             switch (type){
                 case "Text":{
+                    Log.d("isAllFilled","Text");
                     EditText et = (EditText) findViewById(id);
                     if (et != null) {
                         String temp = et.getText().toString().trim();
@@ -327,19 +329,22 @@ public class FillSurveyActivity extends AppCompatActivity {
                     }
                 }
                     break;
-                case "Option":
+                case "Dropdown":
+                    Log.d("isAllFilled","Dropdown");
                     break;
                 case "Scale":
+                    Log.d("isAllFilled","Scale");
                     break;
                 case "Checkbox":{
+                    Log.d("isAllFilled","Checkbox");
                     CheckboxQuestion cq = (CheckboxQuestion) question;
                     boolean checked = false;
                     for(int j = 0; j < cq.getChoices().size();j++){
                         if(j>0) id++;
+                        Log.d("isAllFilled","Checking id " + id);
                         CheckBox cb = (CheckBox) findViewById(id);
                         if(cb.isChecked()){
                             checked = true;
-                            break;
                         }
                     }
                     if(!checked) return false;
