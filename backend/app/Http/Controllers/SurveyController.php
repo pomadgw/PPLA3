@@ -87,7 +87,7 @@ class SurveyController extends Controller
             SurveyController::createQuestion($newSurvey->id, $question);
         }
 
-        return $this->response->withArray(['message' => "Sukses menambah survey", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Success add survey", "status_code" => 200], 200);
     }
 
     public function getSurvey($id) {
@@ -95,7 +95,7 @@ class SurveyController extends Controller
         if ($ret)
             return $ret->toArray();
         else
-            return $this->response->error('Survey yang diminta tidak ada', 404);
+            return $this->response->error('Survey you asked doesn\'t exists', 404);
     }
 
     public function getAllSurveys()
@@ -251,7 +251,7 @@ class SurveyController extends Controller
             }
         }
 
-        return $this->response->withArray(['message' => "Sukses menambah pertanyaan", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Success add questions", "status_code" => 200], 200);
     }
 
     public function addOptions($id, $options) {
@@ -283,7 +283,7 @@ class SurveyController extends Controller
 
         $survey->delete();
 
-        return $this->response->withArray(['message' => "Sukses menghapus survey", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Success delete survey", "status_code" => 200], 200);
     }
 
     public function deleteQuestion($surveyId, $questionId) {
@@ -308,7 +308,7 @@ class SurveyController extends Controller
 
         $question->delete();
 
-        return $this->response->withArray(['message' => "Sukses menghapus pertanyaan", "status_code" => 200], 200);
+        return $this->response->withArray(['message' => "Success delete question", "status_code" => 200], 200);
     }
 
     public function deleteCheckbox($questionId)
@@ -340,7 +340,7 @@ class SurveyController extends Controller
             }
 
             if (Answer::where('user_id', $user_id)->where('question_id', $qid)->count() > 0) {
-                return $this->response->withArray(['message' => "Cannot fill survey you have already filled!", "status_code" => 403], 403);
+                return $this->response->withArray(['message' => "You cannot fill survey you have already filled!", "status_code" => 403], 403);
             }
         }
 
@@ -444,10 +444,14 @@ class SurveyController extends Controller
         foreach($question_label as $q_id => $q) {
             $tmp = [$q];
             foreach($users_answered as $user_id) {
-                if (is_array($csvholder[$q_id][$user_id])) {
-                    $tmp[] = implode(';', $csvholder[$q_id][$user_id]);
+                if (array_key_exists($user_id, $csvholder[$q_id])) {
+                    if (is_array($csvholder[$q_id][$user_id])) {
+                        $tmp[] = implode(';', $csvholder[$q_id][$user_id]);
+                    } else {
+                        $tmp[] = $csvholder[$q_id][$user_id];
+                    }
                 } else {
-                    $tmp[] = $csvholder[$q_id][$user_id];
+                    $tmp[] = "";
                 }
             }
             $realcsv[] = $tmp;
@@ -465,10 +469,10 @@ class SurveyController extends Controller
             throw new NotFoundHttpException("Survey in question doesn't exists");
         }
 
-        $survey = Survey::find($surveyId)->first();
+        $survey = Survey::find($surveyId);
 
         if ($survey->user_id != $user->id) {
-            return $this->response->withArray(['message' => "Cannot access other survey!", "status_code" => 403], 403);
+            return $this->response->withArray(['message' => "Your cannot access other user's surveys!", "status_code" => 403], 403);
         }
 
         $realcsv = SurveyController::prepareForView($survey);
