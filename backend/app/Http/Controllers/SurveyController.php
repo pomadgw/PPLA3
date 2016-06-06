@@ -444,10 +444,14 @@ class SurveyController extends Controller
         foreach($question_label as $q_id => $q) {
             $tmp = [$q];
             foreach($users_answered as $user_id) {
-                if (is_array($csvholder[$q_id][$user_id])) {
-                    $tmp[] = implode(';', $csvholder[$q_id][$user_id]);
+                if (array_key_exists($user_id, $csvholder[$q_id])) {
+                    if (is_array($csvholder[$q_id][$user_id])) {
+                        $tmp[] = implode(';', $csvholder[$q_id][$user_id]);
+                    } else {
+                        $tmp[] = $csvholder[$q_id][$user_id];
+                    }
                 } else {
-                    $tmp[] = $csvholder[$q_id][$user_id];
+                    $tmp[] = "";
                 }
             }
             $realcsv[] = $tmp;
