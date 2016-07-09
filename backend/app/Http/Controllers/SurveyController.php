@@ -158,6 +158,7 @@ class SurveyController extends Controller
                   ->where('answers.user_id', $user->id)
                   ->whereRaw('surveys.id = questions.survey_id');
             })
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return $surveys;
