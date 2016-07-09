@@ -227,10 +227,12 @@ class SurveyController extends Controller
                 break;
             case "scale":
                 $specific = new QuestionScale;
-                $specific->min_val = $request['args']['min_val'];
-                $specific->max_val = $request['args']['max_val'];
-                $specific->min_label = $request['args']['min_label'];
-                $specific->max_label = $request['args']['max_label'];
+                $specific->min_val = $request['args']['min']['val'];
+                $specific->max_val = $request['args']['max']['val'];
+                $specific->min_label = $request['args']['min']['label'];
+                $specific->max_label = $request['args']['max']['label'];
+                $specific->min_desc = $request['args']['min']['description'];
+                $specific->max_desc = $request['args']['max']['description'];
                 break;
             default:
                 break;
