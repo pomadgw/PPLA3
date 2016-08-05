@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.surverior.android.activity.ProfileFragment"
-    android:background="@color/material_grey_300">
+    tools:context="com.surverior.android.activity.ProfileFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,10 +14,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:elevation="4dp"
         android:padding="4dp"
-        android:background="@color/white"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="8dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -34,10 +31,10 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="4dp"
+            android:layout_height="match_parent"
             android:padding="4dp"
-            android:background="@color/white">
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -63,7 +60,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:textSize="18dp"
                         android:layout_marginLeft="24dp"
                         android:layout_alignParentLeft="true"/>
                     <ImageView
@@ -107,7 +103,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:textSize="18dp"
                         android:layout_marginLeft="24dp"
                         android:layout_alignParentLeft="true"/>
                     <ImageView
@@ -147,7 +142,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="18dp"
                     android:layout_marginLeft="24dp" />
             </LinearLayout>
 
@@ -175,7 +169,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="18dp"
                     android:layout_marginLeft="24dp" />
             </LinearLayout>
 
@@ -204,7 +197,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="18dp"
                     android:layout_marginLeft="24dp" />
             </LinearLayout>
 
@@ -233,9 +225,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="18dp"
                     android:layout_marginLeft="24dp" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/material_grey_300"/>
         </LinearLayout>
 
 
