@@ -23,9 +23,18 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.surverior.android.R;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
@@ -42,6 +51,7 @@ public class LoginActivity extends Activity {
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
+    CallbackManager callbackManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,6 +123,54 @@ public class LoginActivity extends Activity {
             }
         });
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList(
+                "public_profile", "email", "user_birthday", "user_friends"));
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+        {
+            @Override
+            public void onSuccess(LoginResult loginResult)
+            {
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.v("LoginActivity", response.toString());
+
+                                // Application code
+                                try
+                                {
+                                    String email = object.getString("email");
+                                    String birthday = object.getString("birthday"); // 01/31/1980 format
+                                    Toast.makeText(getApplicationContext(), email + " " + birthday, Toast.LENGTH_LONG).show();
+                                } catch (JSONException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+                Toast.makeText(getApplicationContext(), loginResult.getAccessToken().getToken(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancel()
+            {
+                Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(FacebookException error)
+            {
+                Toast.makeText(getApplicationContext(), error.getCause().toString(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     /**
@@ -223,5 +281,11 @@ public class LoginActivity extends Activity {
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -10,7 +10,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.facebook.appevents.AppEventsLogger;
 import com.surverior.android.helper.LruBitmapCache;
+import com.facebook.FacebookSdk;
 
 public class AppController extends Application {
 
@@ -27,6 +29,8 @@ public class AppController extends Application {
 	public void onCreate() {
 		super.onCreate();
 		mInstance = this;
+		FacebookSdk.sdkInitialize(getApplicationContext());
+		AppEventsLogger.activateApp(this);
 	}
 
 	public static synchronized AppController getInstance() {
