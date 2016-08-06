@@ -343,15 +343,24 @@ public class QuestionListActivity extends AppCompatActivity {
                     ScaleQuestion s = (ScaleQuestion) q;
                     temp.put("type", "scale");
                     JSONObject args = new JSONObject();
-                        args.put("min_val",1);
-                        args.put("max_val",s.getRange());
-                        args.put("min_label",s.getMinLabel());
-                        args.put("max_label",s.getMaxLabel());
+                    JSONObject min_args = new JSONObject();
+                    JSONObject max_args = new JSONObject();
+
+                    min_args.put("val",1);
+                    max_args.put("val",s.getRange());
+                    min_args.put("label",s.getMinLabel());
+                    max_args.put("label",s.getMaxLabel());
+
+                    args.put("min", min_args);
+                    args.put("max", max_args);
                     temp.put("args",args);
                     break;
                 }
             }
+
             result.put(temp);
+            Log.d(TAG, "Here is what I found!:");
+            Log.d(TAG, temp.toString());
         }
         return result;
     }
