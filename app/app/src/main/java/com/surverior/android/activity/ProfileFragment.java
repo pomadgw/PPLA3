@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
+import com.squareup.picasso.Picasso;
 import com.surverior.android.R;
 import com.surverior.android.app.AppConfig;
 import com.surverior.android.app.AppController;
@@ -180,21 +181,7 @@ public class ProfileFragment extends Fragment {
     public void setImage(String idx) {
         String url = AppConfig.URL_PHOTO + "/" + idx + "/photo.jpg";
 
-        ImageRequest request = new ImageRequest(url,
-                new Response.Listener<Bitmap>() {
-
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        image.setImageBitmap(bitmap);
-                    }
-                }, 0, 0, null,
-                new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-        // Access the RequestQueue.
-        AppController.getInstance().addToRequestQueue(request);
+        Picasso.with(getContext()).load(url).into(image);
     }
 
 }

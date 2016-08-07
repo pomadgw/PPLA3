@@ -189,7 +189,6 @@ public class MySurveyFragment extends Fragment implements MySurveyAdapter.OnLoad
 
     @Override
     public void onRefresh() {
-        Log.d("Masuk","TEs");
         getSurvey(true);
     }
 
