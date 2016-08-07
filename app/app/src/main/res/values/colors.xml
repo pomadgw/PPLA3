@@ -26,5 +26,6 @@
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
     <color name="btn_viewUser_bg">#428bca</color>
+    <color name="colorAnother">#031F33</color>
 
 </resources>
